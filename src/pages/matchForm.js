@@ -5,72 +5,45 @@ class MatchForm extends Component {
         return (
             <div>
                 <p>Form for match {this.props.match.params.matchId} here</p>
-                <ShipPreloadButtons />
-                <RoboPreloadButtons />
+                <CycleTimer />
             </div>
         );
     }
 }
 
-class ShipPreloadButtons extends Component {
+class CycleTimer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			hCount: 0,
-			cCount: 2
-		};
+            takingDuration: false,
+            timeStampStart: 0,
+            timeStampEnd: 0,
+            timeStamps: []
+        };
 		// This binding is necessary to make `this` work in the callback
-		this.hClick = this.hClick.bind(this);
-		this.cClick = this.cClick.bind(this);
-	}
-	hClick() {
-		if(this.state.hCount === 0) {
-			this.setState({hCount: 1, cCount: 1});
-		} else if(this.state.hCount === 1) {
-			this.setState({hCount: 2, cCount: 0});
-		}
-	}
-	cClick() {
-		if(this.state.cCount === 0) {
-			this.setState({hCount: 1, cCount: 1});
-		} else if(this.state.cCount === 1) {
-			this.setState({hCount: 0, cCount: 2});
-		}
-	}
+		this.makeTimeStamp = this.makeTimeStamp.bind(this);
+    }
+    makeTimeStamp() {
+        let time = new Date().getTime();
+        if(this.state.takingDuration === true) {
+            this.setState({
+                takingDuration: false,
+                timeStampEnd: time
+            });
+            this.state.timeStamps.push("   " + (time - this.state.timeStampStart) + "   ");
+        } else {
+            this.setState({
+                takingDuration: true, 
+                timeStampStart: time
+            });
+        }
+    }
 	render() {
     	return (
 			<div>
-                <h3>Ship Preloads:</h3>
-				<button onClick={this.hClick} id="hButton">H: {this.state.hCount}</button>
-				<button onClick={this.cClick} id="cButton">C: {this.state.cCount}</button>
-			</div>
-		)
-	}
-}
-
-class RoboPreloadButtons extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			hCount: 0,
-			cCount: 1
-		};
-		// This binding is necessary to make `this` work in the callback
-		this.hClick = this.hClick.bind(this);
-		this.cClick = this.cClick.bind(this);
-	}
-	hClick() {
-		this.setState({hCount: 1, cCount: 0});
-	}
-	cClick() {
-		this.setState({hCount: 0, cCount: 1});
-	}
-	render() {
-    	return (
-			<div>
-				<h3>Robot Preload:</h3>
-				<button onClick={this.hClick} id="hButton">H: {this.state.hCount}</button>
-				<button onClick={this.cClick} id="cButton">C: {this.state.cCount}</button>
+                <h3>Durations:</h3>
+                <h3>{this.state.timeStamps}</h3>
+				<button onClick={this.makeTimeStamp} id="timeStampButton">{this.state.takingDuration ? "End" : "Start"}</button>
 			</div>
 		)
 	}
