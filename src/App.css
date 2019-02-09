@@ -30,3 +30,15 @@
     transform: rotate(360deg);
   }
 }
+
+/* Start of Calloway's CSS */
+.header {
+  padding: 10px 16px;
+  background: #008000;
+  color: #f1f1f1;
+}
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
