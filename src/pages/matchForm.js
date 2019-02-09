@@ -1,15 +1,17 @@
-import React, { Component } from 'react';
-import CoolPie from './coolPie';
+
+import React, { Component } from "react";
+import FieldIMG from "./form/field";
 
 class MatchForm extends Component {
-    render() {
-        return (
-            <div>
-                <p>Form for match {this.props.match.params.matchId} here</p>
-                <CoolPie/>
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div>
+        <FieldIMG />
+      </div>
+    );
+  }
+
+  // When the user clicks on <div>, open the popup
 }
 
 export default MatchForm;
