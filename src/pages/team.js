@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 
+class Team extends Component {
+    render() {
+        return (<Sidebar />);
+    }
+}
+
 class Sidebar extends Component {
     render() {
         return (
@@ -36,4 +42,4 @@ class Sidebar extends Component {
     }
 }
 
-export default Team;
+export default Sidebar;
