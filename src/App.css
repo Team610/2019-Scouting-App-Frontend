@@ -25,7 +25,7 @@ a {
 }
 
 /* Start of Calloway's CSS */
-.header {
+.stickyHeader {
   padding: 10px 16px;
   background: #008000;
   color: #f1f1f1;
