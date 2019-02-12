@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 // import SampleImportPage from "./pages/samplePage";
 import Loadable from "react-loadable";
-// import './App.css';
+import './App.css'; //TODO: make CSS modularized
 
 const App = () => (
     <Router>

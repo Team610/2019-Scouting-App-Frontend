@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import CycleInputs from '../MatchFormInputs/cycle-inputs';
+import CommentInputs from './CommentInputs/CommentInputs';
+import CommentTextbox from './CommentTextbox/CommentTextbox';
 
-class InMatchForm extends Component {
+class PostMatchForm extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -19,14 +20,16 @@ class InMatchForm extends Component {
         return obj;
     }
     render() {
-        let cyclesRef = React.createRef();
-        this.fieldRefs.push(cyclesRef);
-        return (
+        let cmtInputsRef = React.createRef();
+        let cmtTxtboxRef = React.createRef();
+        this.fieldRefs.push(cmtInputsRef, cmtTxtboxRef);
+        return(
             <div>
-                <CycleInputs ref={cyclesRef} />
+                <CommentInputs ref={cmtInputsRef} />
+                <CommentTextbox ref={cmtTxtboxRef} />
             </div>
         );
     }
 }
 
-export default InMatchForm;
+export default PostMatchForm;

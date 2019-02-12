@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import './buttons.css';
 
-class TeamSelect extends Component {
+class TeamInput extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -81,4 +80,4 @@ class TeamSelect extends Component {
     }
 }
 
-export default TeamSelect;
+export default TeamInput;

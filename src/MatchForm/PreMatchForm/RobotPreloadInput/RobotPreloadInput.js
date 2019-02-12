@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './buttons.css';
 
 class RobotPreload extends Component {
     constructor(props) {

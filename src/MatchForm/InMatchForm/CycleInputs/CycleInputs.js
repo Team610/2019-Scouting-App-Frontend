@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import CycleInput from './cycle-input';
+import CycleInput from './CycleInput';
 
 class CycleInputs extends Component {
     constructor(props) {

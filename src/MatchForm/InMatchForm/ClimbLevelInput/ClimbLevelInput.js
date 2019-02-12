@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class ClimbSelect extends Component {
+class ClimbLevelInput extends Component {
     constructor(props) {
         super(props);
         this.state = {value:'Lv0'};
@@ -30,4 +30,4 @@ class ClimbSelect extends Component {
     }
 }
 
-export default ClimbSelect;
+export default ClimbLevelInput;

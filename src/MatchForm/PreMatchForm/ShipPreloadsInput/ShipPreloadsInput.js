@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './buttons.css';
 
 class ShipPreload extends Component {
     constructor(props) {

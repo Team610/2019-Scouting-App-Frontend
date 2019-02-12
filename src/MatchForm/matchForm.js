@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import MatchFormHeader from './MatchFormViews/match-form-header';
-import PreMatchForm from './MatchFormViews/pre-match-form';
-import InMatchForm from './MatchFormViews/in-match-form';
-import PostMatchForm from './MatchFormViews/post-match-form';
-import TeamSelect from './MatchFormInputs/team-select';
+import MatchFormHeader from './MatchFormHeader/MatchFormHeader';
+import PreMatchForm from './PreMatchForm/PreMatchForm';
+import InMatchForm from './InMatchForm/InMatchForm';
+import PostMatchForm from './PostMatchForm/PostMatchForm';
 import {Redirect} from 'react-router';
 
 class MatchForm extends Component {
@@ -54,14 +53,12 @@ class MatchForm extends Component {
         let preMatchRef = React.createRef();
         let inMatchRef = React.createRef();
         let postMatchRef = React.createRef();
-        let teamSelectRef = React.createRef();
-        this.viewRefs.push(teamSelectRef, preMatchRef, inMatchRef, postMatchRef);
+        this.viewRefs.push(preMatchRef, inMatchRef, postMatchRef);
         //TODO: add team selector back in
         return (
             <div>
                 <MatchFormHeader matchNum={this.state.matchNum} />
-                <TeamSelect matchNum = {this.state.matchNum} ref={teamSelectRef} /><br/>
-                <PreMatchForm ref={preMatchRef} /><br/>
+                <PreMatchForm matchNum={this.state.matchNum} ref={preMatchRef} /><br/>
                 <InMatchForm ref={inMatchRef} /><br/>
                 <PostMatchForm ref={postMatchRef} /><br/>
                 <button type="button" onClick={this.submitForm}>Submit</button>

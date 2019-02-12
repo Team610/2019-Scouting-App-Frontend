@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import RobotPreload from '../MatchFormInputs/robot-preloads';
-import ShipPreload from '../MatchFormInputs/ship-preloads';
+import RobotPreload from './RobotPreloadInput/RobotPreloadInput';
+import ShipPreload from './ShipPreloadsInput/ShipPreloadsInput';
+import TeamInput from './TeamInput/TeamInput';
 
 class PreMatchForm extends Component {
     constructor(props) {
@@ -20,15 +21,17 @@ class PreMatchForm extends Component {
         return obj;
     }
     render() {
+        let teamSlctRef = React.createRef();
         let robPrldRef = React.createRef();
         let shpPrldRef = React.createRef();
-        this.fieldRefs.push(robPrldRef, shpPrldRef);
+        this.fieldRefs.push(teamSlctRef, robPrldRef, shpPrldRef);
         return(
             <div>
+                <TeamInput matchNum = {this.props.matchNum} ref={teamSlctRef} /><br/>
                 <RobotPreload id='robot_preload' ref={robPrldRef} />
                 <ShipPreload id='ship_preloads' ref={shpPrldRef} />
             </div>
-        );
+        ); //TODO: figure out who has responsibility for fetching correct match# and team# from DB
     }
 }
 

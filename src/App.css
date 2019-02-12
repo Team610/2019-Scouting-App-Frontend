@@ -1,8 +1,23 @@
+/*For the entire website*/
 body {
   background-color: #282c34;
   color: white;
 }
 
+/*Link styling*/
 a {
   color: #61dafb;
+}
+
+/*Button styling*/
+.increment-button {
+  background-color: #bb33dd;
+}
+.btn-inactive {
+  background-color: gray;
+  color: darkgray;
+}
+.btn-active {
+  background-color: green;
+  color: white;
 }
