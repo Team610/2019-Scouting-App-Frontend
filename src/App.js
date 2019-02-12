@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 // import SampleImportPage from "./pages/samplePage";
 import Loadable from "react-loadable";
+import './App.css'; //TODO: make CSS modularized
 
 const App = () => (
     <Router>
@@ -11,6 +12,7 @@ const App = () => (
             <Route exact path="/" component={Home} />
             <Route path="/form" component={MatchForms} />
             <Route path="/teams" component={Teams} />
+            <Route path="/testForm" component={TestForm} />
             <Route path="/sample" component={LoadableSamplePage} />
         </div>
     </Router>
@@ -21,7 +23,7 @@ const Home = () => <h2>Home</h2>;
 const Loading = (props) => <div>Loading {props.page}...</div>;
 
 const MatchForm = Loadable({
-    loader: () => import("./pages/matchForm"),
+    loader: () => import("./MatchForm/matchForm"),
     loading: Loading
 });
 const MatchForms = ({ match }) => (
@@ -41,7 +43,7 @@ const MatchForms = ({ match }) => (
 );
 
 const Team = Loadable({
-    loader: () => import("./pages/team"),
+    loader: () => import("./TeamAnalytics/team"),
     loading: Loading
 });
 const Teams = ({ match }) => (
@@ -58,6 +60,11 @@ const Teams = ({ match }) => (
             () => <p>Please select a team.</p>} />
     </div>
 );
+
+const TestForm = Loadable({
+    loader: () => import("./pages/testForm"),
+    loading: Loading
+});
 
 const Header = () => (
     <ul>
