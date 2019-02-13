@@ -22,8 +22,8 @@ class AccordionSection extends Component {
     return (
       <div
         style={{
-          background: isOpen ? '#fae042' : '#6db65b',
-          border: '1px solid #008f68',
+          background: isOpen ? '#ffffff' : '#ffffff',
+          border: '1px solid #000000',
           padding: '5px 10px',
         }}
       >
@@ -37,8 +37,8 @@ class AccordionSection extends Component {
         {isOpen && (
           <div
             style={{
-              background: '#6db65b',
-              border: '2px solid #008f68',
+              background: '#ffffff',
+              border: '2px solid #000000',
               marginTop: 10,
               padding: '10px 20px',
             }}

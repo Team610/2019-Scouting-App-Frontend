@@ -14,22 +14,22 @@ class Team extends Component {
           <p><strong>Distribution:</strong> Texas to North Carolina, US</p>
           <p><strong>Endangered Status:</strong> Currently Not Endangered</p>
         </div>
-        <div label='Cycles'>
+        <div label='Cycles' isOpen>
           <p><strong>Common Name:</strong> Chinese Alligator</p>
           <p><strong>Distribution:</strong> Eastern China</p>
           <p><strong>Endangered Status:</strong> Critically Endangered</p>
         </div>
-        <div label='Pregame'>
+        <div label='Pregame' isOpen>
           <p><strong>Common Name:</strong> Chinese Alligator</p>
           <p><strong>Distribution:</strong> Eastern China</p>
           <p><strong>Endangered Status:</strong> Critically Endangered</p>
         </div>
-        <div label='Endgame'>
+        <div label='Endgame' isOpen>
           <p><strong>Common Name:</strong> Chinese Alligator</p>
           <p><strong>Distribution:</strong> Eastern China</p>
           <p><strong>Endangered Status:</strong> Critically Endangered</p>
         </div>
-        <div label='Miscellaneous'>
+        <div label='Miscellaneous' isOpen>
           <p><strong>Common Name:</strong> Chinese Alligator</p>
           <p><strong>Distribution:</strong> Eastern China</p>
           <p><strong>Endangered Status:</strong> Critically Endangered</p>
