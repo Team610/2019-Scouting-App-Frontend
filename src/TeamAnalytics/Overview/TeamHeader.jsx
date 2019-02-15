@@ -9,22 +9,19 @@ class TeamHeader extends Component {
   render() {
     var teamNumber = this.props.num;
     return (
-      <html>
-        <head>
-          <link rel="stylesheet" type="text/css" href="style.css" />
-        </head>
-        <div>
-          <table class="head">
+      <div>
+        <table className="head">
+          <thead>
             <tr>
               <td />
               <td>
-                <h1 class="h">{teamNumber} Data Page</h1>
+                <h1 className="h">{teamNumber} Data Page</h1>
               </td>
               <td />
             </tr>
-          </table>
-        </div>
-      </html>
+          </thead>
+        </table>
+      </div>
     );
   }
 }
