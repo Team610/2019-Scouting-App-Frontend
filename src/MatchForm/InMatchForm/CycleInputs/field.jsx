@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 import PieMenu, { Slice } from "react-pie-menu";
-var topHP = [110, 580, 205, 650];
-var bottomHP = [110, 800, 205, 875];
-var topRocket = [310, 440, 355, 485];
-var bottomRocket = [310, 710, 355, 750];
-var cargoShip = [325, 700, 425, 755];
-var HAB = [110, 665, 205, 800];
+var topHP = [110, 60, 210, 145];
+var bottomHP = [110, 285, 210, 365];
+var topRocket = [310, 60, 350, 100];
+var bottomRocket = [310, 325, 350, 365];
+var cargoShip = [320, 190, 425, 245];
+var HAB = [110, 145, 210, 285];
 
 class FieldIMG extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class FieldIMG extends Component {
     this.state = {
       mouseX: 0,
       mouseY: 0,
+      objectiveY: 0,
       menu: false,
       secondStage: false,
       close: false,
@@ -27,8 +29,8 @@ class FieldIMG extends Component {
     if (
       this.state.mouseX >= a[0] &&
       this.state.mouseX <= a[2] &&
-      this.state.mouseY >= a[1] &&
-      this.state.mouseY <= a[3]
+      this.state.objectiveY >= a[1] &&
+      this.state.objectiveY <= a[3]
     ) {
       bool = true;
     } else {
@@ -39,29 +41,29 @@ class FieldIMG extends Component {
 
   render() {
     return (
-      <html>
+      <div ref={field => (this.instance = field)}>
         <div>
           <h2>
-            {this.state.mouseX}, {this.state.mouseY}
+            {this.state.mouseX}, {this.state.objectiveY}
           </h2>
         </div>
         <div onMouseDown={this.getClickPosition}>
           <div>
             <img src={require("./2019-field.PNG")} />
+
             {this.loadMenu()}
           </div>
         </div>
-      </html>
+      </div>
     );
   }
 
   getClickPosition = e => {
-    this.setTopOffset();
     this.setState({ mouseX: e.clientX });
-    this.setState({ mouseY: e.clientY + 125 - this.state.topOffset });
+    this.setState({
+      objectiveY: e.clientY - this.instance.getBoundingClientRect().top
+    });
     this.setState({ menu: true });
-    {
-    }
   };
 
   loadMenu = () => {
@@ -105,7 +107,7 @@ class FieldIMG extends Component {
         radius="125px"
         centerRadius="20px"
         centerX={`${this.state.mouseX}px`}
-        centerY={`${this.state.mouseY}px`}
+        centerY={`${this.state.objectiveY + 500}px`}
       >
         <div />
         <Slice
@@ -138,7 +140,7 @@ class FieldIMG extends Component {
           radius="125px"
           centerRadius="20px"
           centerX={`${this.state.mouseX}px`}
-          centerY={`${this.state.mouseY}px`}
+          centerY={`${this.state.objectiveY + 500}px`}
         >
           <Slice
             className="nonSelectable"
@@ -171,12 +173,6 @@ class FieldIMG extends Component {
         </PieMenu>
       </html>
     ) : null;
-  };
-
-  setTopOffset = () => {
-    var scrollOffset = this.props.offset;
-    console.log(scrollOffset);
-    this.setState({ topOffset: scrollOffset });
   };
 }
 

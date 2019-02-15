@@ -6,7 +6,8 @@ class CycleInputs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      numCycles: 0
+      numCycles: 0,
+      offset: 0
     };
     this.addCycle = this.addCycle.bind(this);
     this.getJSON = this.getJSON.bind(this);
@@ -26,6 +27,7 @@ class CycleInputs extends Component {
       numCycles: this.state.numCycles + 1
     });
   }
+
   render() {
     let cycles = [];
     this.cycleRefs = [];
@@ -33,6 +35,8 @@ class CycleInputs extends Component {
       let cycleRef = React.createRef();
       cycles.push(<CycleInput key={i} cycleNum={i} ref={cycleRef} />);
       this.cycleRefs.push(cycleRef);
+    }
+    {
     }
     return (
       <div>
@@ -47,7 +51,7 @@ class CycleInputs extends Component {
         <button onClick={this.addCycle} type="button">
           Add cycle
         </button>
-        <FieldIMG offset={document.documentElement.scrollTop} />
+        <FieldIMG />
       </div>
     );
   }
