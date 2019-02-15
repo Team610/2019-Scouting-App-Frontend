@@ -47,7 +47,7 @@ class CycleInputs extends Component {
         <button onClick={this.addCycle} type="button">
           Add cycle
         </button>
-        <FieldIMG />
+        <FieldIMG offset={document.documentElement.scrollTop} />
       </div>
     );
   }

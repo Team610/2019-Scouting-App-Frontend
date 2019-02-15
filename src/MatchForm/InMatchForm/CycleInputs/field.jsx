@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import PieMenu, { Slice } from "react-pie-menu";
-const topHP = [110, 580, 205, 650];
-const bottomHP = [110, 800, 205, 875];
-const topRocket = [310, 440, 355, 485];
-const bottomRocket = [310, 710, 355, 750];
-const cargoShip = [325, 700, 425, 755];
-const HAB = [110, 665, 205, 800];
+var topHP = [110, 580, 205, 650];
+var bottomHP = [110, 800, 205, 875];
+var topRocket = [310, 440, 355, 485];
+var bottomRocket = [310, 710, 355, 750];
+var cargoShip = [325, 700, 425, 755];
+var HAB = [110, 665, 205, 800];
 
 class FieldIMG extends Component {
   constructor(props) {
@@ -56,9 +56,12 @@ class FieldIMG extends Component {
   }
 
   getClickPosition = e => {
+    this.setTopOffset();
     this.setState({ mouseX: e.clientX });
-    this.setState({ mouseY: e.clientY + 125 });
+    this.setState({ mouseY: e.clientY + 125 - this.state.topOffset });
     this.setState({ menu: true });
+    {
+    }
   };
 
   loadMenu = () => {
@@ -171,7 +174,9 @@ class FieldIMG extends Component {
   };
 
   setTopOffset = () => {
-    // this.setState({ topOffset:});
+    var scrollOffset = this.props.offset;
+    console.log(scrollOffset);
+    this.setState({ topOffset: scrollOffset });
   };
 }
 
