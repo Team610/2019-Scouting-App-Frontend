@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class TeamPageHeader extends Component {
+class TeamAnalyticsHeader extends Component {
     componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
     }
@@ -26,4 +26,4 @@ class TeamPageHeader extends Component {
     }
 }
 
-export default TeamPageHeader;
+export default TeamAnalyticsHeader;

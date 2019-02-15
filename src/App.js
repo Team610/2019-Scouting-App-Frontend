@@ -43,7 +43,7 @@ const MatchForms = ({ match }) => (
 );
 
 const Team = Loadable({
-    loader: () => import("./TeamPage/team"),
+    loader: () => import("./TeamAnalytics/team"),
     loading: Loading
 });
 const Teams = ({ match }) => (
