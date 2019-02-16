@@ -22,10 +22,10 @@ class PreGameSection extends Component {
 								Ship Preload
 							</td>
 							<td>
-								{this.props.data.ship_preload.hatch.avg}
+								{this.props.data.tot_ship_preload.hatch}
 							</td>
 							<td>
-								{this.props.data.ship_preload.cargo.avg}
+								{this.props.data.tot_ship_preload.cargo}
 							</td>
 						</tr>
 						<tr>
@@ -33,10 +33,10 @@ class PreGameSection extends Component {
 								Robot Preload
 							</td>
 							<td>
-								{this.props.data.robot_preload.hatch.avg}
+								{this.props.data.tot_robot_preload.hatch}
 							</td>
 							<td>
-								{this.props.data.robot_preload.cargo.avg}
+								{this.props.data.tot_robot_preload.cargo}
 							</td>
 						</tr>
 						<tr>

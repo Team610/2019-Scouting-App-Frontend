@@ -27,33 +27,33 @@ class DefenseSection extends Component {
 					<tbody>
 						<tr>
 							<td>Total</td>
-							<td>{this.props.data.defense.total.sum} s</td>
-							<td>{this.props.data.defense.total.num_matches}</td>
+							<td>{this.props.data.tot_time_def}</td>
+							<td/>
 						</tr>
 						<tr>
 							<td>Ship Goalkeeping</td>
-							<td>{this.props.data.defense.ship_goalkeep.sum} s</td>
-							<td>{this.props.data.defense.ship_goalkeep.num_matches}</td>
+							<td>{this.props.data.tot_time_def_ship_goalkeep}</td>
+							<td/>
 						</tr>
 						<tr>
 							<td>Rocket Goalkeeping</td>
-							<td>{this.props.data.defense.rocket_goalkeep.sum} s</td>
-							<td>{this.props.data.defense.rocket_goalkeep.num_matches}</td>
+							<td>{this.props.data.tot_time_def_rocket_goalkeep}</td>
+							<td/>
 						</tr>
 						<tr>
 							<td>Pinning</td>
-							<td>{this.props.data.defense.pinning.sum} s</td>
-							<td>{this.props.data.defense.pinning.num_matches}</td>
+							<td>{this.props.data.tot_time_def_pinning}</td>
+							<td/>
 						</tr>
 						<tr>
 							<td>Tough Defense</td>
-							<td>{this.props.data.defense.tough_defense.sum} s</td>
-							<td>{this.props.data.defense.tough_defense.num_matches}</td>
+							<td>{this.props.data.tot_time_def_tough_defense}</td>
+							<td/>
 						</tr>
 						<tr>
 							<td>Driving Around</td>
-							<td>{this.props.data.defense.driving_around.sum} s</td>
-							<td>{this.props.data.defense.driving_around.num_matches}</td>
+							<td>{this.props.data.tot_time_def_driving_around}</td>
+							<td/>
 						</tr>
 						<tr>
 							<td />

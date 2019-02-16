@@ -19,18 +19,18 @@ class Endgame extends Component {
 					<tbody>
 						<tr>
 							<td>Level 3</td>
-							<td>{this.props.data.climb_self.lvl_3_num.avg}</td>
-							<td>{this.props.data.climb_self.lvl_3_time.avg}s</td>
+							<td>{this.props.data.tot_num_climb_lvl[3]}</td>
+							<td>{this.props.data.avg_time_climb_lv3}s</td>
 						</tr>
 						<tr>
 							<td>Level 2</td>
-							<td>{this.props.data.climb_self.lvl_2_num.avg}</td>
-							<td>{this.props.data.climb_self.lvl_2_time.avg}s</td>
+							<td>{this.props.data.tot_num_climb_lvl[2]}</td>
+							<td>{this.props.data.avg_time_climb_lv2}s</td>
 						</tr>
 						<tr>
 							<td>Level 1</td>
-							<td>{this.props.data.climb_self.lvl_1_num.avg}</td>
-							<td>{this.props.data.climb_self.lvl_1_time.avg}s</td>
+							<td>{this.props.data.tot_num_climb_lvl[1]}</td>
+							<td>{this.props.data.avg_time_climb_lv1}s</td>
 						</tr>
 						<tr>
 							<td />

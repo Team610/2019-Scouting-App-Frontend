@@ -26,7 +26,7 @@ class OverallSection extends Component {
 								{this.props.data.avg_time_cargo_tot} @ {this.props.data.avg_time_cargo_tot} s
 							</td>
 							<td>
-								{this.props.data.climb_self.lvl.avg} @ {this.props.data.climb_self.time.avg} s
+								{this.props.data.tot_num_climb_lvl[1]} @ {this.props.data.avg_time_climb_tot} s
 							</td>
 						</tr>
 						<tr>

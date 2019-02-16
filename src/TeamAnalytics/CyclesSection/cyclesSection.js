@@ -39,23 +39,23 @@ class CyclesSection extends Component {
 					<tbody>
 						<tr>
 							<td>Level 3</td>
-							<td>{this.props.data.hatch_lv3.num.avg} @ {this.props.data.hatch_lv3.time.avg} s</td>
-							<td>{this.props.data.cargo_lv3.num.avg} @ {this.props.data.cargo_lv3.time.avg} s</td>
+							<td>{this.props.data.avg_num_hatch_lv3} @ {this.props.data.avg_time_cargo_lv3} s</td>
+							<td>{this.props.data.avg_num_cargo_lv3} @ {this.props.data.avg_time_cargo_lv3} s</td>
 						</tr>
 						<tr>
 							<td>Level 2</td>
-							<td>{this.props.data.hatch_lv2.num.avg} @ {this.props.data.hatch_lv2.time.avg} s</td>
-							<td>{this.props.data.cargo_lv2.num.avg} @ {this.props.data.cargo_lv2.time.avg} s</td>
+							<td>{this.props.data.avg_num_hatch_lv2} @ {this.props.data.avg_time_cargo_lv2} s</td>
+							<td>{this.props.data.avg_num_cargo_lv2} @ {this.props.data.avg_time_cargo_lv2} s</td>
 						</tr>
 						<tr>
 							<td>Level 1</td>
-							<td>{this.props.data.hatch_lv1.num.avg} @ {this.props.data.hatch_lv1.time.avg} s</td>
-							<td>{this.props.data.cargo_lv1.num.avg} @ {this.props.data.cargo_lv1.time.avg} s</td>
+							<td>{this.props.data.avg_num_hatch_lv1} @ {this.props.data.avg_time_cargo_lv1} s</td>
+							<td>{this.props.data.avg_num_cargo_lv1} @ {this.props.data.avg_time_cargo_lv1} s</td>
 						</tr>
 						<tr>
 							<td>Ship</td>
-							<td>{this.props.data.hatch_lvS.num.avg} @ {this.props.data.hatch_lvS.time.avg} s</td>
-							<td>{this.props.data.cargo_lvS.num.avg} @ {this.props.data.cargo_lvS.time.avg} s</td>
+							<td>{this.props.data.avg_num_hatch_lvS} @ {this.props.data.avg_time_cargo_lvS} s</td>
+							<td>{this.props.data.avg_num_cargo_lvS} @ {this.props.data.avg_time_cargo_lvS} s</td>
 						</tr>
 						<tr>
 							<td />
