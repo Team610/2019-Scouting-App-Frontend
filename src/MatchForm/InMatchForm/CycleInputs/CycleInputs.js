@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import CycleInput from './CycleInput';
+import FieldIMG from './Field';
 
 class CycleInputs extends Component {
     constructor(props) {
@@ -37,6 +38,7 @@ class CycleInputs extends Component {
             <div>
                 {cycles.length>0 ? cycles : <span>No cycles yet<br/></span>}
                 <button onClick={this.addCycle} type="button">Add cycle</button>
+				<FieldIMG />
             </div>
         );
     }
