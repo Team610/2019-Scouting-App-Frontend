@@ -39,7 +39,7 @@ class MatchForm extends Component {
             console.log("could not submit form");
             console.log(err.message);
         }
-        if(!status) {console.log("form submission failed")}
+        if(!status.success) {console.log("form submission failed")}
         this.setState({
             redirect: true
         });
