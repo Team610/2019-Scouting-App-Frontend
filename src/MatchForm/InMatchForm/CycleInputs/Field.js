@@ -30,17 +30,18 @@ class FieldIMG extends Component {
 
 	checkZone() {
 		let element = this.instance;
+		//Actual field starts at (110, 0); ends at (720, 325)
 		let arr = {
-			topHP: [110, 20, 210, 145],
-			btmHP: [110, 285, 210, 405],
-			topRocket: [310, 20, 350, 100],
-			btmRocket: [310, 325, 350, 405],
-			cargoShip: [320, 150, 425, 285],
-			HAB: [110, 145, 210, 285],
-			defense: [],
-			deadZone_TopHP_HAB: [],
-			deadZone_BtmHP_HAB: [],
-			deadZone_other_defense: []
+			topHP: [110, 0, 200, 85],
+			btmHP: [110, 250, 200, 325],
+			topRocket: [295, 0, 355, 60],
+			btmRocket: [295, 275, 355, 325],
+			cargoShip: [300, 125, 425, 215],
+			HAB: [110, 120, 200, 230],
+			defense: [450, 0, 720, 325],
+			deadZone_TopHP_HAB: [110, 85, 200, 120],
+			deadZone_BtmHP_HAB: [110, 230, 200, 250],
+			deadZone_other_defense: [425, 0, 450, 325]
 		};
 
 		let zone = 'other';
@@ -48,10 +49,14 @@ class FieldIMG extends Component {
 			if(arr[key].length===0) {
 				continue;
 			}
-			if (this.mouseX >= arr[key][0]+window.pageXOffset+element.offsetLeft &&
-					this.mouseX <= arr[key][2]+window.pageXOffset+element.offsetLeft &&
-					this.mouseY >= arr[key][1]+window.pageYOffset+element.offsetTop &&
-					this.mouseY <= arr[key][3]+window.pageYOffset+element.offsetTop) {
+			// console.log(`mouse pos: ${this.mouseX-element.offsetLeft}, ${this.mouseY-element.offsetTop}`);
+			// console.log(`comparing with ${key}`);
+			// console.log(`left: ${arr[key][0]+element.offsetLeft}\tright: ${arr[key][2]+element.offsetLeft}`);
+			// console.log(`top: ${arr[key][1]+element.offsetTop}\tbottom: ${arr[key][3]+element.offsetTop}`);
+			if (this.mouseX >= arr[key][0]+element.offsetLeft &&
+					this.mouseX <= arr[key][2]+element.offsetLeft &&
+					this.mouseY >= arr[key][1]+element.offsetTop &&
+					this.mouseY <= arr[key][3]+element.offsetTop) {
 				zone = key;
 			}
 		}
