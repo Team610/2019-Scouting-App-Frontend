@@ -12,7 +12,11 @@ class MatchForm extends Component {
         this.state = {
             matchNum: this.props.match.params.matchId
         }
-        this.viewRefs = [];
+		
+        this.preMatchRef = React.createRef();
+        this.inMatchRef = React.createRef();
+        this.postMatchRef = React.createRef();
+        this.viewRefs = [this.preMatchRef, this.inMatchRef, this.postMatchRef];
     }
     async submitForm() {
         let obj = {matchNum: this.state.matchNum};
@@ -50,17 +54,13 @@ class MatchForm extends Component {
                 <Redirect to="/" />
             );
         }
-        let preMatchRef = React.createRef();
-        let inMatchRef = React.createRef();
-        let postMatchRef = React.createRef();
-        this.viewRefs.push(preMatchRef, inMatchRef, postMatchRef);
         //TODO: add team selector back in
         return (
             <div>
                 <MatchFormHeader matchNum={this.state.matchNum} />
-                <PreMatchForm matchNum={this.state.matchNum} ref={preMatchRef} /><br/>
-                <InMatchForm ref={inMatchRef} /><br/>
-                <PostMatchForm ref={postMatchRef} /><br/>
+                <PreMatchForm matchNum={this.state.matchNum} ref={this.preMatchRef} /><br/>
+                <InMatchForm ref={this.inMatchRef} /><br/>
+                <PostMatchForm ref={this.postMatchRef} /><br/>
                 <button type="button" onClick={this.submitForm}>Submit</button>
             </div>
         );

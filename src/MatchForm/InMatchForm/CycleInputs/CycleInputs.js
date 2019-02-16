@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import CycleInput from './CycleInput';
-import FieldIMG from './Field';
+import FieldIMG from '../FieldInput/FieldInput';
 
 class CycleInputs extends Component {
     constructor(props) {

@@ -22,10 +22,19 @@ class FieldIMG extends Component {
 		this.mouseX = 0;
 		this.mouseY = 0;
 		this.startState = {};
-		this.data = {'hatch_lv1':[],'hatch_lv2':[],'hatch_lv3':[],'hatch_lvS':[],'cargo_lv1':[],'cargo_lv2':[],'cargo_lv3':[],'cargo_lvS':[]};
+		this.data = {
+			'cycle_hatch_lv1':[],'cycle_hatch_lv2':[],'cycle_hatch_lv3':[],'cycle_hatch_lvS':[],
+			'cycle_cargo_lv1':[],'cycle_cargo_lv2':[],'cycle_cargo_lv3':[],'cycle_cargo_lvS':[], 
+			'def_tough_defense':[], 'def_rocket_goalkeep':[], 'def_ship_goalkeep':[], 'def_pinning':[], 'def_driving_around':[],
+			'climb_lvl':'1','climb_time':0.0
+		};
 		this.state = {
 			menuRequested: false
 		};
+	}
+
+	getJSON() {
+		return this.data;
 	}
 
 	checkZone() {
@@ -148,7 +157,7 @@ class FieldIMG extends Component {
 	recordCycleEnd(level) {
 		console.log('recording cycle end');
 		let dur = (new Date().getTime() - this.startState.time)/1000;
-		this.data[`${this.startState['intake']}_lv${level}`].push(dur);
+		this.data[`cycle_${this.startState['intake']}_lv${level}`].push(dur);
 
 		this.intake = false;
 		this.menuActive = false;
