@@ -1,0 +1,29 @@
+{
+	"610": {
+	  "hatch_lv3": {
+		"num": { "avg": 2, "std": 0 },
+		"time": { "avg": 6.551, "std": 0.284 }
+	  },
+	  "hatch_lv2": {
+		"num": { "avg": 2, "std": 0 },
+		"time": { "avg": 6.551, "std": 0.284 }
+	  },
+	  "hatch_lv1": {
+		"num": { "avg": 2, "std": 0 },
+		"time": { "avg": 6.551, "std": 0.284 }
+	  },
+	  "hab_lv3": {
+		"pct": { "avg": 2, "std": 0 },
+		"time": { "avg": 6.551, "std": 0.284 }
+	  },
+	  "hab_lv2": {
+		"pct": { "avg": 2, "std": 0 },
+		"time": { "avg": 6.551, "std": 0.284 }
+	  },
+	  "hab_lv1": {
+		"pct": 100,
+		"time": { "avg": 6.551, "std": 0.284 }
+	  }
+	}
+  }
+  

@@ -3,10 +3,10 @@ import CommentInput from './CommentInput';
 
 class CommentInputs extends Component {
     getJSON() {
-        return "";
+        return {"comments":'n/a'};
     }
     render() {
-        return(<p>Not done yet!</p>);
+        return(<p>Comment inputs here</p>);
     }
 }
 

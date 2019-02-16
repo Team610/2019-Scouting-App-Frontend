@@ -6,8 +6,11 @@ class PostMatchForm extends Component {
     constructor(props) {
         super(props);
         this.state = {};
-        this.fieldRefs = [];
-        this.getJSON = this.getJSON.bind(this);
+		this.getJSON = this.getJSON.bind(this);
+		
+		this.cmtInputsRef = React.createRef();
+        this.cmtTxtboxRef = React.createRef();
+        this.fieldRefs = [this.cmtInputsRef, this.cmtTxtboxRef];
     }
     getJSON() {
         let obj={};
@@ -20,13 +23,10 @@ class PostMatchForm extends Component {
         return obj;
     }
     render() {
-        let cmtInputsRef = React.createRef();
-        let cmtTxtboxRef = React.createRef();
-        this.fieldRefs.push(cmtInputsRef, cmtTxtboxRef);
         return(
             <div>
-                <CommentInputs ref={cmtInputsRef} />
-                <CommentTextbox ref={cmtTxtboxRef} />
+                <CommentInputs ref={this.cmtInputsRef} />
+                <CommentTextbox ref={this.cmtTxtboxRef} />
             </div>
         );
     }
