@@ -4,6 +4,7 @@ import PreMatchForm from './PreMatchForm/PreMatchForm';
 import InMatchForm from './InMatchForm/InMatchForm';
 import PostMatchForm from './PostMatchForm/PostMatchForm';
 import {Redirect} from 'react-router';
+import styles from "./style.css";
 
 class MatchForm extends Component {
     constructor(props) {
@@ -59,9 +60,10 @@ class MatchForm extends Component {
             <div>
                 <MatchFormHeader matchNum={this.state.matchNum} />
                 <PreMatchForm matchNum={this.state.matchNum} ref={preMatchRef} /><br/>
+                <br/><br/><br/><br/><br/><br/>
                 <InMatchForm ref={inMatchRef} /><br/>
                 <PostMatchForm ref={postMatchRef} /><br/>
-                <button type="button" onClick={this.submitForm}>Submit</button>
+                <button id="submit" type="button" onClick={this.submitForm}>Submit</button>
             </div>
         );
     }

@@ -1,0 +1,16 @@
+table {
+  float:left;
+}
+
+.increment-button{
+  background-color: white;
+  border: 3px solid #DDDDDD;
+  color: black;
+  padding: 15px 32px;
+  length: 96px;
+  height: 48px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  float:left;
+}

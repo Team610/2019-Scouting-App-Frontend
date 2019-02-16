@@ -47,7 +47,7 @@ class FieldIMG extends Component {
         </div>
         <div onMouseDown={this.getClickPosition}>
           <div>
-            <img src={require("./2019-field.PNG")} />
+            <img src={require("./2019-field.PNG")} width = "50%" />
             {this.loadMenu()}
           </div>
         </div>
