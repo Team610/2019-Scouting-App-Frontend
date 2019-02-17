@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import styles from "./RobotPreloadInput.css"
+import styles from "../../style.css"
 
 class RobotPreload extends Component {
     constructor(props) {
@@ -29,21 +29,13 @@ class RobotPreload extends Component {
     render() {
         return (
             <div>
-              <table>
-                <th>
-                  Robot Preloads<br/>
-                  </th>
-                  <tr>
-                      <label>
-                        <button type="button" onClick={this.cargoIncrement} className="increment-button">Cargo: {this.state.cargo}</button>
-                      </label><br/>
-                      </tr>
-                      <tr>
-                      <label>
-                        <button type="button" onClick={this.hatchIncrement} className="increment-button">Hatch: {this.state.hatch}</button>
-                      </label>
-                  </tr>
-              </table>
+              Robot Preloads<br/>
+              <label>
+                <button type="button" onClick={this.cargoIncrement} className="increment-button">Cargo: {this.state.cargo}</button>
+              </label><br/>
+              <label>
+                <button type="button" onClick={this.hatchIncrement} className="increment-button">Hatch: {this.state.hatch}</button>
+              </label>
             </div>
         );
     }

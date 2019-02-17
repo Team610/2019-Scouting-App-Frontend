@@ -13,7 +13,7 @@ class MatchForm extends Component {
         this.state = {
             matchNum: this.props.match.params.matchId
         }
-		
+
         this.preMatchRef = React.createRef();
         this.inMatchRef = React.createRef();
         this.postMatchRef = React.createRef();
@@ -59,18 +59,12 @@ class MatchForm extends Component {
         return (
             <div>
                 <MatchFormHeader matchNum={this.state.matchNum} />
-<<<<<<< HEAD
-                <PreMatchForm matchNum={this.state.matchNum} ref={preMatchRef} /><br/>
-                <br/><br/><br/><br/><br/><br/>
-                <InMatchForm ref={inMatchRef} /><br/>
-                <PostMatchForm ref={postMatchRef} /><br/>
-                <button id="submit" type="button" onClick={this.submitForm}>Submit</button>
-=======
                 <PreMatchForm matchNum={this.state.matchNum} ref={this.preMatchRef} /><br/>
+                <br/><br/><br/><br/><br/><br/>
                 <InMatchForm ref={this.inMatchRef} /><br/>
                 <PostMatchForm ref={this.postMatchRef} /><br/>
-                <button type="button" onClick={this.submitForm}>Submit</button>
->>>>>>> feature/skeleton
+                <button id="submit" type="button" onClick={this.submitForm}>Submit</button>
+
             </div>
         );
     }

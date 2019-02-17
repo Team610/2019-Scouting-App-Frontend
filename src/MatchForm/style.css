@@ -2,3 +2,28 @@
   color: blue;
   font-size: 20px;
 }
+
+#robot_preload{
+  float: left;
+}
+
+#ship_preloads{
+  float: left;
+}
+
+table {
+  float:left;
+}
+
+.increment-button{
+  background-color: white;
+  border: 3px solid #DDDDDD;
+  color: black;
+  padding: 15px 32px;
+  length: 100px;
+  height: 48px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  float:up;
+}

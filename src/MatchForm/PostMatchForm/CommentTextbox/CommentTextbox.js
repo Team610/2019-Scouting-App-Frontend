@@ -5,7 +5,14 @@ class CommentTextbox extends Component {
         return {"comments":'n/a'};
     }
     render() {
-        return(<p>Comment textbox here</p>);
+        return(
+          <div>
+            <p>Comment Textbox (If your comment doesn't fit the bill)</p>
+            <form>
+              <textarea name="add_comments" rows="10" cols="60"></textarea><br/>
+            </form>
+          </div>
+        );
     }
 }
 

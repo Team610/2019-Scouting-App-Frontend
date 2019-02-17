@@ -24,7 +24,7 @@ class FieldIMG extends Component {
 		this.startState = {};
 		this.data = {
 			'cycle_hatch_lv1':[],'cycle_hatch_lv2':[],'cycle_hatch_lv3':[],'cycle_hatch_lvS':[],
-			'cycle_cargo_lv1':[],'cycle_cargo_lv2':[],'cycle_cargo_lv3':[],'cycle_cargo_lvS':[], 
+			'cycle_cargo_lv1':[],'cycle_cargo_lv2':[],'cycle_cargo_lv3':[],'cycle_cargo_lvS':[],
 			'def_tough_defense':[], 'def_rocket_goalkeep':[], 'def_ship_goalkeep':[], 'def_pinning':[], 'def_driving_around':[],
 			'climb_lvl':'1','climb_time':0.0
 		};
@@ -41,16 +41,16 @@ class FieldIMG extends Component {
 		let element = this.instance;
 		//Actual field starts at (110, 0); ends at (720, 325)
 		let arr = {
-			topHP: [110, 0, 200, 85],
-			btmHP: [110, 250, 200, 325],
-			topRocket: [295, 0, 355, 60],
-			btmRocket: [295, 275, 355, 325],
-			cargoShip: [300, 125, 425, 215],
-			HAB: [110, 120, 200, 230],
-			defense: [450, 0, 720, 325],
-			deadZone_TopHP_HAB: [110, 85, 200, 120],
-			deadZone_BtmHP_HAB: [110, 230, 200, 250],
-			deadZone_other_defense: [425, 0, 450, 325]
+			topHP: [0, 0, 230, 145],
+			btmHP: [0, 630, 230, 770],
+			topRocket: [410, 0, 660, 190], //felix don't like wobun
+			btmRocket: [410, 600, 660, 770],
+			cargoShip: [410, 270, 740, 510],
+			HAB: [0, 260, 230, 510],
+			defense: [800, 0, 900, 770],
+			deadZone_TopHP_HAB: [0, 145, 260, 230],
+			deadZone_BtmHP_HAB: [0, 510, 230, 630],
+			deadZone_other_defense: [660, 0, 800, 770]
 		};
 
 		let zone = 'other';
@@ -58,7 +58,7 @@ class FieldIMG extends Component {
 			if(arr[key].length===0) {
 				continue;
 			}
-			// console.log(`mouse pos: ${this.mouseX-element.offsetLeft}, ${this.mouseY-element.offsetTop}`);
+			console.log(`mouse pos: ${this.mouseX-element.offsetLeft}, ${this.mouseY-element.offsetTop}`);
 			// console.log(`comparing with ${key}`);
 			// console.log(`left: ${arr[key][0]+element.offsetLeft}\tright: ${arr[key][2]+element.offsetLeft}`);
 			// console.log(`top: ${arr[key][1]+element.offsetTop}\tbottom: ${arr[key][3]+element.offsetTop}`);
@@ -75,7 +75,7 @@ class FieldIMG extends Component {
 	render() {
 		return (
 			<div ref={field => (this.instance = field)} id='fieldmap'>
-				<img className="nonSelectable" src={require("./2019-field.png")} onMouseDown={this.handleClick}/>
+				<img className="nonSelectable" src={require("./RL.png")} width= "75%" onMouseDown={this.handleClick}/>
 				{this.menuActive ? this.loadMenu() : null}
 			</div>
 		);
