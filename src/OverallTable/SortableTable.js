@@ -60,10 +60,22 @@ class SortableTable extends Component {
             }
         }
     }
+    addTeam() {
+        var table = document.getElementById("myTable2");
+        var row = table.insertRow(5);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        cell1.innerHTML = " 610";
+        cell2.innerHTML = " 8s";
+        cell3.innerHTML = " 4s";
+        cell4.innerHTML = "3.5";
+    }
     render() {
         return (
             <div>
-            <script src="sorttable.js"></script>
+            <button onClick={() => this.addTeam()}>Add Team:</button>
                 <table className="sortable" id="myTable2">
                     <thead>
                         <tr>
