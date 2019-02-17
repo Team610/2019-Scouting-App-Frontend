@@ -7,7 +7,7 @@ class PostMatchForm extends Component {
         super(props);
         this.state = {};
 		this.getJSON = this.getJSON.bind(this);
-		
+
 		this.cmtInputsRef = React.createRef();
         this.cmtTxtboxRef = React.createRef();
         this.fieldRefs = [this.cmtInputsRef, this.cmtTxtboxRef];
