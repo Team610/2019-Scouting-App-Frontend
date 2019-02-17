@@ -1,14 +1,21 @@
 import React, {Component} from 'react';
-import CycleInputs from './CycleInputs/CycleInputs';
-import ClimbLevelInput from './ClimbLevelInput/ClimbLevelInput';
-import DefenseInput from './DefenseInput/DefenseInput';
+// import CycleInputs from './CycleInputs/CycleInputs'; //LEGACY FIELDS
+// import ClimbLevelInput from './ClimbLevelInput/ClimbLevelInput';
+// import DefenseInput from './DefenseInput/DefenseInput';
+import FieldInput from './FieldInput/FieldInput';
 
 class InMatchForm extends Component {
     constructor(props) {
         super(props);
         this.state = {};
-        this.fieldRefs = [];
-        this.getJSON = this.getJSON.bind(this);
+		this.getJSON = this.getJSON.bind(this);
+		
+		this.fieldInputRef = React.createRef();
+		this.fieldRefs = [this.fieldInputRef];
+        // let cyclesRef = React.createRef(); //LEGACY REFS
+        // let defenseRef = React.createRef();
+        // let climbRef = React.createRef();
+		// this.fieldRefs.push(cyclesRef, defenseRef, climbRef);
     }
     getJSON() {
         let obj={};
@@ -21,17 +28,11 @@ class InMatchForm extends Component {
         return obj;
     }
     render() {
-        let cyclesRef = React.createRef();
-        let defenseRef = React.createRef();
-        let climbRef = React.createRef();
-        this.fieldRefs.push(cyclesRef, defenseRef, climbRef);
         return (
             <div>
-                <CycleInputs ref={cyclesRef} />
-                <DefenseInput ref={defenseRef} />
-                <ClimbLevelInput id="climb_lvl" ref={climbRef} />
+                <FieldInput ref={this.fieldInputRef} />
             </div>
-        ); //TODO: make the id less sketchy
+        );
     }
 }
 
