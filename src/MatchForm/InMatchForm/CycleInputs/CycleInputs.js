@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import React, { Component } from "react";
 import CycleInput from "./CycleInput";
 import FieldIMG from "./field";
+=======
+import React, {Component} from 'react';
+import CycleInput from './CycleInput';
+import FieldIMG from '../FieldInput/FieldInput';
+>>>>>>> feature/skeleton
 
 class CycleInputs extends Component {
   constructor(props) {
@@ -17,6 +23,7 @@ class CycleInputs extends Component {
     for (let i = 0; i < this.cycleRefs.length; i++) {
       arr.push(this.cycleRefs[i].current.getJSON().cycleDuration);
     }
+<<<<<<< HEAD
     return {
       cycle_cargo_lv1: arr
     };
@@ -33,6 +40,37 @@ class CycleInputs extends Component {
       let cycleRef = React.createRef();
       cycles.push(<CycleInput key={i} cycleNum={i} ref={cycleRef} />);
       this.cycleRefs.push(cycleRef);
+=======
+    getJSON() {
+        let arr=[];
+        for (let i=0; i<this.cycleRefs.length; i++) {
+            arr.push(this.cycleRefs[i].current.getJSON().cycleDuration);
+        }
+        return ({
+            cycle_cargo_lv1: arr
+        });
+    }
+    addCycle() {
+        this.setState({
+            numCycles: this.state.numCycles+1
+        });
+    }
+    render() {
+        let cycles = [];
+        this.cycleRefs = [];
+        for (let i=1; i<=this.state.numCycles; i++) {
+            let cycleRef = React.createRef();
+            cycles.push(<CycleInput key={i} cycleNum={i} ref={cycleRef} />);
+            this.cycleRefs.push(cycleRef);
+        }
+        return (
+            <div>
+                {cycles.length>0 ? cycles : <span>No cycles yet<br/></span>}
+                <button onClick={this.addCycle} type="button">Add cycle</button>
+				<FieldIMG />
+            </div>
+        );
+>>>>>>> feature/skeleton
     }
     return (
       <div>

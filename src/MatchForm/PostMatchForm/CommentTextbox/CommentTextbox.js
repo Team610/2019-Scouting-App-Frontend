@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 
 class CommentTextbox extends Component {
     getJSON() {
-        return "";
+        return {"comments":'n/a'};
     }
     render() {
-        return(<p>Not done yet!</p>);
+        return(<p>Comment textbox here</p>);
     }
 }
 

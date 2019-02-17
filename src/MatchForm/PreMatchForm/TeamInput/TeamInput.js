@@ -30,7 +30,7 @@ class TeamInput extends Component {
     }
     async getTeams() {
         try {
-            let teamList = await fetch(`/matches/${this.props.matchNum}/teams`);
+            let teamList = await fetch(`/api/v1/matches/${this.props.matchNum}/teams`);
             let teamJSON = await teamList.json();
             this.setState({
                 teamJson: teamJSON
