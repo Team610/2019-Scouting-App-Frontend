@@ -6,12 +6,12 @@
         "react": "^16.7.0",
         "react-dom": "^16.7.0",
         "react-loadable": "^5.5.0",
-		"react-modal": "^3.8.1",
-		"typescripts": "*",
-	    "styled-components": "^4.0.0-beta.9",
+        "react-modal": "^3.8.1",
         "react-pie-menu": "^0.2.4",
         "react-router-dom": "^4.3.1",
-        "react-scripts": "^2.1.5"
+        "react-scripts": "^2.1.5",
+        "styled-components": "^4.1.3",
+        "typescript": "^3.3.3"
     },
     "scripts": {
         "start": "react-scripts start",
