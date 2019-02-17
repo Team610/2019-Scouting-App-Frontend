@@ -16,7 +16,7 @@ class Team extends Component {
 		}
 	}
 	async componentWillMount() {
-		let data = await fetch(`/stats/team/${this.state.teamNum}/agg`);
+		let data = await fetch(`/api/v1/stats/team/${this.state.teamNum}/agg`);
 		data = await data.json();
 		this.setState({
 			dataAvailable: true,
