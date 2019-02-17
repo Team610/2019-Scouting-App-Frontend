@@ -32,7 +32,7 @@ class MatchForm extends Component {
 
         let status;
         try {
-            status = await fetch('/submitForm', {
+            status = await fetch('/api/v1/submitForm', {
                 method: 'POST',
                 body: JSON.stringify(obj),
                 headers: {
