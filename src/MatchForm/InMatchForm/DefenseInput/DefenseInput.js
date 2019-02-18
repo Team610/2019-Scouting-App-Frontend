@@ -26,9 +26,12 @@ class DefenseInput extends Component {
     this.startTime = new Date().getTime();
   };
 
-  onCloseModal = () => {
+  onCloseModal = (defType) => {
     this.setState({ open: false });
-    this.endTime = new Date().getTime();
+    if(defType !== undefined) {
+      this.endTime = new Date().getTime();
+      this.setDefType(defType);
+    }
   };
 
   setDefType = (type) => {
@@ -42,11 +45,11 @@ class DefenseInput extends Component {
         <button onClick={this.onOpenModal}>Defense</button>
         <Modal open={open} onClose={this.onCloseModal} center>
         <br/>
-        <button style={{margin:5}} onClick={()=>{this.setDefType('rocket_goalkeep')}}> Rocket Goalkeep </button><br/>
-        <button style={{margin:5}} onClick={()=>{this.setDefType('ship_goalkeep')}}> Ship Goalkeep </button><br/>
-        <button style={{margin:5}} onClick={()=>{this.setDefType('pinning')}}> Pinning </button><br/>
-        <button style={{margin:5}} onClick={()=>{this.setDefType('driving_around')}}> Driving Around </button><br/>
-        <button style={{margin:5}} onClick={()=>{this.setDefType('tough_defense')}}> Tough Defense </button><br/>
+        <button style={{margin:5}} onClick={()=>{this.onCloseModal('rocket_goalkeep')}}> Rocket Goalkeep </button><br/>
+        <button style={{margin:5}} onClick={()=>{this.onCloseModal('ship_goalkeep')}}> Ship Goalkeep </button><br/>
+        <button style={{margin:5}} onClick={()=>{this.onCloseModal('pinning')}}> Pinning </button><br/>
+        <button style={{margin:5}} onClick={()=>{this.onCloseModal('driving_around')}}> Driving Around </button><br/>
+        <button style={{margin:5}} onClick={()=>{this.onCloseModal('tough_defense')}}> Tough Defense </button><br/>
         </Modal>
       </div>
     );
