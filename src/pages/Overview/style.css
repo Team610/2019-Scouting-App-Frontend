@@ -6,7 +6,7 @@ td {
   padding-left: 10px;
 }
 th {
-  padding: 10pt;
+  padding: 10px;
 }
 
 .h {
@@ -60,6 +60,6 @@ th {
 .header {
   width: 60%;
   margin-left: 0px;
-  text-align: left;
+  text-align: right;
   padding-left: 0px;
 }

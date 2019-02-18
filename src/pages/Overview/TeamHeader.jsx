@@ -7,7 +7,7 @@ class TeamHeader extends Component {
   }
 
   render() {
-    var teamNumber = this.props.num;
+    let teamNumber = this.props.num;
     return (
       <html>
         <head>
