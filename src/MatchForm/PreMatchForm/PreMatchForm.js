@@ -32,11 +32,13 @@ class PreMatchForm extends Component {
     render() {
         return(
             <div>
-              <div class="element">
+              <div className ="element">
                 <TeamInput matchNum = {this.props.matchNum} ref={this.teamSlctRef} /><br/>
                   <table>
-                    <col width = "160"></col>
-                    <col width = "160"></col>
+                    <colgroup>
+                      <col width = "160"></col>
+                      <col width = "160"></col>
+                    </colgroup>
                     <tbody>
                       <tr>
                         <td><RobotPreloadInput id='robot_preload' ref={this.robPrldRef} /></td>
@@ -46,14 +48,13 @@ class PreMatchForm extends Component {
                   </table>
                 <br/>
               </div>
-              <div class = "element">
+              <div className = "element">
                 <StartPositionInput id='start_position' ref={this.startPosRef} />
               </div>
-              <div class="element">
+              <div className = "element">
                 <RobotPhotoDisplay id='robo_photo' ref={this.shpPrldRef} />
               </div>
             </div>
-
         ); //TODO: figure out who has responsibility for fetching correct match# and team# from DB
     }
 }

@@ -23,7 +23,7 @@ class CommentRadioInput extends Component {
     render() {
       let choiceList = [];
       for(let choice of this.props.choices) {
-          choiceList.push(<label className="comment"><input type="radio" name={this.props.inputId} value={choice.value} onChange={this.handleChange} />{choice.description}<br/></label>);
+          choiceList.push(<label key={choice.value} className="comment"><input type="radio" name={this.props.inputId} value={choice.value} onChange={this.handleChange} />{choice.description}<br/></label>);
         }
       return(
           <div>

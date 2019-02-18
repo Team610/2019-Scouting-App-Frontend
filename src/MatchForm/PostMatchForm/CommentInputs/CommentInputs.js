@@ -26,7 +26,7 @@ class CommentInputs extends Component {
     render() {
         return(
           <div>
-              <CommentRadioInput class="comments" inputId="climb_state"
+              <CommentRadioInput className="comments" inputId="climb_state"
                 choices={
                   [
                     {value:"climb_yes", description:" The robot climbed successfully."},
@@ -38,12 +38,12 @@ class CommentInputs extends Component {
                   description="Climb Comments"
                   ref={this.radio1Ref}/>
             <br/><br/>
-              <p class="subheader"> Other Comments </p>
-                <CommentCheckboxInput inputId="robot_dc" description=" Robot DC'd midmatch." ref={cbox1Ref}/>
+              <p className="subheader"> Other Comments </p>
+                <CommentCheckboxInput inputId="robot_dc" description=" Robot DC'd midmatch." ref={this.cbox1Ref}/>
               <br/>
-                <CommentCheckboxInput inputId="robot_noshow" description=" Robot was a no-show." ref={cbox2Ref}/>
+                <CommentCheckboxInput inputId="robot_noshow" description=" Robot was a no-show." ref={this.cbox2Ref}/>
               <br/>
-                <CommentCheckboxInput inputId="robot_drop" description=" Robot droppped several game pieces." ref={cbox3Ref}/>
+                <CommentCheckboxInput inputId="robot_drop" description=" Robot droppped several game pieces." ref={this.cbox3Ref}/>
           </div>
         );
     }

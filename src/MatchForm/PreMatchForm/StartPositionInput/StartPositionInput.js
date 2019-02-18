@@ -4,24 +4,40 @@ class StartPositionInput extends Component {
     constructor(props){
       super(props);
       // Set base state
-      this.startlevel = "1";
+      this.state = {
+        value:"false"
+      };
       this.getJSON = this.getJSON.bind(this);
+      this.handleChange = this.handleChange.bind(this);
     }
 
     getJSON() {
-      if(this.startlevel==="2"){
-        return {"start_on_lvl_2":true};
-      }else{
-        return {"start_on_lvl_2":false};
-      }
+        return {"start_on_lvl_2":this.state.value};
+    }
+
+    handleChange(event){
+      this.setState({
+        value: event.target.value
+      });
+    }
+
+    componentDidUpdate() {
+      console.log(this.state.value)
     }
 
     render() {
         return(
           <div>
-            <p class="subheader"> Indicate Starting Position  </p>
-            <img src={require("./RLHAB.png")} height="240"></img>
-            <p> Current level: {this.startlevel}</p>
+            <p className="subheader"> Select Start Position  </p>
+            <img src={require("./RLHAB.png")} height="160"></img><br/>
+            <label className="comment">
+              <input checked={this.state.value==="false"} type="radio" name="startPos" value="false" onChange={this.handleChange}></input>
+              Level 1
+            </label><br/>
+            <label className="comment">
+              <input checked={this.state.value==="true"} type="radio" name="startPos" value="true" onChange={this.handleChange}></input>
+              Level 2
+            </label><br/>
           </div>
         );
     }

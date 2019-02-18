@@ -29,7 +29,7 @@ class RobotPreload extends Component {
     render() {
         return (
             <div>
-              <p class="subheader">Robot Preloads</p>
+              <p className="subheader">Robot Preloads</p>
               <label>
                 <button type="button" onClick={this.cargoIncrement} className="increment-button">Cargo: {this.state.cargo}</button>
               </label><br/>
