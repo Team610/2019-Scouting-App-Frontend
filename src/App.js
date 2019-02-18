@@ -12,8 +12,6 @@ const App = () => (
             <Route exact path="/" component={Home} />
             <Route path="/form" component={MatchForms} />
             <Route path="/teams" component={Teams} />
-            <Route path="/testForm" component={TestForm} />
-            <Route path="/sample" component={LoadableSamplePage} />
             <Route path="/overall" component={OverallTable} />
         </div>
     </Router>
@@ -70,11 +68,6 @@ const OverallTable = Loadable({
     loading: Loading
 });
 
-const TestForm = Loadable({
-    loader: () => import("./pages/testForm"),
-    loading: Loading
-});
-
 const Header = () => (
     <ul>
         <li><NavLink to="/">Home</NavLink></li>
@@ -85,10 +78,5 @@ const Header = () => (
     </ul>
 );
 const NoMatch = () => (<div>404 Error: Page not found</div>);
-
-const LoadableSamplePage = Loadable({
-    loader: () => import("./pages/samplePage"),
-    loading: Loading
-});
 
 export default App;
