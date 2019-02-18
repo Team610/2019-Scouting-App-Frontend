@@ -30,23 +30,23 @@ class MatchForm extends Component {
         console.log(JSON.stringify(obj));
 
 		// Submit the form!
-        // let status;
-        // try {
-        //     status = await fetch('/api/v1/submitForm', {
-        //         method: 'POST',
-        //         body: JSON.stringify(obj),
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         }
-        //     });
-        // } catch (err) {
-        //     console.log("could not submit form");
-        //     console.log(err.message);
-        // }
-        // if(!status.success) {console.log("form submission failed")}
-        // this.setState({
-        //     redirect: true
-        // });
+        let status;
+        try {
+            status = await fetch('/api/v1/submitForm', {
+                method: 'POST',
+                body: JSON.stringify(obj),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (err) {
+            console.log("could not submit form");
+            console.log(err.message);
+        }
+        if(!status.success) {console.log("form submission failed")}
+        this.setState({
+            redirect: true
+        });
     }
     render() {
         if (this.state.redirect) {
