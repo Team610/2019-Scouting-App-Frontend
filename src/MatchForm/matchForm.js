@@ -32,6 +32,7 @@ class MatchForm extends Component {
 		// Submit the form!
         let status;
         try {
+			console.log("trying to submit form");
             status = await fetch('/api/v1/submitForm', {
                 method: 'POST',
                 body: JSON.stringify(obj),
