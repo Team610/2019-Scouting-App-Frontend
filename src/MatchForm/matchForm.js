@@ -4,7 +4,7 @@ import PreMatchForm from './PreMatchForm/PreMatchForm';
 import InMatchForm from './InMatchForm/InMatchForm';
 import PostMatchForm from './PostMatchForm/PostMatchForm';
 import {Redirect} from 'react-router';
-import styles from "./style.css";
+import "./style.css";
 
 class MatchForm extends Component {
     constructor(props) {
