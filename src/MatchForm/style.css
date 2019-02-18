@@ -1,5 +1,7 @@
 #submit {
-  color: blue;
+  background-color: darkgreen;
+  color: white;
+  padding: 15px 32px;
   font-size: 20px;
 }
 
@@ -20,10 +22,28 @@ table {
   border: 3px solid #DDDDDD;
   color: black;
   padding: 15px 32px;
-  length: 100px;
-  height: 48px;
+  margin-top: 2px;
+  margin-bottom: 2px;
   text-align: center;
   text-decoration: none;
   font-size: 16px;
   float:up;
+  width: 128px;
+}
+
+.comment {
+  font-family: "Arial";
+  font-size: 16px;
+}
+
+.subheader{
+  font-family: "Arial";
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.element{
+  margin-left: 10px;
+  display: inline-block;
+  float:left;
 }
