@@ -36,7 +36,7 @@ class ShipPreload extends Component {
   render() {
     return (
       <div>
-       Ship Preloads<br/>
+       <p className="subheader">Ship Preloads</p>
        <label>
         <button type="button" onClick={this.cargoIncrement} className="increment-button">Cargo: {this.state.cargo}</button>
        </label><br/>

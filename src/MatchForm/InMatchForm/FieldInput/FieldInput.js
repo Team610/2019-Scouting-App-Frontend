@@ -39,7 +39,7 @@ class FieldIMG extends Component {
 
 	checkZone() {
 		let element = this.instance;
-		//Actual field starts at (110, 0); ends at (720, 325)
+		//the old comment here is obsolete
 		let arr = {
 			topHP: [0, 0, 230, 145],
 			btmHP: [0, 630, 230, 770],
@@ -64,8 +64,8 @@ class FieldIMG extends Component {
 			// console.log(`top: ${arr[key][1]+element.offsetTop}\tbottom: ${arr[key][3]+element.offsetTop}`);
 			if (this.mouseX >= arr[key][0]+element.offsetLeft &&
 					this.mouseX <= arr[key][2]+element.offsetLeft &&
-					this.mouseY >= arr[key][1]+element.offsetTop &&
-					this.mouseY <= arr[key][3]+element.offsetTop) {
+					this.mouseY >= arr[key][1]+element.offsetTop +190 &&
+					this.mouseY <= arr[key][3]+element.offsetTop+190) {
 				zone = key;
 			}
 		}

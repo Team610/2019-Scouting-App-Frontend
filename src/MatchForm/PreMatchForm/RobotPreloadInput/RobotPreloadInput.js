@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import styles from "../../style.css"
+import "../../style.css"
 
 class RobotPreload extends Component {
     constructor(props) {
@@ -29,7 +29,7 @@ class RobotPreload extends Component {
     render() {
         return (
             <div>
-              Robot Preloads<br/>
+              <p className="subheader">Robot Preloads</p>
               <label>
                 <button type="button" onClick={this.cargoIncrement} className="increment-button">Cargo: {this.state.cargo}</button>
               </label><br/>

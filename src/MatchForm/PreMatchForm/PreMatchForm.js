@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import RobotPreload from './RobotPreloadInput/RobotPreloadInput';
-import ShipPreload from './ShipPreloadsInput/ShipPreloadsInput';
-import StartPosition from './StartPositionInput/StartPositionInput';
+import RobotPreloadInput from './RobotPreloadInput/RobotPreloadInput';
+import ShipPreloadInput from './ShipPreloadsInput/ShipPreloadsInput';
+import StartPositionInput from './StartPositionInput/StartPositionInput';
 import TeamInput from './TeamInput/TeamInput';
-import styles from "../style.css";
+import RobotPhotoDisplay from './RobotPhotoDisplay/RobotPhotoDisplay';
+import "../style.css";
 
 class PreMatchForm extends Component {
     constructor(props) {
@@ -15,6 +16,7 @@ class PreMatchForm extends Component {
 		this.startPosRef = React.createRef();
 		this.robPrldRef = React.createRef();
 		this.shpPrldRef = React.createRef();
+    this.robPhotRef = React.createRef();
 		this.fieldRefs = [this.teamSlctRef, this.startPosRef, this.robPrldRef, this.shpPrldRef];
     }
     getJSON() {
@@ -30,20 +32,28 @@ class PreMatchForm extends Component {
     render() {
         return(
             <div>
+              <div className ="element">
                 <TeamInput matchNum = {this.props.matchNum} ref={this.teamSlctRef} /><br/>
-				        <StartPosition ref={this.startPosRef} />
                   <table>
-                  <col width = "160"></col>
-                  <col width = "160"></col>
+                    <colgroup>
+                      <col width = "160"></col>
+                      <col width = "160"></col>
+                    </colgroup>
                     <tbody>
                       <tr>
-                        <td><RobotPreload id='robot_preload' ref={this.robPrldRef} /></td>
-                        <td><ShipPreload id='ship_preloads' ref={this.shpPrldRef} /></td>
+                        <td><RobotPreloadInput id='robot_preload' ref={this.robPrldRef} /></td>
+                        <td><ShipPreloadInput id='ship_preloads' ref={this.shpPrldRef} /></td>
                       </tr>
                     </tbody>
-
                   </table>
                 <br/>
+              </div>
+              <div className = "element">
+                <StartPositionInput id='start_position' ref={this.startPosRef} />
+              </div>
+              <div className = "element">
+                <RobotPhotoDisplay id='robo_photo' ref={this.shpPrldRef} />
+              </div>
             </div>
         ); //TODO: figure out who has responsibility for fetching correct match# and team# from DB
     }
