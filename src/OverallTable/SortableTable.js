@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 //https://www.w3schools.com/jsref/met_table_insertrow.asp
 
 class SortableTable extends Component {
-    constructor(props) {
-        super(props);
-    }
+    // constructor(props) {
+    //     super(props);
+    // }
     sortTable = (n) => {
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
         table = document.getElementById("myTable2");
@@ -29,13 +29,13 @@ class SortableTable extends Component {
                 y = rows[i + 1].getElementsByTagName("TD")[n];
                 /* Check if the two rows should switch place,
                 based on the direction, asc or desc: */
-                if (dir == "asc") {
+                if (dir === "asc") {
                     if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
                         // If so, mark as a switch and break the loop:
                         shouldSwitch = true;
                         break;
                     }
-                } else if (dir == "desc") {
+                } else if (dir === "desc") {
                     if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
                         // If so, mark as a switch and break the loop:
                         shouldSwitch = true;
@@ -53,7 +53,7 @@ class SortableTable extends Component {
             } else {
             /* If no switching has been done AND the direction is "asc",
             set the direction to "desc" and run the while loop again. */
-                if (switchcount == 0 && dir == "asc") {
+                if (switchcount === 0 && dir === "asc") {
                     dir = "desc";
                     switching = true;
                 }

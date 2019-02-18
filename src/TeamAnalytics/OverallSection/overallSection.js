@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import styles from "../style.css";
 
 class OverallSection extends Component {
 	showMatchData() {
