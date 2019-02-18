@@ -36,36 +36,41 @@ class FieldIMG extends Component {
 	getJSON() {
 		return this.data;
 	}
-
 	checkZone() {
 		let element = this.instance;
-		//the old comment here is obsolete
-		let arr = {
-			topHP: [0, 0, 230, 145],
-			btmHP: [0, 630, 230, 770],
-			topRocket: [410, 0, 660, 190], //felix don't like wobun
-			btmRocket: [410, 600, 660, 770],
-			cargoShip: [410, 270, 740, 510],
-			HAB: [0, 260, 230, 510],
-			defense: [800, 0, 900, 770],
-			deadZone_TopHP_HAB: [0, 145, 260, 230],
-			deadZone_BtmHP_HAB: [0, 510, 230, 630],
-			deadZone_other_defense: [660, 0, 800, 770]
+		let img = this.image;
+		let origFieldSize = {
+			width:3252,
+			height:2786
+		}
+		let zones = {
+			topHP: {startCoor:{x: 0, y: 0}, endCoor:{x: 840, y: 510}},
+			btmHP: {startCoor:{x: 0, y: 2276}, endCoor:{x: 840, y: 2786}},
+			topRocket: {startCoor:{x:1500, y:0}, endCoor:{x:2350, y:650}},
+			btmRocket: {startCoor:{x:1500, y: 2136}, endCoor:{x: 2350, y: 2786}},
+			cargoShip: {startCoor:{x:1340, y: 850}, endCoor:{x: 2700, y: 1930}},
+			HAB: {startCoor:{x:0, y:945}, endCoor:{x:840, y:1845}},
+			defense: {startCoor:{x:2840, y:0}, endCoor:{x:3252, y:2786}},
+			deadZone_TopHP_HAB: {startCoor:{x:0, y:510}, endCoor:{x:840, y:945}},
+			deadZone_BtmHP_HAB: {startCoor:{x:0, y:1845}, endCoor:{x:840, y:2276}},
+			deadZone_other_defense: {startCoor:{x:2700, y:0}, endCoor:{x:2840, y:2786}}
 		};
 
 		let zone = 'other';
-		for (let key of Object.keys(arr)) {
-			if(arr[key].length===0) {
+		//Mouse relative to element coordinates
+		let mInEX = this.mouseX - element.offsetLeft;
+		let mInEY = this.mouseY - element.offsetTop;
+		for (let key of Object.keys(zones)) {
+			if(zones[key].length===0) {
 				continue;
 			}
-			console.log(`mouse pos: ${this.mouseX-element.offsetLeft}, ${this.mouseY-element.offsetTop}`);
-			// console.log(`comparing with ${key}`);
-			// console.log(`left: ${arr[key][0]+element.offsetLeft}\tright: ${arr[key][2]+element.offsetLeft}`);
-			// console.log(`top: ${arr[key][1]+element.offsetTop}\tbottom: ${arr[key][3]+element.offsetTop}`);
-			if (this.mouseX >= arr[key][0]+element.offsetLeft &&
-					this.mouseX <= arr[key][2]+element.offsetLeft &&
-					this.mouseY >= arr[key][1]+element.offsetTop +190 &&
-					this.mouseY <= arr[key][3]+element.offsetTop+190) {
+
+			let lft = zones[key].startCoor.x * img.width / origFieldSize.width;
+			let rit = zones[key].endCoor.x * img.width / origFieldSize.width;
+			let top = zones[key].startCoor.y * img.height / origFieldSize.height;
+			let btm = zones[key].endCoor.y * img.height / origFieldSize.height;
+
+			if (mInEX >= lft && mInEX <= rit && mInEY >= top && mInEY <= btm) {
 				zone = key;
 			}
 		}
@@ -75,14 +80,14 @@ class FieldIMG extends Component {
 	render() {
 		return (
 			<div ref={field => (this.instance = field)} id='fieldmap'>
-				<img className="nonSelectable" src={require("./RL.png")} width= "75%" onMouseDown={this.handleClick}/>
+				<img className="nonSelectable" ref={image => (this.image = image)} width='75%' src={require("./RL.png")} onMouseDown={this.handleClick}/>
 				{this.menuActive ? this.loadMenu() : null}
 			</div>
 		);
 	}
 
 	handleClick = e => {
-		//Get the mouse's coordinates relative to the viewport and window's scroll
+		//Get the mouse's coordinates relative to: (element's pos in viewport) and (window's scroll)
 		this.mouseX = e.clientX + window.pageXOffset;
 		this.mouseY = e.clientY + window.pageYOffset;
 

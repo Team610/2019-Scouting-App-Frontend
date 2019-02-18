@@ -16,7 +16,6 @@ class PreMatchForm extends Component {
 		this.startPosRef = React.createRef();
 		this.robPrldRef = React.createRef();
 		this.shpPrldRef = React.createRef();
-    this.robPhotRef = React.createRef();
 		this.fieldRefs = [this.teamSlctRef, this.startPosRef, this.robPrldRef, this.shpPrldRef];
     }
     getJSON() {
@@ -31,7 +30,7 @@ class PreMatchForm extends Component {
 	}
     render() {
         return(
-            <div>
+            <div style={{overflow:'auto'}}>
               <div className ="element">
                 <TeamInput matchNum = {this.props.matchNum} ref={this.teamSlctRef} /><br/>
                   <table>
@@ -52,7 +51,7 @@ class PreMatchForm extends Component {
                 <StartPositionInput id='start_position' ref={this.startPosRef} />
               </div>
               <div className = "element">
-                <RobotPhotoDisplay id='robo_photo' ref={this.shpPrldRef} />
+                <RobotPhotoDisplay id='robo_photo' />
               </div>
             </div>
         ); //TODO: figure out who has responsibility for fetching correct match# and team# from DB
