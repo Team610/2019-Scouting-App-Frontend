@@ -13,7 +13,6 @@ class CommentCheckboxInput extends Component {
 	}
 	handleChange() {
 		this.value = !this.value;
-		console.log(this.value);
 	}
 	render() {
 		return (
