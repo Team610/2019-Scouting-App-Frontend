@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
+import mockJSON from './teamsMock.json';
 
 //https://www.w3schools.com/jsref/met_table_insertrow.asp
 
 class SortableTable extends Component {
     constructor(props) {
         super(props);
+        this.addTeam = this.addTeam.bind(this);
+    }
+    componentDidMount() {
+        this.addTeam();
     }
     sortTable = (n) => {
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
@@ -30,13 +35,15 @@ class SortableTable extends Component {
                 /* Check if the two rows should switch place,
                 based on the direction, asc or desc: */
                 if (dir == "asc") {
-                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    //Breaks if the content is not a number
+                    if (Number(x.innerHTML) > Number(y.innerHTML)) {
                         // If so, mark as a switch and break the loop:
                         shouldSwitch = true;
                         break;
                     }
                 } else if (dir == "desc") {
-                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                    //Breaks if the content is not a number
+                    if (Number(x.innerHTML) < Number(y.innerHTML)) {
                         // If so, mark as a switch and break the loop:
                         shouldSwitch = true;
                         break;
@@ -61,56 +68,31 @@ class SortableTable extends Component {
         }
     }
     addTeam() {
-        var table = document.getElementById("myTable2");
-        var row = table.insertRow(5);
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        var cell4 = row.insertCell(3);
-        cell1.innerHTML = " 610";
-        cell2.innerHTML = " 8s";
-        cell3.innerHTML = " 4s";
-        cell4.innerHTML = "3.5";
+        let table = document.getElementById("myTable2");
+        for(let key of Object.keys(mockJSON)) {
+            let row = table.insertRow(1);
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1);
+            let cell3 = row.insertCell(2);
+            let cell4 = row.insertCell(3);
+            cell1.innerHTML = key;
+            cell2.innerHTML = mockJSON[key]["avg_num_hatch_lv1"];
+            cell3.innerHTML = mockJSON[key]["avg_num_hatch_lv2"];
+            cell4.innerHTML = mockJSON[key]["avg_num_hatch_lv3"];
+        }
     }
     render() {
         return (
             <div>
-            <button onClick={() => this.addTeam()}>Add Team:</button>
                 <table className="sortable" id="myTable2">
                     <thead>
                         <tr>
                             <th onClick={() => this.sortTable(0)}>Team</th>
-                            <th onClick={() => this.sortTable(1)}>Climb</th>
-                            <th onClick={() => this.sortTable(2)}>Cycles</th>
-                            <th onClick={() => this.sortTable(3)}>Avg Rp</th>
+                            <th onClick={() => this.sortTable(1)}>AvgHatchLvl1</th>
+                            <th onClick={() => this.sortTable(2)}>AvgHatchLvl2</th>
+                            <th onClick={() => this.sortTable(3)}>AvgHatchLvl3</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td> 610</td>
-                            <td> 8s</td>
-                            <td> 6s</td>
-                            <td>3.5</td>
-                        </tr>
-                        <tr>
-                            <td> 188</td>
-                            <td>10s</td>
-                            <td> 5s</td>
-                            <td>3.2</td>
-                        </tr>
-                        <tr>
-                            <td>4476</td>
-                            <td>11s</td>
-                            <td> 8s</td>
-                            <td>2.5</td>
-                        </tr>
-                        <tr>
-                            <td> 771</td>
-                            <td>12s</td>
-                            <td> 4s</td>
-                            <td>2.8</td>
-                        </tr>
-                    </tbody>
                 </table>
             </div>
         );
