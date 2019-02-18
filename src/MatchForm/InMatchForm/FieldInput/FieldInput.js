@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PieMenu, { Slice } from "react-pie-menu";
+import DefenseInput from "./DefenseInput/DefenseInput";
 
 class FieldIMG extends Component {
 	constructor(props) {
@@ -22,20 +23,24 @@ class FieldIMG extends Component {
 		this.mouseX = 0;
 		this.mouseY = 0;
 		this.startState = {};
+		this.defenseRef = React.createRef();
 		this.data = {
 			'cycle_hatch_lv1':[],'cycle_hatch_lv2':[],'cycle_hatch_lv3':[],'cycle_hatch_lvS':[],
 			'cycle_cargo_lv1':[],'cycle_cargo_lv2':[],'cycle_cargo_lv3':[],'cycle_cargo_lvS':[],
-			'def_tough_defense':[], 'def_rocket_goalkeep':[], 'def_ship_goalkeep':[], 'def_pinning':[], 'def_driving_around':[],
 			'climb_lvl':'1','climb_time':0.0
 		};
 		this.state = {
 			menuRequested: false
 		};
 	}
-
 	getJSON() {
+		let defJSON = this.defenseRef.current.getJSON();
+		for (let key of Object.keys(defJSON)) {
+			this.data[key] = defJSON[key];
+		}
 		return this.data;
 	}
+
 	checkZone() {
 		let element = this.instance;
 		let img = this.image;
@@ -80,8 +85,9 @@ class FieldIMG extends Component {
 	render() {
 		return (
 			<div ref={field => (this.instance = field)} id='fieldmap'>
-				<img className="nonSelectable" ref={image => (this.image = image)} width='75%' src={require("./RL.png")} onMouseDown={this.handleClick}/>
+				<img alt="field" className="nonSelectable" ref={image => (this.image = image)} width='75%' src={require("./RL.png")} onMouseDown={this.handleClick}/>
 				{this.menuActive ? this.loadMenu() : null}
+				<DefenseInput ref={this.defenseRef} />
 			</div>
 		);
 	}
@@ -107,10 +113,14 @@ class FieldIMG extends Component {
 		//   if the robot has a game piece intaked, check if the tapped zone is a scoring zone
 		//   otherwise, check if the tapped zone is an intake zone
 		// In each successful case, the menu should be active
-		// TODO: Include logic for defense cycles
+		// Alternatively, if the defense zone was hit, run the defense logic
 		let whichMenu = '';
 		let zone = this.checkZone();
 		console.log(`intake: ${this.intake}, zone: ${zone}`);
+		if (zone === 'defense') {
+			this.defenseRef.current.onOpenModal();
+			return;
+		}
 		if (this.intake) {
 			if (zone === 'topRocket' || zone === 'btmRocket') {
 				console.log('rocket selected');

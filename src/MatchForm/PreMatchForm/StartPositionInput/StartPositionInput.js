@@ -21,15 +21,11 @@ class StartPositionInput extends Component {
       });
     }
 
-    componentDidUpdate() {
-      console.log(this.state.value)
-    }
-
     render() {
         return(
           <div>
             <p className="subheader"> Select Start Position  </p>
-            <img src={require("./RLHAB.png")} height="160"></img><br/>
+            <img src={require("./RLHAB.png")} height="160" alt="start position"/><br/>
             <label className="comment">
               <input checked={this.state.value==="false"} type="radio" name="startPos" value="false" onChange={this.handleChange}></input>
               Level 1

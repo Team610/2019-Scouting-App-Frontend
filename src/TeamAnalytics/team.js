@@ -6,6 +6,7 @@ import PreGameSection from './PreGameSection/preGameSection';
 import EndGameSection from './EndGameSection/endGameSection';
 import DefenseSection from './DefenseSection/defenseSection';
 import CommentsSection from './CommentsSection/commentsSection';
+import './style.css';
 
 class Team extends Component {
 	constructor(props) {
