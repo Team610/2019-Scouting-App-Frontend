@@ -1,10 +1,23 @@
 import React, { Component } from "react";
-import PieMenu, { Slice } from "react-pie-menu";
+import PieMenu, { Slice, PieCenter } from "react-pie-menu";
 import DefenseInput from "./DefenseInput/DefenseInput";
+import ClimbInput from "./ClimbInput/ClimbInput";
+import { ThemeProvider } from 'styled-components';
+import * as styles from './FieldInput.style';
 
 class FieldIMG extends Component {
 	constructor(props) {
 		super(props);
+
+		this.theme = {
+			pieMenu: {
+				container: styles.container,
+				center: styles.center,
+			},
+			slice: {
+				container: styles.slice,
+			},
+		};
 
 		//Bind all methods
 		this.handleClick = this.handleClick.bind(this);
@@ -24,10 +37,11 @@ class FieldIMG extends Component {
 		this.mouseY = 0;
 		this.startState = {};
 		this.defenseRef = React.createRef();
+		this.climbRef = React.createRef();
 		this.data = {
-			'cycle_hatch_lv1':[],'cycle_hatch_lv2':[],'cycle_hatch_lv3':[],'cycle_hatch_lvS':[],
-			'cycle_cargo_lv1':[],'cycle_cargo_lv2':[],'cycle_cargo_lv3':[],'cycle_cargo_lvS':[],
-			'climb_lvl':'1','climb_time':0.0
+			'cycle_hatch_lv1': [], 'cycle_hatch_lv2': [], 'cycle_hatch_lv3': [], 'cycle_hatch_lvS': [],
+			'cycle_cargo_lv1': [], 'cycle_cargo_lv2': [], 'cycle_cargo_lv3': [], 'cycle_cargo_lvS': [],
+			'climb_lvl': '1', 'climb_time': 0.0
 		};
 		this.state = {
 			menuRequested: false
@@ -38,6 +52,10 @@ class FieldIMG extends Component {
 		for (let key of Object.keys(defJSON)) {
 			this.data[key] = defJSON[key];
 		}
+		let climbJSON = this.climbRef.current.getJSON();
+		for (let key of Object.keys(climbJSON)) {
+			this.data[key] = climbJSON[key];
+		}
 		return this.data;
 	}
 
@@ -45,20 +63,20 @@ class FieldIMG extends Component {
 		let element = this.instance;
 		let img = this.image;
 		let origFieldSize = {
-			width:3252,
-			height:2786
+			width: 3252,
+			height: 2786
 		}
 		let zones = {
-			topHP: {startCoor:{x: 0, y: 0}, endCoor:{x: 840, y: 510}},
-			btmHP: {startCoor:{x: 0, y: 2276}, endCoor:{x: 840, y: 2786}},
-			topRocket: {startCoor:{x:1500, y:0}, endCoor:{x:2350, y:650}},
-			btmRocket: {startCoor:{x:1500, y: 2136}, endCoor:{x: 2350, y: 2786}},
-			cargoShip: {startCoor:{x:1340, y: 850}, endCoor:{x: 2700, y: 1930}},
-			HAB: {startCoor:{x:0, y:945}, endCoor:{x:840, y:1845}},
-			defense: {startCoor:{x:2840, y:0}, endCoor:{x:3252, y:2786}},
-			deadZone_TopHP_HAB: {startCoor:{x:0, y:510}, endCoor:{x:840, y:945}},
-			deadZone_BtmHP_HAB: {startCoor:{x:0, y:1845}, endCoor:{x:840, y:2276}},
-			deadZone_other_defense: {startCoor:{x:2700, y:0}, endCoor:{x:2840, y:2786}}
+			topHP: { startCoor: { x: 0, y: 0 }, endCoor: { x: 840, y: 510 } },
+			btmHP: { startCoor: { x: 0, y: 2276 }, endCoor: { x: 840, y: 2786 } },
+			topRocket: { startCoor: { x: 1500, y: 0 }, endCoor: { x: 2350, y: 650 } },
+			btmRocket: { startCoor: { x: 1500, y: 2136 }, endCoor: { x: 2350, y: 2786 } },
+			cargoShip: { startCoor: { x: 1340, y: 850 }, endCoor: { x: 2700, y: 1930 } },
+			HAB: { startCoor: { x: 0, y: 945 }, endCoor: { x: 840, y: 1845 } },
+			defense: { startCoor: { x: 2840, y: 0 }, endCoor: { x: 3252, y: 2786 } },
+			deadZone_TopHP_HAB: { startCoor: { x: 0, y: 510 }, endCoor: { x: 840, y: 945 } },
+			deadZone_BtmHP_HAB: { startCoor: { x: 0, y: 1845 }, endCoor: { x: 840, y: 2276 } },
+			deadZone_other_defense: { startCoor: { x: 2700, y: 0 }, endCoor: { x: 2840, y: 2786 } }
 		};
 
 		let zone = 'other';
@@ -66,7 +84,7 @@ class FieldIMG extends Component {
 		let mInEX = this.mouseX - element.offsetLeft;
 		let mInEY = this.mouseY - element.offsetTop;
 		for (let key of Object.keys(zones)) {
-			if(zones[key].length===0) {
+			if (zones[key].length === 0) {
 				continue;
 			}
 
@@ -85,9 +103,10 @@ class FieldIMG extends Component {
 	render() {
 		return (
 			<div ref={field => (this.instance = field)} id='fieldmap'>
-				<img alt="field" className="nonSelectable" ref={image => (this.image = image)} width='75%' src={require("./RL.png")} onMouseDown={this.handleClick}/>
+				<img alt="field" className="nonSelectable" ref={image => (this.image = image)} width='75%' src={require("./RL.png")} onMouseDown={this.handleClick} />
 				{this.menuActive ? this.loadMenu() : null}
 				<DefenseInput ref={this.defenseRef} />
+				<ClimbInput ref={this.climbRef} />
 			</div>
 		);
 	}
@@ -104,7 +123,7 @@ class FieldIMG extends Component {
 		// console.log(`elementPos: ${element.offsetLeft}, ${element.offsetTop}`);
 
 		//Check if the menu is already active. If so, don't try to bring up another one!
-		if(this.state.menuRequested) {
+		if (this.state.menuRequested) {
 			console.log('menu already active!');
 			return;
 		}
@@ -140,10 +159,10 @@ class FieldIMG extends Component {
 		}
 
 		//Check if a menu was selected
-		if(whichMenu !== '') {
+		if (whichMenu !== '') {
 			this.menu = whichMenu;
 			this.menuActive = true;
-			this.setState({menuRequested: true});
+			this.setState({ menuRequested: true });
 		}
 	};
 
@@ -162,7 +181,7 @@ class FieldIMG extends Component {
 	recordCycleStart(intake) {
 		console.log('recording cycle start');
 		let startTime = new Date().getTime();
-		this.startState = {"time":startTime, "intake":intake};
+		this.startState = { "time": startTime, "intake": intake };
 
 		this.intake = true;
 		this.menuActive = false;
@@ -171,7 +190,7 @@ class FieldIMG extends Component {
 
 	recordCycleEnd(level) {
 		console.log('recording cycle end');
-		let dur = (new Date().getTime() - this.startState.time)/1000;
+		let dur = (new Date().getTime() - this.startState.time) / 1000;
 		this.data[`cycle_${this.startState['intake']}_lv${level}`].push(dur);
 
 		this.intake = false;
@@ -179,97 +198,114 @@ class FieldIMG extends Component {
 		this.setState({ menuRequested: false });
 	}
 
+	closeMenu() {
+		this.menuActive = false;
+		this.setState({ menuRequested: false });
+	}
+
 	intakeMenu() {
+		const Center = <PieCenter onClick={this.closeMenu}>&larr;</PieCenter>
 		return (
-			<PieMenu
-				radius="125px"
-				centerRadius="20px"
-				centerX={`${this.mouseX}px`}
-				centerY={`${this.mouseY}px`}
-			>
-				<Slice
-					onSelect={() => {
-						console.log('selecting hatch');
-						this.recordCycleStart("hatch");
-					}}
+			<ThemeProvider theme={this.theme}>
+				<PieMenu
+					radius="125px"
+					centerRadius="20px"
+					centerX={`${this.mouseX}px`}
+					centerY={`${this.mouseY}px`}
+					center={Center}
 				>
-					<p className="nonSelectable">Hatch</p>
-				</Slice>
-				<Slice
-					onSelect={() => {
-						console.log('selecting cargo');
-						this.recordCycleStart("cargo");
-					}}
-				>
-					<p className="nonSelectable">Cargo</p>
-				</Slice>
-			</PieMenu>
+					<Slice
+						onSelect={() => {
+							console.log('selecting hatch');
+							this.recordCycleStart("hatch");
+						}}
+					>
+						<p className="nonSelectable">Hatch</p>
+					</Slice>
+					<Slice
+						onSelect={() => {
+							console.log('selecting cargo');
+							this.recordCycleStart("cargo");
+						}}
+					>
+						<p className="nonSelectable">Cargo</p>
+					</Slice>
+				</PieMenu>
+			</ThemeProvider>
 		);
 	}
 
 	rocketMenu() {
+		const Center = <PieCenter onClick={this.closeMenu}>&larr;</PieCenter>
 		return (
-			<PieMenu
-				radius="125px"
-				centerRadius="20px"
-				centerX={`${this.mouseX}px`}
-				centerY={`${this.mouseY}px`}
-			>
-				<Slice
-					onSelect={() => {
-						console.log('going rocket high');
-						this.recordCycleEnd(3);
-					}}
+			<ThemeProvider theme={this.theme}>
+				<PieMenu
+					radius="125px"
+					centerRadius="20px"
+					centerX={`${this.mouseX}px`}
+					centerY={`${this.mouseY}px`}
+					center={Center}
 				>
-					<p className="nonSelectable">Level 3</p>
-				</Slice>
-				<Slice
-					onSelect={() => {
-						console.log('going rocket middle');
-						this.recordCycleEnd(2);
-					}}
-				>
-					<p className="nonSelectable">Level 2</p>
-				</Slice>
+					<Slice
+						onSelect={() => {
+							console.log('going rocket high');
+							this.recordCycleEnd(3);
+						}}
+					>
+						<p className="nonSelectable">Level 3</p>
+					</Slice>
+					<Slice
+						onSelect={() => {
+							console.log('going rocket middle');
+							this.recordCycleEnd(2);
+						}}
+					>
+						<p className="nonSelectable">Level 2</p>
+					</Slice>
 
-				<Slice
-					onSelect={() => {
-						console.log('going rocket low');
-						this.recordCycleEnd(1);
-					}}
-				>
-					<p className="nonSelectable">Level 1</p>
-				</Slice>
+					<Slice
+						onSelect={() => {
+							console.log('going rocket low');
+							this.recordCycleEnd(1);
+						}}
+					>
+						<p className="nonSelectable">Level 1</p>
+					</Slice>
 
-				<Slice
-					onSelect={() => {
-						console.log('going rocket middle');
-						this.recordCycleEnd(2);
-					}}
-				>
-					<p className="nonSelectable">Level 2</p>
-				</Slice>
-			</PieMenu>
+					<Slice
+						onSelect={() => {
+							console.log('going rocket middle');
+							this.recordCycleEnd(2);
+						}}
+					>
+						<p className="nonSelectable">Level 2</p>
+					</Slice>
+				</PieMenu>
+			</ThemeProvider>
 		);
 	}
 
 	shipMenu() {
+		const Center = <PieCenter onClick={this.closeMenu}>&larr;</PieCenter>
 		return (
-			<PieMenu
-				radius="125px"
-				centerRadius="20px"
-				centerX={`${this.mouseX}px`}
-				centerY={`${this.mouseY}px`}
-			>
-				<Slice
-					onSelect={() => {
-						console.log('going cargo ship');
-						this.recordCycleEnd('S');
-					}}
+			<ThemeProvider theme={this.theme}>
+				<PieMenu
+					radius="125px"
+					centerRadius="20px"
+					centerX={`${this.mouseX}px`}
+					centerY={`${this.mouseY}px`}
+					center={Center}
 				>
-					<p className="nonSelectable">Cargo Ship</p>
-				</Slice>
-			</PieMenu>
+					<Slice
+						onSelect={() => {
+							console.log('going cargo ship');
+							this.recordCycleEnd('S');
+						}}
+					>
+						<p className="nonSelectable">Cargo Ship</p>
+					</Slice>
+				</PieMenu>
+			</ThemeProvider>
 		);
 	}
 }

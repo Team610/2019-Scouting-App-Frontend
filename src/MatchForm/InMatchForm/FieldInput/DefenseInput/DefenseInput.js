@@ -34,7 +34,7 @@ class DefenseInput extends Component {
 
 	render() {
 		return (
-			<div>
+			<React.Fragment>
 				<Modal open={this.state.open} onClose={this.onCloseModal} center>
 					<br />
 					<button style={{ margin: 5 }}
@@ -58,7 +58,7 @@ class DefenseInput extends Component {
 						Tough Defense
 					</button><br />
 				</Modal>
-			</div>
+			</React.Fragment>
 		);
 	}
 }
