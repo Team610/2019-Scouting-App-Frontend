@@ -1,23 +1,11 @@
 import React, { Component } from "react";
-import PieMenu, { Slice, PieCenter } from "react-pie-menu";
+import PieMenu, { Slice } from "react-pie-menu";
 import DefenseInput from "./DefenseInput/DefenseInput";
 import ClimbInput from "./ClimbInput/ClimbInput";
-import { ThemeProvider } from 'styled-components';
-import * as styles from './FieldInput.style';
 
 class FieldIMG extends Component {
 	constructor(props) {
 		super(props);
-
-		this.theme = {
-			pieMenu: {
-				container: styles.container,
-				center: styles.center,
-			},
-			slice: {
-				container: styles.slice,
-			},
-		};
 
 		//Bind all methods
 		this.handleClick = this.handleClick.bind(this);
@@ -28,6 +16,7 @@ class FieldIMG extends Component {
 		this.intakeMenu = this.intakeMenu.bind(this);
 		this.rocketMenu = this.rocketMenu.bind(this);
 		this.shipMenu = this.shipMenu.bind(this);
+		this.closeMenu = this.closeMenu.bind(this);
 
 		//Initialize empty state
 		this.menu = '';
@@ -59,6 +48,76 @@ class FieldIMG extends Component {
 		return this.data;
 	}
 
+	render() {
+		return (
+			<div ref={field => (this.instance = field)} id='fieldmap'>
+				<img alt="field" className="nonSelectable" ref={image => (this.image = image)} width='75%' src={require("./RL.png")} onMouseDown={this.handleClick} />
+				{this.menuActive ? this.loadMenu() : null}
+				<DefenseInput ref={this.defenseRef} />
+				<ClimbInput ref={this.climbRef} />
+			</div>
+		);
+	}
+
+	handleClick(e) {
+		//Get the mouse's coordinates relative to: (element's pos in viewport) and (window's scroll)
+		this.mouseX = e.clientX + window.pageXOffset;
+		this.mouseY = e.clientY + window.pageYOffset;
+
+		// Print the mouse's coordinates to the screen (debug only)
+		// let element = this.instance;
+		// console.log(`mousePos: ${this.mouseX}, ${this.mouseY}`);
+		// console.log(`windowPos: ${window.pageXOffset}, ${window.pageYOffset}`);
+		// console.log(`elementPos: ${element.offsetLeft}, ${element.offsetTop}`);
+
+		//Check if the menu is already active. If so, don't try to bring up another one!
+		if (this.state.menuRequested) {
+			console.log('menu already active!');
+			this.closeMenu();
+			return;
+		}
+
+		// Check which menu should be brought up:
+		//   if the robot has a game piece intaked, check if the tapped zone is a scoring zone
+		//   otherwise, check if the tapped zone is an intake zone
+		// In each successful case, the menu should be active
+		// Alternatively, if the defense zone was hit, run the defense logic
+		let whichMenu = '';
+		let zone = this.checkZone();
+		console.log(`intake: ${this.intake}, zone: ${zone}`);
+		if (zone === 'defense') {
+			this.defenseRef.current.onOpenModal();
+			return;
+		}
+		if (zone === 'HAB') {
+			this.climbRef.current.onOpenModal();
+			return;
+		}
+		if (this.intake) {
+			if (zone === 'topRocket' || zone === 'btmRocket') {
+				console.log('rocket selected');
+				whichMenu = 'rocket';
+			} else if (zone === 'cargoShip') {
+				console.log('ship selected');
+				whichMenu = 'ship';
+			}
+		} else {
+			if (zone === 'topHP' || zone === 'btmHP') {
+				console.log('hp intake selected');
+				whichMenu = 'intake';
+			} else if (zone === 'other') {
+				console.log('ground intake selected');
+				whichMenu = 'intake';
+			}
+		}
+
+		//Check if a menu was selected
+		if (whichMenu !== '') {
+			this.menu = whichMenu;
+			this.menuActive = true;
+			this.setState({ menuRequested: true });
+		}
+	}
 	checkZone() {
 		let element = this.instance;
 		let img = this.image;
@@ -100,72 +159,6 @@ class FieldIMG extends Component {
 		return zone;
 	}
 
-	render() {
-		return (
-			<div ref={field => (this.instance = field)} id='fieldmap'>
-				<img alt="field" className="nonSelectable" ref={image => (this.image = image)} width='75%' src={require("./RL.png")} onMouseDown={this.handleClick} />
-				{this.menuActive ? this.loadMenu() : null}
-				<DefenseInput ref={this.defenseRef} />
-				<ClimbInput ref={this.climbRef} />
-			</div>
-		);
-	}
-
-	handleClick = e => {
-		//Get the mouse's coordinates relative to: (element's pos in viewport) and (window's scroll)
-		this.mouseX = e.clientX + window.pageXOffset;
-		this.mouseY = e.clientY + window.pageYOffset;
-
-		// Print the mouse's coordinates to the screen (debug only)
-		// let element = this.instance;
-		// console.log(`mousePos: ${this.mouseX}, ${this.mouseY}`);
-		// console.log(`windowPos: ${window.pageXOffset}, ${window.pageYOffset}`);
-		// console.log(`elementPos: ${element.offsetLeft}, ${element.offsetTop}`);
-
-		//Check if the menu is already active. If so, don't try to bring up another one!
-		if (this.state.menuRequested) {
-			console.log('menu already active!');
-			return;
-		}
-
-		// Check which menu should be brought up:
-		//   if the robot has a game piece intaked, check if the tapped zone is a scoring zone
-		//   otherwise, check if the tapped zone is an intake zone
-		// In each successful case, the menu should be active
-		// Alternatively, if the defense zone was hit, run the defense logic
-		let whichMenu = '';
-		let zone = this.checkZone();
-		console.log(`intake: ${this.intake}, zone: ${zone}`);
-		if (zone === 'defense') {
-			this.defenseRef.current.onOpenModal();
-			return;
-		}
-		if (this.intake) {
-			if (zone === 'topRocket' || zone === 'btmRocket') {
-				console.log('rocket selected');
-				whichMenu = 'rocket';
-			} else if (zone === 'cargoShip') {
-				console.log('ship selected');
-				whichMenu = 'ship';
-			}
-		} else {
-			if (zone === 'topHP' || zone === 'btmHP') {
-				console.log('hp intake selected');
-				whichMenu = 'intake';
-			} else if (zone === 'other') {
-				console.log('ground intake selected');
-				whichMenu = 'intake';
-			}
-		}
-
-		//Check if a menu was selected
-		if (whichMenu !== '') {
-			this.menu = whichMenu;
-			this.menuActive = true;
-			this.setState({ menuRequested: true });
-		}
-	};
-
 	loadMenu() {
 		//Load the appropriate menu
 		console.log(`loading ${this.menu} menu`);
@@ -177,6 +170,11 @@ class FieldIMG extends Component {
 			return this.intakeMenu();
 		}
 	}
+	closeMenu() {
+		console.log('closing menu');
+		this.menuActive = false;
+		this.setState({ menuRequested: false });
+	}
 
 	recordCycleStart(intake) {
 		console.log('recording cycle start');
@@ -187,7 +185,6 @@ class FieldIMG extends Component {
 		this.menuActive = false;
 		this.setState({ menuRequested: false });
 	}
-
 	recordCycleEnd(level) {
 		console.log('recording cycle end');
 		let dur = (new Date().getTime() - this.startState.time) / 1000;
@@ -198,114 +195,113 @@ class FieldIMG extends Component {
 		this.setState({ menuRequested: false });
 	}
 
-	closeMenu() {
-		this.menuActive = false;
-		this.setState({ menuRequested: false });
-	}
-
 	intakeMenu() {
-		const Center = <PieCenter onClick={this.closeMenu}>&larr;</PieCenter>
 		return (
-			<ThemeProvider theme={this.theme}>
-				<PieMenu
-					radius="125px"
-					centerRadius="20px"
-					centerX={`${this.mouseX}px`}
-					centerY={`${this.mouseY}px`}
-					center={Center}
+			<PieMenu
+				radius="125px"
+				centerX={`${this.mouseX}px`}
+				centerY={`${this.mouseY}px`}
+				centerRadius='25px'
+			>
+				<Slice />
+				<Slice
+					onSelect={() => {
+						console.log('selecting hatch');
+						this.recordCycleStart("hatch");
+					}}
 				>
-					<Slice
-						onSelect={() => {
-							console.log('selecting hatch');
-							this.recordCycleStart("hatch");
-						}}
-					>
-						<p className="nonSelectable">Hatch</p>
-					</Slice>
-					<Slice
-						onSelect={() => {
-							console.log('selecting cargo');
-							this.recordCycleStart("cargo");
-						}}
-					>
-						<p className="nonSelectable">Cargo</p>
-					</Slice>
-				</PieMenu>
-			</ThemeProvider>
+					<span className="nonSelectable">Hatch</span>
+				</Slice>
+				<Slice />
+				<Slice
+					onSelect={() => {
+						console.log('selecting cargo');
+						this.recordCycleStart("cargo");
+					}}
+				>
+					<span className="nonSelectable">Cargo</span>
+				</Slice>
+			</PieMenu>
 		);
 	}
-
 	rocketMenu() {
-		const Center = <PieCenter onClick={this.closeMenu}>&larr;</PieCenter>
 		return (
-			<ThemeProvider theme={this.theme}>
-				<PieMenu
-					radius="125px"
-					centerRadius="20px"
-					centerX={`${this.mouseX}px`}
-					centerY={`${this.mouseY}px`}
-					center={Center}
+			<PieMenu
+				radius="125px"
+				centerRadius="25px"
+				centerX={`${this.mouseX}px`}
+				centerY={`${this.mouseY}px`}
+			>
+				<Slice
+					onSelect={() => {
+						console.log('going rocket high');
+						this.recordCycleEnd(3);
+					}}
 				>
-					<Slice
-						onSelect={() => {
-							console.log('going rocket high');
-							this.recordCycleEnd(3);
-						}}
-					>
-						<p className="nonSelectable">Level 3</p>
-					</Slice>
-					<Slice
-						onSelect={() => {
-							console.log('going rocket middle');
-							this.recordCycleEnd(2);
-						}}
-					>
-						<p className="nonSelectable">Level 2</p>
-					</Slice>
+					<span className="nonSelectable">Level 3</span>
+				</Slice>
+				<Slice
+					onSelect={() => {
+						console.log('going rocket middle');
+						this.recordCycleEnd(2);
+					}}
+				>
+					<span className="nonSelectable">Level 2</span>
+				</Slice>
 
-					<Slice
-						onSelect={() => {
-							console.log('going rocket low');
-							this.recordCycleEnd(1);
-						}}
-					>
-						<p className="nonSelectable">Level 1</p>
-					</Slice>
+				<Slice
+					onSelect={() => {
+						console.log('going rocket low');
+						this.recordCycleEnd(1);
+					}}
+				>
+					<span className="nonSelectable">Level 1</span>
+				</Slice>
 
-					<Slice
-						onSelect={() => {
-							console.log('going rocket middle');
-							this.recordCycleEnd(2);
-						}}
-					>
-						<p className="nonSelectable">Level 2</p>
-					</Slice>
-				</PieMenu>
-			</ThemeProvider>
+				<Slice
+					onSelect={() => {
+						console.log('going rocket middle');
+						this.recordCycleEnd(2);
+					}}
+				>
+					<span className="nonSelectable">Level 2</span>
+				</Slice>
+			</PieMenu>
 		);
 	}
-
 	shipMenu() {
-		const Center = <PieCenter onClick={this.closeMenu}>&larr;</PieCenter>
 		return (
-			<ThemeProvider theme={this.theme}>
-				<PieMenu
-					radius="125px"
-					centerRadius="20px"
-					centerX={`${this.mouseX}px`}
-					centerY={`${this.mouseY}px`}
-					center={Center}
+			<PieMenu
+				radius="125px"
+				centerRadius="25px"
+				centerX={`${this.mouseX}px`}
+				centerY={`${this.mouseY}px`}
+			>
+				<Slice
+					onSelect={() => {
+						console.log('going cargo ship');
+						this.recordCycleEnd('S');
+					}}
 				>
-					<Slice
-						onSelect={() => {
-							console.log('going cargo ship');
-							this.recordCycleEnd('S');
-						}}
-					>
-						<p className="nonSelectable">Cargo Ship</p>
-					</Slice>
-				</PieMenu>
-			</ThemeProvider>
+					<span className="nonSelectable">Cargo Ship</span>
+				</Slice>
+				<Slice
+					onSelect={() => {
+						console.log('going cargo ship');
+						this.recordCycleEnd('S');
+					}}
+				>
+					<span className="nonSelectable">Cargo Ship</span>
+				</Slice>
+				<Slice
+					onSelect={() => {
+						console.log('going cargo ship');
+						this.recordCycleEnd('S');
+					}}
+				>
+					<span className="nonSelectable">Cargo Ship</span>
+				</Slice>
+			</PieMenu>
 		);
 	}
 }
