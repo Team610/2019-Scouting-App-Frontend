@@ -17,7 +17,7 @@ class Misc extends Component {
             </thead>
           </table>
         </h1>
-        <table>
+        <table className="analyticsTable">
           <tbody>
             <tr>
               <th>Total Defense Time</th>

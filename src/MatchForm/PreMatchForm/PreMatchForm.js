@@ -31,7 +31,9 @@ class PreMatchForm extends Component {
 	}
     render() {
         return(
-            <div>
+            <div style={
+              {overflow:"auto"}
+            }>
               <div className ="element">
                 <TeamInput matchNum = {this.props.matchNum} ref={this.teamSlctRef} /><br/>
                   <table>

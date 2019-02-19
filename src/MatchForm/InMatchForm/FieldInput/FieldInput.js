@@ -64,8 +64,8 @@ class FieldIMG extends Component {
 			// console.log(`top: ${arr[key][1]+element.offsetTop}\tbottom: ${arr[key][3]+element.offsetTop}`);
 			if (this.mouseX >= arr[key][0]+element.offsetLeft &&
 					this.mouseX <= arr[key][2]+element.offsetLeft &&
-					this.mouseY >= arr[key][1]+element.offsetTop +190 &&
-					this.mouseY <= arr[key][3]+element.offsetTop+190) {
+					this.mouseY >= arr[key][1]+element.offsetTop &&
+					this.mouseY <= arr[key][3]+element.offsetTop) {
 				zone = key;
 			}
 		}

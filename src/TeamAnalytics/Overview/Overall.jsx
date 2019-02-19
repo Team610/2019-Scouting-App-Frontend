@@ -16,7 +16,7 @@ class Overall extends Component {
     return (
       <div>
         <h1 className="comp">Overall</h1>
-        <table>
+        <table className="analyticsTable">
           <thead>
             <tr>
               <th>Hatch</th>

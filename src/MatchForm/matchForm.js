@@ -60,7 +60,6 @@ class MatchForm extends Component {
             <div>
                 <MatchFormHeader matchNum={this.state.matchNum} />
                 <PreMatchForm matchNum={this.state.matchNum} ref={this.preMatchRef} /><br/>
-                <br/><br/><br/><br/><br/><br/>
                 <InMatchForm ref={this.inMatchRef} /><br/>
                 <PostMatchForm ref={this.postMatchRef} /><br/>
                 <button id="submit" type="button" onClick={this.submitForm}>Submit</button>

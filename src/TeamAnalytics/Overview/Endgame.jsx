@@ -9,7 +9,7 @@ class Endgame extends Component {
     return (
       <div>
         <h1 className="comp">Endgame</h1>
-        <table>
+        <table className="analyticsTable">
           <thead>
             <tr>
               <th />
