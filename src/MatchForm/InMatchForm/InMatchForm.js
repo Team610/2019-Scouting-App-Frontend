@@ -24,6 +24,7 @@ class InMatchForm extends Component {
         return (
             <React.Fragment>
                 <FieldInput ref={this.fieldInputRef} />
+				<button onClick={this.props.callNext}>Next</button>
             </React.Fragment>
         );
     }

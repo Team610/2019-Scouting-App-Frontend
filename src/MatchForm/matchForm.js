@@ -1,71 +1,102 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import MatchFormHeader from './MatchFormHeader/MatchFormHeader';
 import PreMatchForm from './PreMatchForm/PreMatchForm';
 import InMatchForm from './InMatchForm/InMatchForm';
 import PostMatchForm from './PostMatchForm/PostMatchForm';
-import {Redirect} from 'react-router';
+import { Redirect } from 'react-router';
 import "./style.css";
 
 class MatchForm extends Component {
-    constructor(props) {
-        super(props);
-        this.submitForm = this.submitForm.bind(this);
-        this.state = {
-            matchNum: this.props.match.params.matchId
-        }
+	constructor(props) {
+		super(props);
+		this.submitForm = this.submitForm.bind(this);
+		this.state = {
+			matchView:'preMatch'
+		}
 
-        this.preMatchRef = React.createRef();
-        this.inMatchRef = React.createRef();
-        this.postMatchRef = React.createRef();
-        this.viewRefs = [this.preMatchRef, this.inMatchRef, this.postMatchRef];
-    }
-    async submitForm() {
-        let obj = {matchNum: this.state.matchNum};
-        for (let i=0; i<this.viewRefs.length; i++) {
-            let viewJSON = this.viewRefs[i].current.getJSON();
-            for (let key in viewJSON) {
-                obj[key]=viewJSON[key];
-            }
-        }
-        console.log(JSON.stringify(obj));
+		this.matchNum = this.props.match.params.matchId;
+		this.data = { matchNum: this.matchNum };
+
+		this.preMatchRef = React.createRef();
+		this.inMatchRef = React.createRef();
+		this.postMatchRef = React.createRef();
+		this.viewRefs = [this.preMatchRef, this.inMatchRef, this.postMatchRef];
+	}
+	async submitForm() {
+		console.log(JSON.stringify(this.data));
 
 		// Submit the form!
-        let status;
-        try {
+		let status;
+		try {
 			console.log("trying to submit form");
-            status = await fetch('/api/v1/submitForm', {
-                method: 'POST',
-                body: JSON.stringify(obj),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-        } catch (err) {
-            console.log("could not submit form");
-            console.log(err.message);
-        }
-        if(!status.success) {console.log("form submission failed")}
-        this.setState({
-            redirect: true
-        });
-    }
-    render() {
-        if (this.state.redirect) {
-            return (
-                <Redirect to="/" />
-            );
-        }
-        //TODO: add team selector back in
-        return (
-            <div>
-                <MatchFormHeader matchNum={this.state.matchNum} /><hr/>
-                <PreMatchForm matchNum={this.state.matchNum} ref={this.preMatchRef} /><hr/>
-                <InMatchForm ref={this.inMatchRef} /><hr/>
-                <PostMatchForm ref={this.postMatchRef} />
-                <button id="submit" type="button" onClick={this.submitForm} style={{float:'right'}}>Submit</button>
-            </div>
-        );
-    }
+			status = await fetch('/api/v1/submitForm', {
+				method: 'POST',
+				body: JSON.stringify(this.data),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+		} catch (err) {
+			console.log("could not submit form");
+			console.log(err.message);
+		}
+		if (!status.success) { console.log("form submission failed") }
+		this.setState({
+			redirect: true
+		});
+	}
+	collectData(view) {
+		let ref;
+		if (view === 'preMatch') { ref = this.preMatchRef; }
+		else if (view === 'inMatch') {ref=this.inMatchRef;}
+		else if (view === 'postMatch') {ref=this.postMatchRef;}
+		let viewJSON = ref.current.getJSON();
+		for (let key in viewJSON) {
+			this.data[key] = viewJSON[key];
+		}
+		if (view === 'preMatch') {
+			this.setState({matchView:'inMatch'});
+		} else if (view === 'inMatch') {
+			this.setState({matchView:'postMatch'});
+		} else if (view==='postMatch') {
+			this.submitForm();
+		}
+	}
+	render() {
+		if (this.state.redirect) {
+			return (
+				<Redirect to="/" />
+			);
+		}
+		if (this.state.matchView === 'preMatch') {
+			return (
+				<div>
+					<MatchFormHeader matchNum={this.matchNum} /><hr />
+					<PreMatchForm callNext = {()=>this.collectData('preMatch')} matchNum={this.matchNum} ref={this.preMatchRef} />
+				</div>
+			);
+		} else if (this.state.matchView === 'inMatch') {
+			return (
+				<div>
+					<MatchFormHeader matchNum={this.matchNum} /><hr />
+					<InMatchForm callNext={()=>this.collectData('inMatch')} ref={this.inMatchRef} />
+				</div>
+			);
+		} else if (this.state.matchView === 'postMatch') {
+			return (
+				<div>
+					<MatchFormHeader matchNum={this.matchNum} /><hr />
+					<PostMatchForm callNext={()=>this.collectData('postMatch')} ref={this.postMatchRef} />
+				</div>
+			);
+		}
+		return (
+			<div>
+				<MatchFormHeader matchNum={this.matchNum} /><hr />
+				Loading...
+			</div>
+		);
+	}
 }
 
 export default MatchForm;
