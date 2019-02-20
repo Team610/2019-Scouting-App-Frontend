@@ -26,10 +26,10 @@ class Team extends Component {
 
 	getChartData(){
 		let txt = '{"33":{"1":{"def_tough_defense":[],"robot_preload":["cargo"],"cargo_lv3":[],"def_driving_around":[],"def_ship_goalkeep":[],"start_on_lvl_2":["true"],"comments":["undefined"],"climb_lvl":["1"],"hatch_lv1":[],"hatch_lv2":[1.104],"hatch_lvS":[],"climb_time":["0"],"hatch_lv3":[],"cargo_lvS":[],"def_rocket_goalkeep":[],"ship_preloads":["cargo","hatch"],"cargo_lv2":[],"cargo_lv1":[],"def_pinning":[1.096]}}}';
-		let obj = JSON.parse(txt);
+		let obj = JSON.parse(txt); 
 		console.log(obj[33]);
 		this.setState({
-      chartData:{
+      chartData:{ // add data to this chart
         labels: [],
         datasets:[
           {
