@@ -52,6 +52,7 @@ class PreMatchForm extends Component {
 				<div className="element">
 					<RobotPhotoDisplay id='robo_photo' />
 				</div>
+				<button onClick={this.props.callNext}>Next</button>
 			</div>
 		); //TODO: figure out who has responsibility for fetching correct match# and team# from DB
 	}

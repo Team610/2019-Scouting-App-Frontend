@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PieMenu, { Slice } from "react-pie-menu";
 import DefenseInput from "./DefenseInput/DefenseInput";
+import ClimbInput from "./ClimbInput/ClimbInput";
 
 class FieldIMG extends Component {
 	constructor(props) {
@@ -15,6 +16,7 @@ class FieldIMG extends Component {
 		this.intakeMenu = this.intakeMenu.bind(this);
 		this.rocketMenu = this.rocketMenu.bind(this);
 		this.shipMenu = this.shipMenu.bind(this);
+		this.closeMenu = this.closeMenu.bind(this);
 
 		//Initialize empty state
 		this.menu = '';
@@ -24,10 +26,11 @@ class FieldIMG extends Component {
 		this.mouseY = 0;
 		this.startState = {};
 		this.defenseRef = React.createRef();
+		this.climbRef = React.createRef();
 		this.data = {
-			'cycle_hatch_lv1':[],'cycle_hatch_lv2':[],'cycle_hatch_lv3':[],'cycle_hatch_lvS':[],
-			'cycle_cargo_lv1':[],'cycle_cargo_lv2':[],'cycle_cargo_lv3':[],'cycle_cargo_lvS':[],
-			'climb_lvl':'1','climb_time':0.0
+			'cycle_hatch_lv1': [], 'cycle_hatch_lv2': [], 'cycle_hatch_lv3': [], 'cycle_hatch_lvS': [],
+			'cycle_cargo_lv1': [], 'cycle_cargo_lv2': [], 'cycle_cargo_lv3': [], 'cycle_cargo_lvS': [],
+			'climb_lvl': '1', 'climb_time': 0.0
 		};
 		this.state = {
 			menuRequested: false
@@ -38,61 +41,25 @@ class FieldIMG extends Component {
 		for (let key of Object.keys(defJSON)) {
 			this.data[key] = defJSON[key];
 		}
+		let climbJSON = this.climbRef.current.getJSON();
+		for (let key of Object.keys(climbJSON)) {
+			this.data[key] = climbJSON[key];
+		}
 		return this.data;
-	}
-
-	checkZone() {
-		let element = this.instance;
-		let img = this.image;
-		let origFieldSize = {
-			width:3252,
-			height:2786
-		}
-		let zones = {
-			topHP: {startCoor:{x: 0, y: 0}, endCoor:{x: 840, y: 510}},
-			btmHP: {startCoor:{x: 0, y: 2276}, endCoor:{x: 840, y: 2786}},
-			topRocket: {startCoor:{x:1500, y:0}, endCoor:{x:2350, y:650}},
-			btmRocket: {startCoor:{x:1500, y: 2136}, endCoor:{x: 2350, y: 2786}},
-			cargoShip: {startCoor:{x:1340, y: 850}, endCoor:{x: 2700, y: 1930}},
-			HAB: {startCoor:{x:0, y:945}, endCoor:{x:840, y:1845}},
-			defense: {startCoor:{x:2840, y:0}, endCoor:{x:3252, y:2786}},
-			deadZone_TopHP_HAB: {startCoor:{x:0, y:510}, endCoor:{x:840, y:945}},
-			deadZone_BtmHP_HAB: {startCoor:{x:0, y:1845}, endCoor:{x:840, y:2276}},
-			deadZone_other_defense: {startCoor:{x:2700, y:0}, endCoor:{x:2840, y:2786}}
-		};
-
-		let zone = 'other';
-		//Mouse relative to element coordinates
-		let mInEX = this.mouseX - element.offsetLeft;
-		let mInEY = this.mouseY - element.offsetTop;
-		for (let key of Object.keys(zones)) {
-			if(zones[key].length===0) {
-				continue;
-			}
-
-			let lft = zones[key].startCoor.x * img.width / origFieldSize.width;
-			let rit = zones[key].endCoor.x * img.width / origFieldSize.width;
-			let top = zones[key].startCoor.y * img.height / origFieldSize.height;
-			let btm = zones[key].endCoor.y * img.height / origFieldSize.height;
-
-			if (mInEX >= lft && mInEX <= rit && mInEY >= top && mInEY <= btm) {
-				zone = key;
-			}
-		}
-		return zone;
 	}
 
 	render() {
 		return (
 			<div ref={field => (this.instance = field)} id='fieldmap'>
-				<img alt="field" className="nonSelectable" ref={image => (this.image = image)} width='75%' src={require("./RL.png")} onMouseDown={this.handleClick}/>
+				<img alt="field" className="nonSelectable" ref={image => (this.image = image)} width='75%' src={require("./RL.png")} onMouseDown={this.handleClick} />
 				{this.menuActive ? this.loadMenu() : null}
 				<DefenseInput ref={this.defenseRef} />
+				<ClimbInput ref={this.climbRef} />
 			</div>
 		);
 	}
 
-	handleClick = e => {
+	handleClick(e) {
 		//Get the mouse's coordinates relative to: (element's pos in viewport) and (window's scroll)
 		this.mouseX = e.clientX + window.pageXOffset;
 		this.mouseY = e.clientY + window.pageYOffset;
@@ -104,8 +71,9 @@ class FieldIMG extends Component {
 		// console.log(`elementPos: ${element.offsetLeft}, ${element.offsetTop}`);
 
 		//Check if the menu is already active. If so, don't try to bring up another one!
-		if(this.state.menuRequested) {
+		if (this.state.menuRequested) {
 			console.log('menu already active!');
+			this.closeMenu();
 			return;
 		}
 
@@ -119,6 +87,10 @@ class FieldIMG extends Component {
 		console.log(`intake: ${this.intake}, zone: ${zone}`);
 		if (zone === 'defense') {
 			this.defenseRef.current.onOpenModal();
+			return;
+		}
+		if (zone === 'HAB') {
+			this.climbRef.current.onOpenModal();
 			return;
 		}
 		if (this.intake) {
@@ -140,12 +112,52 @@ class FieldIMG extends Component {
 		}
 
 		//Check if a menu was selected
-		if(whichMenu !== '') {
+		if (whichMenu !== '') {
 			this.menu = whichMenu;
 			this.menuActive = true;
-			this.setState({menuRequested: true});
+			this.setState({ menuRequested: true });
 		}
-	};
+	}
+	checkZone() {
+		let element = this.instance;
+		let img = this.image;
+		let origFieldSize = {
+			width: 3252,
+			height: 2786
+		}
+		let zones = {
+			topHP: { startCoor: { x: 0, y: 0 }, endCoor: { x: 840, y: 510 } },
+			btmHP: { startCoor: { x: 0, y: 2276 }, endCoor: { x: 840, y: 2786 } },
+			topRocket: { startCoor: { x: 1500, y: 0 }, endCoor: { x: 2350, y: 650 } },
+			btmRocket: { startCoor: { x: 1500, y: 2136 }, endCoor: { x: 2350, y: 2786 } },
+			cargoShip: { startCoor: { x: 1340, y: 850 }, endCoor: { x: 2700, y: 1930 } },
+			HAB: { startCoor: { x: 0, y: 945 }, endCoor: { x: 840, y: 1845 } },
+			defense: { startCoor: { x: 2840, y: 0 }, endCoor: { x: 3252, y: 2786 } },
+			deadZone_TopHP_HAB: { startCoor: { x: 0, y: 510 }, endCoor: { x: 840, y: 945 } },
+			deadZone_BtmHP_HAB: { startCoor: { x: 0, y: 1845 }, endCoor: { x: 840, y: 2276 } },
+			deadZone_other_defense: { startCoor: { x: 2700, y: 0 }, endCoor: { x: 2840, y: 2786 } }
+		};
+
+		let zone = 'other';
+		//Mouse relative to element coordinates
+		let mInEX = this.mouseX - element.offsetLeft;
+		let mInEY = this.mouseY - element.offsetTop;
+		for (let key of Object.keys(zones)) {
+			if (zones[key].length === 0) {
+				continue;
+			}
+
+			let lft = zones[key].startCoor.x * img.width / origFieldSize.width;
+			let rit = zones[key].endCoor.x * img.width / origFieldSize.width;
+			let top = zones[key].startCoor.y * img.height / origFieldSize.height;
+			let btm = zones[key].endCoor.y * img.height / origFieldSize.height;
+
+			if (mInEX >= lft && mInEX <= rit && mInEY >= top && mInEY <= btm) {
+				zone = key;
+			}
+		}
+		return zone;
+	}
 
 	loadMenu() {
 		//Load the appropriate menu
@@ -158,20 +170,24 @@ class FieldIMG extends Component {
 			return this.intakeMenu();
 		}
 	}
+	closeMenu() {
+		console.log('closing menu');
+		this.menuActive = false;
+		this.setState({ menuRequested: false });
+	}
 
 	recordCycleStart(intake) {
 		console.log('recording cycle start');
 		let startTime = new Date().getTime();
-		this.startState = {"time":startTime, "intake":intake};
+		this.startState = { "time": startTime, "intake": intake };
 
 		this.intake = true;
 		this.menuActive = false;
 		this.setState({ menuRequested: false });
 	}
-
 	recordCycleEnd(level) {
 		console.log('recording cycle end');
-		let dur = (new Date().getTime() - this.startState.time)/1000;
+		let dur = (new Date().getTime() - this.startState.time) / 1000;
 		this.data[`cycle_${this.startState['intake']}_lv${level}`].push(dur);
 
 		this.intake = false;
@@ -183,35 +199,36 @@ class FieldIMG extends Component {
 		return (
 			<PieMenu
 				radius="125px"
-				centerRadius="20px"
 				centerX={`${this.mouseX}px`}
 				centerY={`${this.mouseY}px`}
+				centerRadius='25px'
 			>
+				<Slice />
 				<Slice
 					onSelect={() => {
 						console.log('selecting hatch');
 						this.recordCycleStart("hatch");
 					}}
 				>
-					<p className="nonSelectable">Hatch</p>
+					<span className="nonSelectable">Hatch</span>
 				</Slice>
+				<Slice />
 				<Slice
 					onSelect={() => {
 						console.log('selecting cargo');
 						this.recordCycleStart("cargo");
 					}}
 				>
-					<p className="nonSelectable">Cargo</p>
+					<span className="nonSelectable">Cargo</span>
 				</Slice>
 			</PieMenu>
 		);
 	}
-
 	rocketMenu() {
 		return (
 			<PieMenu
 				radius="125px"
-				centerRadius="20px"
+				centerRadius="25px"
 				centerX={`${this.mouseX}px`}
 				centerY={`${this.mouseY}px`}
 			>
@@ -221,7 +238,7 @@ class FieldIMG extends Component {
 						this.recordCycleEnd(3);
 					}}
 				>
-					<p className="nonSelectable">Level 3</p>
+					<span className="nonSelectable">Level 3</span>
 				</Slice>
 				<Slice
 					onSelect={() => {
@@ -229,7 +246,7 @@ class FieldIMG extends Component {
 						this.recordCycleEnd(2);
 					}}
 				>
-					<p className="nonSelectable">Level 2</p>
+					<span className="nonSelectable">Level 2</span>
 				</Slice>
 
 				<Slice
@@ -238,7 +255,7 @@ class FieldIMG extends Component {
 						this.recordCycleEnd(1);
 					}}
 				>
-					<p className="nonSelectable">Level 1</p>
+					<span className="nonSelectable">Level 1</span>
 				</Slice>
 
 				<Slice
@@ -247,17 +264,16 @@ class FieldIMG extends Component {
 						this.recordCycleEnd(2);
 					}}
 				>
-					<p className="nonSelectable">Level 2</p>
+					<span className="nonSelectable">Level 2</span>
 				</Slice>
 			</PieMenu>
 		);
 	}
-
 	shipMenu() {
 		return (
 			<PieMenu
 				radius="125px"
-				centerRadius="20px"
+				centerRadius="25px"
 				centerX={`${this.mouseX}px`}
 				centerY={`${this.mouseY}px`}
 			>
@@ -267,7 +283,23 @@ class FieldIMG extends Component {
 						this.recordCycleEnd('S');
 					}}
 				>
-					<p className="nonSelectable">Cargo Ship</p>
+					<span className="nonSelectable">Cargo Ship</span>
+				</Slice>
+				<Slice
+					onSelect={() => {
+						console.log('going cargo ship');
+						this.recordCycleEnd('S');
+					}}
+				>
+					<span className="nonSelectable">Cargo Ship</span>
+				</Slice>
+				<Slice
+					onSelect={() => {
+						console.log('going cargo ship');
+						this.recordCycleEnd('S');
+					}}
+				>
+					<span className="nonSelectable">Cargo Ship</span>
 				</Slice>
 			</PieMenu>
 		);

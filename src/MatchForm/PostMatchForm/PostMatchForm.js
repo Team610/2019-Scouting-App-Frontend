@@ -27,6 +27,7 @@ class PostMatchForm extends Component {
 			<React.Fragment>
 				<CommentInputs ref={this.cmtInputsRef} />
 				<CommentTextbox ref={this.cmtTxtboxRef} />
+				<button onClick={this.props.callNext}>Submit</button>
 			</React.Fragment>
 		);
 	}
