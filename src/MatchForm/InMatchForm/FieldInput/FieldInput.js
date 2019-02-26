@@ -53,12 +53,36 @@ class FieldIMG extends Component {
 	}
 
 	render() {
+		let imgPath = "";
+		if(this.props.alliance==='blue') {
+			if(this.props.blueSide==='left') {
+				imgPath='./BL.png';
+			} else {
+				imgPath='./BR.png';
+			}
+		} else {
+			if(this.props.blueSide==='left') {
+				imgPath='./RR.png';
+			} else {
+				imgPath='./RL.png';
+			}
+		}
 		return (
 			<div ref={field => (this.instance = field)} id='fieldmap'>
-				<img alt="field" className="nonSelectable" ref={image => (this.image = image)} width='75%' src={require("./RL.png")} onMouseDown={this.handleClick} />
+				<img alt="field"
+					className="nonSelectable"
+					ref={image => (this.image = image)}
+					height={window.innerHeight * 0.7}
+					src={require(`${imgPath}`)}
+					onMouseDown={this.handleClick}
+					style={{ float: "left" }} />
+				{this.intake ?
+					<div style={{ float: "left", padding: "5px", color:"yellow", "font-size":"20px" }}>
+						{this.startState.intake === "cargo" ? "Cargo cycle" : "Hatch cycle"}
+					</div> : null}
 				{this.menuActive ? this.loadMenu() : null}
 				<DefenseInput ref={this.defenseRef} />
-				<ClimbInput callNext = {this.props.callNext} ref={this.climbRef} />
+				<ClimbInput callNext={this.props.callNext} ref={this.climbRef} />
 			</div>
 		);
 	}
@@ -285,8 +309,8 @@ class FieldIMG extends Component {
 		);
 	}
 	shipMenu() {
-			console.log('going cargo ship');
-						this.recordCycleEnd('S');
+		console.log('going cargo ship');
+		this.recordCycleEnd('S');
 	}
 }
 

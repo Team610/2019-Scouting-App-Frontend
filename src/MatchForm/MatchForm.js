@@ -5,6 +5,7 @@ import InMatchForm from './InMatchForm/InMatchForm';
 import PostMatchForm from './PostMatchForm/PostMatchForm';
 import { Redirect } from 'react-router';
 import "./style.css";
+let fieldConfig = require('../config.json');
 
 class MatchForm extends Component {
 	constructor(props) {
@@ -21,6 +22,7 @@ class MatchForm extends Component {
 		this.inMatchRef = React.createRef();
 		this.postMatchRef = React.createRef();
 		this.viewRefs = [this.preMatchRef, this.inMatchRef, this.postMatchRef];
+		this.alliance = 'red';
 	}
 	async submitForm() {
 		console.log(JSON.stringify(this.data));
@@ -54,6 +56,7 @@ class MatchForm extends Component {
 		}
 		if (view === 'preMatch') {
 			this.setState({matchView:'inMatch'});
+			this.alliance = this.preMatchRef.current.getAlliance();
 		} else if (view === 'inMatch') {
 			this.setState({matchView:'postMatch'});
 		} else if (view==='postMatch') {
@@ -77,7 +80,7 @@ class MatchForm extends Component {
 			return (
 				<div>
 					<MatchFormHeader matchNum={this.matchNum} /><hr />
-					<InMatchForm callNext={()=>this.collectData('inMatch')} robotPreload={this.data.robot_preload} ref={this.inMatchRef} />
+					<InMatchForm callNext={()=>this.collectData('inMatch')} alliance={this.alliance} blueSide={fieldConfig.blueSide} robotPreload={this.data.robot_preload} ref={this.inMatchRef} />
 				</div>
 			);
 		} else if (this.state.matchView === 'postMatch') {

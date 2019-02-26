@@ -23,7 +23,7 @@ class InMatchForm extends Component {
     render() {
         return (
             <React.Fragment>
-                <FieldInput callNext={this.props.callNext} robotPreload={this.props.robotPreload} ref={this.fieldInputRef} />
+                <FieldInput callNext={this.props.callNext} alliance={this.props.alliance} blueSide={this.props.blueSide} robotPreload={this.props.robotPreload} ref={this.fieldInputRef} />
             </React.Fragment>
         );
     }

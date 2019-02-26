@@ -10,6 +10,7 @@ class PreMatchForm extends Component {
 		super(props);
 		this.state = {};
 		this.getJSON = this.getJSON.bind(this);
+		this.getAlliance = this.getAlliance.bind(this);
 
 		this.teamSlctRef = React.createRef();
 		this.startPosRef = React.createRef();
@@ -26,6 +27,9 @@ class PreMatchForm extends Component {
 			}
 		}
 		return obj;
+	}
+	getAlliance() {
+		return this.teamSlctRef.current.getAlliance();
 	}
 	render() {
 		return (
