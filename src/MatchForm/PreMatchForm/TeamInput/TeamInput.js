@@ -11,6 +11,7 @@ class TeamInput extends Component {
         this.renderTeamBtns = this.renderTeamBtns.bind(this);
         this.getTeams = this.getTeams.bind(this);
 		this.getJSON = this.getJSON.bind(this);
+		this.getAlliance = this.getAlliance.bind(this);
 		
 		this.getTeams();
     }
@@ -19,10 +20,14 @@ class TeamInput extends Component {
             teamNum: this.state.value
         });
 	}
+	getAlliance() {
+		return this.state.alliance;
+	}
 	
-    selectTeam(teamNum) {
+    selectTeam(teamNum, pos) {
         this.setState({
-            value: teamNum
+			value: teamNum,
+			alliance: pos<3?'red':'blue'
 		});
     }
     async getTeams() {
@@ -47,7 +52,7 @@ class TeamInput extends Component {
 			teams[i] = (
 				<button type="button"
 						key = {i}
-						onClick={() => {this.selectTeam(this.teamList[i]);}}
+						onClick={() => {this.selectTeam(this.teamList[i], i);}}
 						className={this.teamList[i]===activeTeam ? 'btn-active' : 'btn-inactive'}>
 					{this.teamList[i]}
 				</button>

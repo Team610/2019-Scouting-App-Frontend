@@ -29,7 +29,7 @@ class Cycles extends Component {
             </thead>
           </table>
         </h1>
-        <table>
+        <table className="analyticsTable">
           <thead>
             <tr>
               <th />

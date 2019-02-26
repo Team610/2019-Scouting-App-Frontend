@@ -19,17 +19,22 @@ class FieldIMG extends Component {
 		this.closeMenu = this.closeMenu.bind(this);
 
 		//Initialize empty state
+		this.leftSide = true;
 		this.menu = '';
 		this.menuActive = false;
-		this.intake = false;
+		this.intake = true;
 		this.mouseX = 0;
 		this.mouseY = 0;
-		this.startState = {};
+		let time = new Date().getTime();
+		this.startState = { "time": time, "intake": this.props.robotPreload, "ss": true };
+		this.initTime = time;
 		this.defenseRef = React.createRef();
 		this.climbRef = React.createRef();
 		this.data = {
-			'cycle_hatch_lv1': [], 'cycle_hatch_lv2': [], 'cycle_hatch_lv3': [], 'cycle_hatch_lvS': [],
-			'cycle_cargo_lv1': [], 'cycle_cargo_lv2': [], 'cycle_cargo_lv3': [], 'cycle_cargo_lvS': [],
+			'ss_cycle_hatch_lv1': [], 'ss_cycle_hatch_lv2': [], 'ss_cycle_hatch_lv3': [], 'ss_cycle_hatch_lvS': [],
+			'ss_cycle_cargo_lv1': [], 'ss_cycle_cargo_lv2': [], 'ss_cycle_cargo_lv3': [], 'ss_cycle_cargo_lvS': [],
+			'to_cycle_hatch_lv1': [], 'to_cycle_hatch_lv2': [], 'to_cycle_hatch_lv3': [], 'to_cycle_hatch_lvS': [],
+			'to_cycle_cargo_lv1': [], 'to_cycle_cargo_lv2': [], 'to_cycle_cargo_lv3': [], 'to_cycle_cargo_lvS': [],
 			'climb_lvl': '1', 'climb_time': 0.0
 		};
 		this.state = {
@@ -49,12 +54,40 @@ class FieldIMG extends Component {
 	}
 
 	render() {
+		let imgPath = "";
+		if (this.props.alliance === 'blue') {
+			if (this.props.blueSide === 'left') {
+				imgPath = './BL.png';
+				this.leftSide = true;
+			} else {
+				imgPath = './BR.png';
+				this.leftSide = false;
+			}
+		} else {
+			if (this.props.blueSide === 'left') {
+				imgPath = './RR.png';
+				this.leftSide = false;
+			} else {
+				imgPath = './RL.png';
+				this.leftSide = true;
+			}
+		}
 		return (
 			<div ref={field => (this.instance = field)} id='fieldmap'>
-				<img alt="field" className="nonSelectable" ref={image => (this.image = image)} width='75%' src={require("./RL.png")} onMouseDown={this.handleClick} />
+				<img alt="field"
+					className="nonSelectable"
+					ref={image => (this.image = image)}
+					height={window.innerHeight * 0.7}
+					src={require(`${imgPath}`)}
+					onMouseDown={this.handleClick}
+					style={{ float: "left" }} />
+				{this.intake ?
+					<div style={{ float: "left", padding: "5px", color: "yellow", fontSize: "20px" }}>
+						{this.startState.intake === "cargo" ? "Cargo cycle" : "Hatch cycle"}
+					</div> : null}
 				{this.menuActive ? this.loadMenu() : null}
 				<DefenseInput ref={this.defenseRef} />
-				<ClimbInput ref={this.climbRef} />
+				<ClimbInput callNext={this.props.callNext} ref={this.climbRef} />
 			</div>
 		);
 	}
@@ -135,7 +168,11 @@ class FieldIMG extends Component {
 			defense: { startCoor: { x: 2840, y: 0 }, endCoor: { x: 3252, y: 2786 } },
 			deadZone_TopHP_HAB: { startCoor: { x: 0, y: 510 }, endCoor: { x: 840, y: 945 } },
 			deadZone_BtmHP_HAB: { startCoor: { x: 0, y: 1845 }, endCoor: { x: 840, y: 2276 } },
-			deadZone_other_defense: { startCoor: { x: 2700, y: 0 }, endCoor: { x: 2840, y: 2786 } }
+			deadZone_other_defense: { startCoor: { x: 2700, y: 0 }, endCoor: { x: 2840, y: 2786 } },
+			other1: { startCoor: { x: 1500, y: 513 }, endCoor: { x: 1900, y: 975 } }, //cutting corner off of topRocket and top-left corner of cargo ship
+			other2: { startCoor: { x: 1500, y: 1805 }, endCoor: { x: 1900, y: 2273 } }, //cutting corner off of btmRocket and btm-left corner of cargo ship
+			other3: { startCoor: { x: 1950, y: 513 }, endCoor: { x: 2350, y: 975 } }, //cutting btm-right corner off of topRocket
+			other4: { startCoor: { x: 1950, y: 1805 }, endCoor: { x: 2350, y: 2273 } } //cutting top-right corner off of top rocket
 		};
 
 		let zone = 'other';
@@ -147,8 +184,8 @@ class FieldIMG extends Component {
 				continue;
 			}
 
-			let lft = zones[key].startCoor.x * img.width / origFieldSize.width;
-			let rit = zones[key].endCoor.x * img.width / origFieldSize.width;
+			let lft = (this.leftSide ? zones[key].startCoor.x : origFieldSize.width - zones[key].endCoor.x) * img.width / origFieldSize.width;
+			let rit = (this.leftSide ? zones[key].endCoor.x : origFieldSize.width - zones[key].startCoor.x) * img.width / origFieldSize.width;
 			let top = zones[key].startCoor.y * img.height / origFieldSize.height;
 			let btm = zones[key].endCoor.y * img.height / origFieldSize.height;
 
@@ -156,6 +193,7 @@ class FieldIMG extends Component {
 				zone = key;
 			}
 		}
+		if (zone.substring(0, 5) === 'other') { zone = 'other'; }
 		return zone;
 	}
 
@@ -179,7 +217,7 @@ class FieldIMG extends Component {
 	recordCycleStart(intake) {
 		console.log('recording cycle start');
 		let startTime = new Date().getTime();
-		this.startState = { "time": startTime, "intake": intake };
+		this.startState = { "time": startTime, "intake": intake, "ss": startTime - this.initTime < 15000 ? true : false };
 
 		this.intake = true;
 		this.menuActive = false;
@@ -188,7 +226,13 @@ class FieldIMG extends Component {
 	recordCycleEnd(level) {
 		console.log('recording cycle end');
 		let dur = (new Date().getTime() - this.startState.time) / 1000;
-		this.data[`cycle_${this.startState['intake']}_lv${level}`].push(dur);
+		if (this.startState.ss) {
+			console.log(`ss ${this.startState.intake} lv${level}`);
+			this.data[`ss_cycle_${this.startState['intake']}_lv${level}`].push(dur);
+		} else {
+			console.log(`to ${this.startState.intake} lv${level}`);
+			this.data[`to_cycle_${this.startState['intake']}_lv${level}`].push(dur);
+		}
 
 		this.intake = false;
 		this.menuActive = false;
@@ -203,7 +247,6 @@ class FieldIMG extends Component {
 				centerY={`${this.mouseY}px`}
 				centerRadius='25px'
 			>
-				<Slice />
 				<Slice
 					onSelect={() => {
 						console.log('selecting hatch');
@@ -221,6 +264,7 @@ class FieldIMG extends Component {
 				>
 					<span className="nonSelectable">Cargo</span>
 				</Slice>
+				<Slice />
 			</PieMenu>
 		);
 	}
@@ -270,39 +314,8 @@ class FieldIMG extends Component {
 		);
 	}
 	shipMenu() {
-		return (
-			<PieMenu
-				radius="125px"
-				centerRadius="25px"
-				centerX={`${this.mouseX}px`}
-				centerY={`${this.mouseY}px`}
-			>
-				<Slice
-					onSelect={() => {
-						console.log('going cargo ship');
-						this.recordCycleEnd('S');
-					}}
-				>
-					<span className="nonSelectable">Cargo Ship</span>
-				</Slice>
-				<Slice
-					onSelect={() => {
-						console.log('going cargo ship');
-						this.recordCycleEnd('S');
-					}}
-				>
-					<span className="nonSelectable">Cargo Ship</span>
-				</Slice>
-				<Slice
-					onSelect={() => {
-						console.log('going cargo ship');
-						this.recordCycleEnd('S');
-					}}
-				>
-					<span className="nonSelectable">Cargo Ship</span>
-				</Slice>
-			</PieMenu>
-		);
+		console.log('going cargo ship');
+		this.recordCycleEnd('S');
 	}
 }
 

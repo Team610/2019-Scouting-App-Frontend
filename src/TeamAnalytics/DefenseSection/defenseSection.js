@@ -16,7 +16,7 @@ class DefenseSection extends Component {
 						</thead>
 					</table>
 				</h1>
-				<table>
+				<table className="analyticsTable">
 					<thead>
 						<tr>
 							<th />
@@ -26,39 +26,39 @@ class DefenseSection extends Component {
 					</thead>
 					<tbody>
 						<tr>
-							<td>Total</td>
-							<td>{this.props.data.tot_time_def}</td>
-							<td/>
+							<td className="analyticsTable">Total</td>
+							<td className="analyticsTable">{this.props.data.tot_time_def}</td>
+							<td className="analyticsTable"/>
 						</tr>
 						<tr>
-							<td>Ship Goalkeeping</td>
-							<td>{this.props.data.tot_time_def_ship_goalkeep}</td>
-							<td/>
+							<td className="analyticsTable">Ship Goalkeeping</td>
+							<td className="analyticsTable">{this.props.data.tot_time_def_ship_goalkeep}</td>
+							<td className="analyticsTable"/>
 						</tr>
 						<tr>
-							<td>Rocket Goalkeeping</td>
-							<td>{this.props.data.tot_time_def_rocket_goalkeep}</td>
-							<td/>
+							<td className="analyticsTable">Rocket Goalkeeping</td>
+							<td className="analyticsTable">{this.props.data.tot_time_def_rocket_goalkeep}</td>
+							<td className="analyticsTable"/>
 						</tr>
 						<tr>
-							<td>Pinning</td>
-							<td>{this.props.data.tot_time_def_pinning}</td>
-							<td/>
+							<td className="analyticsTable">Pinning</td>
+							<td className="analyticsTable">{this.props.data.tot_time_def_pinning}</td>
+							<td className="analyticsTable"/>
 						</tr>
 						<tr>
-							<td>Tough Defense</td>
-							<td>{this.props.data.tot_time_def_tough_defense}</td>
-							<td/>
+							<td className="analyticsTable">Tough Defense</td>
+							<td className="analyticsTable">{this.props.data.tot_time_def_tough_defense}</td>
+							<td className="analyticsTable"/>
 						</tr>
 						<tr>
-							<td>Driving Around</td>
-							<td>{this.props.data.tot_time_def_driving_around}</td>
-							<td/>
+							<td className="analyticsTable">Driving Around</td>
+							<td className="analyticsTable">{this.props.data.tot_time_def_driving_around}</td>
+							<td className="analyticsTable"/>
 						</tr>
 						<tr>
-							<td />
-							<td />
-							<td>
+							<td className="analyticsTable"/>
+							<td className="analyticsTable"/>
+							<td className="analyticsTable">
 								<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
 							</td>
 						</tr>

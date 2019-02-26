@@ -10,6 +10,7 @@ class PreMatchForm extends Component {
 		super(props);
 		this.state = {};
 		this.getJSON = this.getJSON.bind(this);
+		this.getAlliance = this.getAlliance.bind(this);
 
 		this.teamSlctRef = React.createRef();
 		this.startPosRef = React.createRef();
@@ -26,6 +27,9 @@ class PreMatchForm extends Component {
 			}
 		}
 		return obj;
+	}
+	getAlliance() {
+		return this.teamSlctRef.current.getAlliance();
 	}
 	render() {
 		return (
@@ -52,7 +56,7 @@ class PreMatchForm extends Component {
 				<div className="element">
 					<RobotPhotoDisplay id='robo_photo' />
 				</div>
-				<button onClick={this.props.callNext}>Next</button>
+				<button onClick={this.props.callNext}>Start</button>
 			</div>
 		); //TODO: figure out who has responsibility for fetching correct match# and team# from DB
 	}

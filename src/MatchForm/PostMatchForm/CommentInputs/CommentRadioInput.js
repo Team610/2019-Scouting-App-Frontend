@@ -19,12 +19,12 @@ class CommentRadioInput extends Component {
 	render() {
 		let choiceList = [];
 		for (let choice of this.props.choices) {
-			choiceList.push(<label key={choice.value} className="comment"><input type="radio" name={this.props.inputId} value={choice.value} onChange={this.handleChange} />{choice.description}<br /></label>);
+			choiceList.push(<label key={choice.value} className="comment"><input type="radio" name={this.props.inputId} value={choice.value} onChange={this.handleChange} required />{choice.description}<br /></label>);
 		}
 		return (
 			<React.Fragment>
 				<p className="subheader">{this.props.description}</p>
-				<label>{choiceList}</label>
+				{choiceList}
 			</React.Fragment>
 		);
 	}

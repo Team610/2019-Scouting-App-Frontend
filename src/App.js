@@ -22,7 +22,7 @@ const Home = () => <h2>Home</h2>;
 const Loading = (props) => <div>Loading {props.page}...</div>;
 
 const MatchForm = Loadable({
-    loader: () => import("./MatchForm/matchForm"),
+    loader: () => import("./MatchForm/MatchForm"),
     loading: Loading
 });
 const MatchForms = ({ match }) => (
@@ -45,7 +45,7 @@ const MatchForms = ({ match }) => (
 );
 
 const Team = Loadable({
-    loader: () => import("./TeamAnalytics/team"),
+    loader: () => import("./TeamAnalytics/TeamAnalytics"),
     loading: Loading
 });
 const Teams = ({ match }) => (
