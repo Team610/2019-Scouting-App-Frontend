@@ -25,7 +25,7 @@ class Team extends Component {
 		});
 	}
     render() {
-		console.log(this.state.data);
+		console.log(JSON.stringify(this.state.data));
 		if(!this.state.dataAvailable) {
 			return(
 				<div>
@@ -42,7 +42,7 @@ class Team extends Component {
 				<PreGameSection data={this.state.data} />
 				<EndGameSection data={this.state.data} />
 				<DefenseSection data={this.state.data} />
-				<CommentsSection />
+				<CommentsSection data={this.state.data} />
             </div>
         );
     }

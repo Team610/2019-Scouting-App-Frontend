@@ -12,7 +12,7 @@ class MatchForm extends Component {
 		super(props);
 		this.submitForm = this.submitForm.bind(this);
 		this.state = {
-			matchView:'preMatch'
+			matchView: 'preMatch'
 		}
 
 		this.matchNum = this.props.match.params.matchId;
@@ -48,18 +48,18 @@ class MatchForm extends Component {
 	collectData(view) {
 		let ref;
 		if (view === 'preMatch') { ref = this.preMatchRef; }
-		else if (view === 'inMatch') {ref=this.inMatchRef;}
-		else if (view === 'postMatch') {ref=this.postMatchRef;}
+		else if (view === 'inMatch') { ref = this.inMatchRef; }
+		else if (view === 'postMatch') { ref = this.postMatchRef; }
 		let viewJSON = ref.current.getJSON();
 		for (let key in viewJSON) {
 			this.data[key] = viewJSON[key];
 		}
 		if (view === 'preMatch') {
-			this.setState({matchView:'inMatch'});
+			this.setState({ matchView: 'inMatch' });
 			this.alliance = this.preMatchRef.current.getAlliance();
 		} else if (view === 'inMatch') {
-			this.setState({matchView:'postMatch'});
-		} else if (view==='postMatch') {
+			this.setState({ matchView: 'postMatch' });
+		} else if (view === 'postMatch') {
 			this.submitForm();
 		}
 	}
@@ -73,21 +73,21 @@ class MatchForm extends Component {
 			return (
 				<div>
 					<MatchFormHeader matchNum={this.matchNum} /><hr />
-					<PreMatchForm callNext = {()=>this.collectData('preMatch')} matchNum={this.matchNum} ref={this.preMatchRef} />
+					<PreMatchForm callNext={() => this.collectData('preMatch')} matchNum={this.matchNum} ref={this.preMatchRef} />
 				</div>
 			);
 		} else if (this.state.matchView === 'inMatch') {
 			return (
 				<div>
 					<MatchFormHeader matchNum={this.matchNum} /><hr />
-					<InMatchForm callNext={()=>this.collectData('inMatch')} alliance={this.alliance} blueSide={fieldConfig.blueSide} robotPreload={this.data.robot_preload} ref={this.inMatchRef} />
+					<InMatchForm callNext={() => this.collectData('inMatch')} alliance={this.alliance} blueSide={fieldConfig.blueSide} robotPreload={this.data.robot_preload} ref={this.inMatchRef} />
 				</div>
 			);
 		} else if (this.state.matchView === 'postMatch') {
 			return (
 				<div>
 					<MatchFormHeader matchNum={this.matchNum} /><hr />
-					<PostMatchForm callNext={()=>this.collectData('postMatch')} ref={this.postMatchRef} />
+					<PostMatchForm callNext={() => this.collectData('postMatch')} ref={this.postMatchRef} />
 				</div>
 			);
 		}

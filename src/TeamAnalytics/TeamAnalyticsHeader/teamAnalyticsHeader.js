@@ -1,25 +1,9 @@
 import React, { Component } from 'react';
 
 class TeamAnalyticsHeader extends Component {
-    componentDidMount() {
-        window.addEventListener('scroll', this.handleScroll);
-    }
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.handleScroll);
-    }
-    handleScroll = () => {
-        let header = document.getElementById("teamPageHeader");
-        let belowTop = header.offsetTop;
-        if (window.pageYOffset > belowTop) {
-            header.classList.add("sticky");
-        } else {
-            header.classList.remove("sticky");
-        }
-    }
-
     render() {
         return (
-            <div className="stickyHeader" id="teamPageHeader">
+            <div className="sticky teamPageHeader" id="teamPageHeader">
                 <h2>Team #{this.props.teamNum}</h2>
             </div>
         );

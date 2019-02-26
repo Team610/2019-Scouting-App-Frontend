@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class ShipPreload extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { cargo: 2, hatch: 0 };
+		this.state = { cargo: 1, hatch: 1 };
 		this.getJSON = this.getJSON.bind(this);
 		this.cargoIncrement = this.cargoIncrement.bind(this);
 		this.hatchIncrement = this.hatchIncrement.bind(this);
