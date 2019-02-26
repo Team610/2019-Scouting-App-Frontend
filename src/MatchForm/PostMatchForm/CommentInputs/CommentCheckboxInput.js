@@ -17,7 +17,7 @@ class CommentCheckboxInput extends Component {
 	render() {
 		return (
 			<label className="comment">
-				<input type="checkbox" id={this.props.inputId} onChange={this.handleChange} />
+				<input type="checkbox" id={this.props.inputId} onChange={this.handleChange} required />
 				{this.props.description}
 			</label>
 		);

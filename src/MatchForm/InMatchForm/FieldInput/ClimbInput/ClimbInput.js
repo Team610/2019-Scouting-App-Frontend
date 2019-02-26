@@ -26,9 +26,11 @@ class ClimbInput extends Component {
 
 	onCloseModal = (climbLvl) => {
 		console.log(`recording climb end\tlevel: ${climbLvl}`);
-		if (typeof climbLvl === 'string') {
+		if (typeof climbLvl !== 'object') {
 			this.data['climb_time']=(new Date().getTime() - this.startTime)/1000;
 			this.data['climb_lvl']=`${climbLvl}`;
+			console.log('time recorded');
+			this.props.callNext();
 		}
 		this.setState({ open: false });
 	};

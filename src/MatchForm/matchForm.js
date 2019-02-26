@@ -26,10 +26,9 @@ class MatchForm extends Component {
 		console.log(JSON.stringify(this.data));
 
 		// Submit the form!
-		let status;
 		try {
 			console.log("trying to submit form");
-			status = await fetch('/api/v1/submitForm', {
+			await fetch('/api/v1/submitForm', {
 				method: 'POST',
 				body: JSON.stringify(this.data),
 				headers: {
@@ -40,7 +39,6 @@ class MatchForm extends Component {
 			console.log("could not submit form");
 			console.log(err.message);
 		}
-		if (!status.success) { console.log("form submission failed") }
 		this.setState({
 			redirect: true
 		});
@@ -79,7 +77,7 @@ class MatchForm extends Component {
 			return (
 				<div>
 					<MatchFormHeader matchNum={this.matchNum} /><hr />
-					<InMatchForm callNext={()=>this.collectData('inMatch')} ref={this.inMatchRef} />
+					<InMatchForm callNext={()=>this.collectData('inMatch')} robotPreload={this.data.robot_preload} ref={this.inMatchRef} />
 				</div>
 			);
 		} else if (this.state.matchView === 'postMatch') {
