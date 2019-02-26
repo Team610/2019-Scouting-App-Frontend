@@ -1,5 +1,5 @@
-table,
-td {
+table.analyticsTable,
+td.analyticsTable {
   width: 60%;
   margin-left: 10px;
   text-align: left;

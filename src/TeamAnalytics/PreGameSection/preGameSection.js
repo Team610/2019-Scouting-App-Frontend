@@ -8,7 +8,7 @@ class PreGameSection extends Component {
 		return (
 			<div>
 				<h1 className="comp">Preloads</h1>
-				<table>
+				<table className="analyticsTable">
 					<thead>
 						<tr>
 							<th />
@@ -18,31 +18,31 @@ class PreGameSection extends Component {
 					</thead>
 					<tbody>
 						<tr>
-							<td>
+							<td className="analyticsTable">
 								Ship Preload
 							</td>
-							<td>
+							<td className="analyticsTable">
 								{this.props.data.tot_ship_preload.hatch}
 							</td>
-							<td>
+							<td className="analyticsTable">
 								{this.props.data.tot_ship_preload.cargo}
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<td className="analyticsTable">
 								Robot Preload
 							</td>
-							<td>
+							<td className="analyticsTable">
 								{this.props.data.tot_robot_preload.hatch}
 							</td>
-							<td>
+							<td className="analyticsTable">
 								{this.props.data.tot_robot_preload.cargo}
 							</td>
 						</tr>
 						<tr>
-							<td />
-							<td />
-							<td>
+							<td className="analyticsTable"/>
+							<td className="analyticsTable"/>
+							<td className="analyticsTable">
 								<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
 							</td>
 						</tr>

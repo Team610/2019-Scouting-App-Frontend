@@ -8,7 +8,7 @@ class OverallSection extends Component {
 		return (
 			<div>
 				<h1 className="comp">Overall</h1>
-				<table>
+				<table className="analyticsTable">
 					<thead>
 						<tr>
 							<th>Hatch</th>
@@ -18,20 +18,20 @@ class OverallSection extends Component {
 					</thead>
 					<tbody>
 						<tr>
-							<td>
+							<td className="analyticsTable">
 								{this.props.data.avg_num_hatch_tot} @ {this.props.data.avg_time_hatch_tot} s
 							</td>
-							<td>
+							<td className="analyticsTable">
 								{this.props.data.avg_time_cargo_tot} @ {this.props.data.avg_time_cargo_tot} s
 							</td>
-							<td>
+							<td className="analyticsTable">
 								{this.props.data.tot_num_climb_lvl[1]} @ {this.props.data.avg_time_climb_tot} s
 							</td>
 						</tr>
 						<tr>
-							<td />
-							<td />
-							<td>
+							<td className="analyticsTable"/>
+							<td className="analyticsTable"/>
+							<td className="analyticsTable">
 								<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
 							</td>
 						</tr>

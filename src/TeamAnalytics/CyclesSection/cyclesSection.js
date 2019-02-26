@@ -28,7 +28,7 @@ class CyclesSection extends Component {
 						</thead>
 					</table>
 				</h1>
-				<table>
+				<table className="analyticsTable">
 					<thead>
 						<tr>
 							<th />
@@ -38,29 +38,29 @@ class CyclesSection extends Component {
 					</thead>
 					<tbody>
 						<tr>
-							<td>Level 3</td>
-							<td>{this.props.data.avg_num_hatch_lv3} @ {this.props.data.avg_time_cargo_lv3} s</td>
-							<td>{this.props.data.avg_num_cargo_lv3} @ {this.props.data.avg_time_cargo_lv3} s</td>
+							<td className="analyticsTable">Level 3</td>
+							<td className="analyticsTable">{this.props.data.avg_num_hatch_lv3} @ {this.props.data.avg_time_cargo_lv3} s</td>
+							<td className="analyticsTable">{this.props.data.avg_num_cargo_lv3} @ {this.props.data.avg_time_cargo_lv3} s</td>
 						</tr>
 						<tr>
-							<td>Level 2</td>
-							<td>{this.props.data.avg_num_hatch_lv2} @ {this.props.data.avg_time_cargo_lv2} s</td>
-							<td>{this.props.data.avg_num_cargo_lv2} @ {this.props.data.avg_time_cargo_lv2} s</td>
+							<td className="analyticsTable">Level 2</td>
+							<td className="analyticsTable">{this.props.data.avg_num_hatch_lv2} @ {this.props.data.avg_time_cargo_lv2} s</td>
+							<td className="analyticsTable">{this.props.data.avg_num_cargo_lv2} @ {this.props.data.avg_time_cargo_lv2} s</td>
 						</tr>
 						<tr>
-							<td>Level 1</td>
-							<td>{this.props.data.avg_num_hatch_lv1} @ {this.props.data.avg_time_cargo_lv1} s</td>
-							<td>{this.props.data.avg_num_cargo_lv1} @ {this.props.data.avg_time_cargo_lv1} s</td>
+							<td className="analyticsTable">Level 1</td>
+							<td className="analyticsTable">{this.props.data.avg_num_hatch_lv1} @ {this.props.data.avg_time_cargo_lv1} s</td>
+							<td className="analyticsTable">{this.props.data.avg_num_cargo_lv1} @ {this.props.data.avg_time_cargo_lv1} s</td>
 						</tr>
 						<tr>
-							<td>Ship</td>
-							<td>{this.props.data.avg_num_hatch_lvS} @ {this.props.data.avg_time_cargo_lvS} s</td>
-							<td>{this.props.data.avg_num_cargo_lvS} @ {this.props.data.avg_time_cargo_lvS} s</td>
+							<td className="analyticsTable">Ship</td>
+							<td className="analyticsTable">{this.props.data.avg_num_hatch_lvS} @ {this.props.data.avg_time_cargo_lvS} s</td>
+							<td className="analyticsTable">{this.props.data.avg_num_cargo_lvS} @ {this.props.data.avg_time_cargo_lvS} s</td>
 						</tr>
 						<tr>
-							<td />
-							<td />
-							<td>
+							<td className="analyticsTable"/>
+							<td className="analyticsTable"/>
+							<td className="analyticsTable">
 								<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
 							</td>
 						</tr>

@@ -16,7 +16,7 @@ class CommentsSection extends Component {
 						</thead>
 					</table>
 				</h1>
-				<table>
+				<table className="analyticsTable">
 					<thead>
 						<tr>
 							<th />
@@ -26,19 +26,19 @@ class CommentsSection extends Component {
 					</thead>
 					<tbody>
 						<tr>
-							<td />
-							<td>Comment A</td>
-							<td>{"some number value"}</td>
+							<td className="analyticsTable"/>
+							<td className="analyticsTable">Comment A</td>
+							<td className="analyticsTable">{"some number value"}</td>
 						</tr>
 						<tr>
-							<td />
-							<td>Comment B</td>
-							<td>{"some number value"}</td>
+							<td className="analyticsTable"/>
+							<td className="analyticsTable">Comment B</td>
+							<td className="analyticsTable">{"some number value"}</td>
 						</tr>
 						<tr>
-							<td />
-							<td />
-							<td>
+							<td className="analyticsTable"/>
+							<td className="analyticsTable"/>
+							<td className="analyticsTable">
 								<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
 							</td>
 						</tr>

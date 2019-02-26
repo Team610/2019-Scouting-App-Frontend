@@ -17,6 +17,10 @@ table {
   float:left;
 }
 
+table.preloadstable, td.preloadstable{
+  width: 160px
+}
+
 .increment-button{
   background-color: white;
   border: 3px solid #DDDDDD;
