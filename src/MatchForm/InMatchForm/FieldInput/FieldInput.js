@@ -285,39 +285,8 @@ class FieldIMG extends Component {
 		);
 	}
 	shipMenu() {
-		return (
-			<PieMenu
-				radius="125px"
-				centerRadius="25px"
-				centerX={`${this.mouseX}px`}
-				centerY={`${this.mouseY}px`}
-			>
-				<Slice
-					onSelect={() => {
-						console.log('going cargo ship');
+			console.log('going cargo ship');
 						this.recordCycleEnd('S');
-					}}
-				>
-					<span className="nonSelectable">Cargo Ship</span>
-				</Slice>
-				<Slice
-					onSelect={() => {
-						console.log('going cargo ship');
-						this.recordCycleEnd('S');
-					}}
-				>
-					<span className="nonSelectable">Cargo Ship</span>
-				</Slice>
-				<Slice
-					onSelect={() => {
-						console.log('going cargo ship');
-						this.recordCycleEnd('S');
-					}}
-				>
-					<span className="nonSelectable">Cargo Ship</span>
-				</Slice>
-			</PieMenu>
-		);
 	}
 }
 
