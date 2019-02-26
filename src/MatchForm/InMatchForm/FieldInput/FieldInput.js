@@ -19,6 +19,7 @@ class FieldIMG extends Component {
 		this.closeMenu = this.closeMenu.bind(this);
 
 		//Initialize empty state
+		this.leftSide = true;
 		this.menu = '';
 		this.menuActive = false;
 		this.intake = true;
@@ -54,17 +55,21 @@ class FieldIMG extends Component {
 
 	render() {
 		let imgPath = "";
-		if(this.props.alliance==='blue') {
-			if(this.props.blueSide==='left') {
-				imgPath='./BL.png';
+		if (this.props.alliance === 'blue') {
+			if (this.props.blueSide === 'left') {
+				imgPath = './BL.png';
+				this.leftSide = true;
 			} else {
-				imgPath='./BR.png';
+				imgPath = './BR.png';
+				this.leftSide = false;
 			}
 		} else {
-			if(this.props.blueSide==='left') {
-				imgPath='./RR.png';
+			if (this.props.blueSide === 'left') {
+				imgPath = './RR.png';
+				this.leftSide = false;
 			} else {
-				imgPath='./RL.png';
+				imgPath = './RL.png';
+				this.leftSide = true;
 			}
 		}
 		return (
@@ -77,7 +82,7 @@ class FieldIMG extends Component {
 					onMouseDown={this.handleClick}
 					style={{ float: "left" }} />
 				{this.intake ?
-					<div style={{ float: "left", padding: "5px", color:"yellow", "font-size":"20px" }}>
+					<div style={{ float: "left", padding: "5px", color: "yellow", fontSize: "20px" }}>
 						{this.startState.intake === "cargo" ? "Cargo cycle" : "Hatch cycle"}
 					</div> : null}
 				{this.menuActive ? this.loadMenu() : null}
@@ -179,8 +184,8 @@ class FieldIMG extends Component {
 				continue;
 			}
 
-			let lft = zones[key].startCoor.x * img.width / origFieldSize.width;
-			let rit = zones[key].endCoor.x * img.width / origFieldSize.width;
+			let lft = (this.leftSide ? zones[key].startCoor.x : origFieldSize.width - zones[key].endCoor.x) * img.width / origFieldSize.width;
+			let rit = (this.leftSide ? zones[key].endCoor.x : origFieldSize.width - zones[key].startCoor.x) * img.width / origFieldSize.width;
 			let top = zones[key].startCoor.y * img.height / origFieldSize.height;
 			let btm = zones[key].endCoor.y * img.height / origFieldSize.height;
 
