@@ -48,9 +48,6 @@ class PreMatchForm extends Component {
 							</tr>
 						</tbody>
 					</table>
-					<br />
-				</div>
-				<div className="element">
 					<StartPositionInput id='start_position' ref={this.startPosRef} />
 				</div>
 				<div className="element">

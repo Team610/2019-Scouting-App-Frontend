@@ -36,7 +36,7 @@ class TeamInput extends Component {
 			this.teamList = await teamListRaw.json();
 			this.setState({
 				teamsLoaded: true
-			})
+			});
             this.renderTeamBtns('');
         } catch(err) {
             console.log("could not load teams");

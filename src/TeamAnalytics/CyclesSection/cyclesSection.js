@@ -4,10 +4,26 @@ class CyclesSection extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			toggle: "true"
+			mode: "TO",
+			avg_num_hatch_lv3: Math.round(this.props.data.avg_num_to_hatch_lv3 * 1000) / 1000,
+			avg_time_hatch_lv3: Math.round(this.props.data.avg_time_to_hatch_lv3 * 1000) / 1000,
+			avg_num_cargo_lv3: Math.round(this.props.data.avg_num_to_cargo_lv3 * 1000) / 1000,
+			avg_time_cargo_lv3: Math.round(this.props.data.avg_time_to_cargo_lv3 * 1000) / 1000,
+			avg_num_hatch_lv2: Math.round(this.props.data.avg_num_to_hatch_lv2 * 1000) / 1000,
+			avg_time_hatch_lv2: Math.round(this.props.data.avg_time_to_hatch_lv2 * 1000) / 1000,
+			avg_num_cargo_lv2: Math.round(this.props.data.avg_num_to_cargo_lv2 * 1000) / 1000,
+			avg_time_cargo_lv2: Math.round(this.props.data.avg_time_to_cargo_lv2 * 1000) / 1000,
+			avg_num_hatch_lv1: Math.round(this.props.data.avg_num_to_hatch_lv1 * 1000) / 1000,
+			avg_time_hatch_lv1: Math.round(this.props.data.avg_time_to_hatch_lv1 * 1000) / 1000,
+			avg_num_cargo_lv1: Math.round(this.props.data.avg_num_to_cargo_lv1 * 1000) / 1000,
+			avg_time_cargo_lv1: Math.round(this.props.data.avg_time_to_cargo_lv1 * 1000) / 1000,
+			avg_num_hatch_lvS: Math.round(this.props.data.avg_num_to_hatch_lvS * 1000) / 1000,
+			avg_time_hatch_lvS: Math.round(this.props.data.avg_time_to_hatch_lvS * 1000) / 1000,
+			avg_num_cargo_lvS: Math.round(this.props.data.avg_num_to_cargo_lvS * 1000) / 1000,
+			avg_time_cargo_lvS: Math.round(this.props.data.avg_time_to_cargo_lvS * 1000) / 1000
 		};
 	}
-	showMatchData () {
+	showMatchData() {
 		console.log("show cycles match data");
 	}
 	render() {
@@ -39,27 +55,27 @@ class CyclesSection extends Component {
 					<tbody>
 						<tr>
 							<td className="analyticsTable">Level 3</td>
-							<td className="analyticsTable">{this.props.data.avg_num_hatch_lv3} @ {this.props.data.avg_time_cargo_lv3} s</td>
-							<td className="analyticsTable">{this.props.data.avg_num_cargo_lv3} @ {this.props.data.avg_time_cargo_lv3} s</td>
+							<td className="analyticsTable">{this.state.avg_num_hatch_lv3} @ {this.state.avg_time_hatch_lv3} s</td>
+							<td className="analyticsTable">{this.state.avg_num_cargo_lv3} @ {this.state.avg_time_cargo_lv3} s</td>
 						</tr>
 						<tr>
 							<td className="analyticsTable">Level 2</td>
-							<td className="analyticsTable">{this.props.data.avg_num_hatch_lv2} @ {this.props.data.avg_time_cargo_lv2} s</td>
-							<td className="analyticsTable">{this.props.data.avg_num_cargo_lv2} @ {this.props.data.avg_time_cargo_lv2} s</td>
+							<td className="analyticsTable">{this.state.avg_num_hatch_lv2} @ {this.state.avg_time_cargo_lv2} s</td>
+							<td className="analyticsTable">{this.state.avg_num_cargo_lv2} @ {this.state.avg_time_cargo_lv2} s</td>
 						</tr>
 						<tr>
 							<td className="analyticsTable">Level 1</td>
-							<td className="analyticsTable">{this.props.data.avg_num_hatch_lv1} @ {this.props.data.avg_time_cargo_lv1} s</td>
-							<td className="analyticsTable">{this.props.data.avg_num_cargo_lv1} @ {this.props.data.avg_time_cargo_lv1} s</td>
+							<td className="analyticsTable">{this.state.avg_num_hatch_lv1} @ {this.state.avg_time_cargo_lv1} s</td>
+							<td className="analyticsTable">{this.state.avg_num_cargo_lv1} @ {this.state.avg_time_cargo_lv1} s</td>
 						</tr>
 						<tr>
 							<td className="analyticsTable">Ship</td>
-							<td className="analyticsTable">{this.props.data.avg_num_hatch_lvS} @ {this.props.data.avg_time_cargo_lvS} s</td>
-							<td className="analyticsTable">{this.props.data.avg_num_cargo_lvS} @ {this.props.data.avg_time_cargo_lvS} s</td>
+							<td className="analyticsTable">{this.state.avg_num_hatch_lvS} @ {this.state.avg_time_cargo_lvS} s</td>
+							<td className="analyticsTable">{this.state.avg_num_cargo_lvS} @ {this.state.avg_time_cargo_lvS} s</td>
 						</tr>
 						<tr>
-							<td className="analyticsTable"/>
-							<td className="analyticsTable"/>
+							<td className="analyticsTable" />
+							<td className="analyticsTable" />
 							<td className="analyticsTable">
 								<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
 							</td>
@@ -69,15 +85,52 @@ class CyclesSection extends Component {
 			</div>
 		);
 	}
-	// teleop = () => {
-	// 	this.setState({ values: [[1, 2], [3, 4], [1, 2], [3, 4]] });
-	// 	console.log(this.state.toggle);
-	// };
-
-	// sandstorm = () => {
-	// 	this.setState({ values: [[3, 4], [1, 2], [3, 4], [1, 2]] });
-	// 	console.log(this.state.toggle);
-	// };
+	teleop() {
+		if (this.state.mode !== "TO") {
+			this.setState({
+				mode:"TO",
+				avg_num_hatch_lv3: Math.round(this.props.data.avg_num_to_hatch_lv3 * 1000) / 1000,
+				avg_time_hatch_lv3: Math.round(this.props.data.avg_time_to_hatch_lv3 * 1000) / 1000,
+				avg_num_cargo_lv3: Math.round(this.props.data.avg_num_to_cargo_lv3 * 1000) / 1000,
+				avg_time_cargo_lv3: Math.round(this.props.data.avg_time_to_cargo_lv3 * 1000) / 1000,
+				avg_num_hatch_lv2: Math.round(this.props.data.avg_num_to_hatch_lv2 * 1000) / 1000,
+				avg_time_hatch_lv2: Math.round(this.props.data.avg_time_to_hatch_lv2 * 1000) / 1000,
+				avg_num_cargo_lv2: Math.round(this.props.data.avg_num_to_cargo_lv2 * 1000) / 1000,
+				avg_time_cargo_lv2: Math.round(this.props.data.avg_time_to_cargo_lv2 * 1000) / 1000,
+				avg_num_hatch_lv1: Math.round(this.props.data.avg_num_to_hatch_lv1 * 1000) / 1000,
+				avg_time_hatch_lv1: Math.round(this.props.data.avg_time_to_hatch_lv1 * 1000) / 1000,
+				avg_num_cargo_lv1: Math.round(this.props.data.avg_num_to_cargo_lv1 * 1000) / 1000,
+				avg_time_cargo_lv1: Math.round(this.props.data.avg_time_to_cargo_lv1 * 1000) / 1000,
+				avg_num_hatch_lvS: Math.round(this.props.data.avg_num_to_hatch_lvS * 1000) / 1000,
+				avg_time_hatch_lvS: Math.round(this.props.data.avg_time_to_hatch_lvS * 1000) / 1000,
+				avg_num_cargo_lvS: Math.round(this.props.data.avg_num_to_cargo_lvS * 1000) / 1000,
+				avg_time_cargo_lvS: Math.round(this.props.data.avg_time_to_cargo_lvS * 1000) / 1000
+			});
+		}
+	};
+	sandstorm() {
+		if (this.state.mode !== "SS") {
+			this.setState({
+				mode: "SS",
+				avg_num_hatch_lv3: Math.round(this.props.data.avg_num_ss_hatch_lv3 * 1000) / 1000,
+				avg_time_hatch_lv3: Math.round(this.props.data.avg_time_ss_hatch_lv3 * 1000) / 1000,
+				avg_num_cargo_lv3: Math.round(this.props.data.avg_num_ss_cargo_lv3 * 1000) / 1000,
+				avg_time_cargo_lv3: Math.round(this.props.data.avg_time_ss_cargo_lv3 * 1000) / 1000,
+				avg_num_hatch_lv2: Math.round(this.props.data.avg_num_ss_hatch_lv2 * 1000) / 1000,
+				avg_time_hatch_lv2: Math.round(this.props.data.avg_time_ss_hatch_lv2 * 1000) / 1000,
+				avg_num_cargo_lv2: Math.round(this.props.data.avg_num_ss_cargo_lv2 * 1000) / 1000,
+				avg_time_cargo_lv2: Math.round(this.props.data.avg_time_ss_cargo_lv2 * 1000) / 1000,
+				avg_num_hatch_lv1: Math.round(this.props.data.avg_num_ss_hatch_lv1 * 1000) / 1000,
+				avg_time_hatch_lv1: Math.round(this.props.data.avg_time_ss_hatch_lv1 * 1000) / 1000,
+				avg_num_cargo_lv1: Math.round(this.props.data.avg_num_ss_cargo_lv1 * 1000) / 1000,
+				avg_time_cargo_lv1: Math.round(this.props.data.avg_time_ss_cargo_lv1 * 1000) / 1000,
+				avg_num_hatch_lvS: Math.round(this.props.data.avg_num_ss_hatch_lvS * 1000) / 1000,
+				avg_time_hatch_lvS: Math.round(this.props.data.avg_time_ss_hatch_lvS * 1000) / 1000,
+				avg_num_cargo_lvS: Math.round(this.props.data.avg_num_ss_cargo_lvS * 1000) / 1000,
+				avg_time_cargo_lvS: Math.round(this.props.data.avg_time_ss_cargo_lvS * 1000) / 1000
+			});
+		}
+	};
 }
 
 export default CyclesSection;

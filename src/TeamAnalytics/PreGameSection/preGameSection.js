@@ -22,10 +22,10 @@ class PreGameSection extends Component {
 								Ship Preload
 							</td>
 							<td className="analyticsTable">
-								{this.props.data.tot_ship_preload.hatch}
+								{this.props.data.tot_ship_preload.hatch?this.props.data.tot_ship_preload.hatch:0}
 							</td>
 							<td className="analyticsTable">
-								{this.props.data.tot_ship_preload.cargo}
+								{this.props.data.tot_ship_preload.cargo?this.props.data.tot_ship_preload.cargo:0}
 							</td>
 						</tr>
 						<tr>
@@ -33,15 +33,15 @@ class PreGameSection extends Component {
 								Robot Preload
 							</td>
 							<td className="analyticsTable">
-								{this.props.data.tot_robot_preload.hatch}
+								{this.props.data.tot_robot_preload.hatch?this.props.data.tot_robot_preload.hatch:0}
 							</td>
 							<td className="analyticsTable">
-								{this.props.data.tot_robot_preload.cargo}
+								{this.props.data.tot_robot_preload.cargo?this.props.data.tot_robot_preload.cargo:0}
 							</td>
 						</tr>
 						<tr>
-							<td className="analyticsTable"/>
-							<td className="analyticsTable"/>
+							<td className="analyticsTable" />
+							<td className="analyticsTable" />
 							<td className="analyticsTable">
 								<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
 							</td>
