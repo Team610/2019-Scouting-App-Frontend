@@ -35,6 +35,13 @@ const MatchForms = ({ match }) => (
 			<li><NavLink to={`${match.url}/4`}>Match 4</NavLink></li>
             <li><NavLink to={`${match.url}/5`}>Match 5</NavLink></li>
             <li><NavLink to={`${match.url}/6`}>Match 6</NavLink></li>
+			<li><NavLink to={`${match.url}/7`}>Match 7</NavLink></li>
+			<li><NavLink to={`${match.url}/8`}>Match 8</NavLink></li>
+			<li><NavLink to={`${match.url}/9`}>Match 9</NavLink></li>
+			<li><NavLink to={`${match.url}/10`}>Match 10</NavLink></li>
+			<li><NavLink to={`${match.url}/11`}>Match 11</NavLink></li>
+			<li><NavLink to={`${match.url}/12`}>Match 12</NavLink></li>
+			<li><NavLink to={`${match.url}/13`}>Match 13</NavLink></li>
         </ul>
 
         <Route path={`${match.path}/:matchId`} render={
