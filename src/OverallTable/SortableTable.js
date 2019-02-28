@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './style.css';
 
 //https://www.w3schools.com/jsref/met_table_insertrow.asp
 
@@ -30,7 +31,7 @@ class SortableTable extends Component {
             if (shouldSwitch) {
                 rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
                 switching = true;
-                switchcount ++;
+                switchcount++;
             } else {
                 if (switchcount === 0 && dir === "asc") {
                     dir = "desc";
