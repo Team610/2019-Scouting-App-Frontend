@@ -8,7 +8,6 @@ const App = () => (
     <Router>
         <div>
             <Header />
-
             <Route exact path="/" component={Home} />
             <Route path="/form" component={MatchForms} />
             <Route path="/teams" component={Teams} />
