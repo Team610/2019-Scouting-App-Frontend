@@ -16,9 +16,9 @@ class CommentTextbox extends Component {
     render() {
         return(
           <div>
-            <p className="subheader">Comment Textbox (If your comment doesn't fit the bill)</p>
+            <p className="subheader">Comment Textbox (only for the truly special!)</p>
             <form>
-              <textarea input="text" name="add_comments" rows="10" cols="60"
+              <textarea input="text" name="add_comments" rows="8" cols="40"
                onChange={this.handleChange}>
               </textarea>
               <br/>
