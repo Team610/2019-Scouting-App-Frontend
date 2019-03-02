@@ -81,7 +81,7 @@ export default class App extends React.Component {
 				</React.Fragment>
 			);
 		} else {
-			if (this.state.user === null) {
+			if (this.state.user === null || this.state.user === undefined) {
 				return (
 					<React.Fragment>
 						<p>Unable to log in</p>
@@ -103,7 +103,7 @@ export default class App extends React.Component {
 
 							<Switch>
 								<Route exact path="/" component={Home} />
-								<Route path="/form" render={()=><AllMatchForm user = {this.state.user} />} />
+								<Route path="/form" render={() => <AllMatchForm user={this.state.user} />} />
 								<Route path="/teams" component={Teams} />
 								<Route path="/overall" component={OverallTable} />
 								<Route component={Err404} />
@@ -126,7 +126,7 @@ export default class App extends React.Component {
 
 							<Switch>
 								<Route exact path="/" component={Home} />
-								<Route path="/form" render={()=><AllMatchForm user = {this.state.user} />} />
+								<Route path="/form" render={() => <AllMatchForm user={this.state.user} />} />
 								<Route path="/teams" component={Teams} />
 								<Route path="/overall" component={OverallTable} />
 								<Route path="/config" component={ConfigPage} />
@@ -148,7 +148,7 @@ export default class App extends React.Component {
 
 							<Switch>
 								<Route exact path="/" component={Home} />
-								<Route path="/form" render={()=><AllMatchForm user = {this.state.user} />} />
+								<Route path="/form" render={() => <MatchForm user={this.state.user} />} />
 								<Route path="/overall" component={OverallTable} />
 								<Route component={Err404} />
 							</Switch>
@@ -168,7 +168,7 @@ const MatchForm = Loadable({
 	loading: Loading
 });
 const AllMatchForm = Loadable({
-	loader: ()=>import("./MatchForm/AllMatchSelect"),
+	loader: () => import("./MatchForm/AllMatchSelect"),
 	loading: Loading
 });
 
@@ -176,21 +176,54 @@ const Team = Loadable({
 	loader: () => import("./TeamAnalytics/TeamAnalytics"),
 	loading: Loading
 });
-const Teams = ({ match }) => (
-	<div>
-		<h2>Teams</h2>
-		<ul>
-			<li><NavLink to={`${match.url}/610`}>610</NavLink></li>
-			<li><NavLink to={`${match.url}/33`}>33</NavLink></li>
-		</ul>
+class Teams extends React.Component {
+	constructor(props) {
+		super(props);
+		this.match = this.props.match;
+		this.state = {
+			loaded: false
+		}
+	}
+	componentDidMount() {
+		fetch('/api/v1/event/getEventTeams', {
+			method: 'GET'
+		}).then((res) => {
+			res.json().then((json) => {
+				this.teamList = [];
+				for(let i=0; i<json.length; i++) {
+					this.teamList.push(
+						<li key={json[i]}>
+							<NavLink to={`${this.match.path}/${json[i]}`}>json[i]</NavLink>
+						</li>
+					);
+					this.setState({
+						loaded: true
+					})
+				}
+			});
+		});
+	}
+	render() {
+		if(!this.state.loaded) {
+			return(
+				<p>Loading teams...</p>
+			);
+		}
+		return (
+			<div>
+				<h2>Teams</h2>
+				<ul>
+					{this.teamList}
+				</ul>
 
-		<p>TODO: make the team list dynamic!!</p>
-		<Route path={`${match.path}/:teamNum`} render={
-			(props) => <Team {...props} />} />
-		<Route exact path={match.path} render={
-			() => <p>Please select a team.</p>} />
-	</div>
-);
+				<Route path={`${this.match.path}/:teamNum`} render={
+					(props) => <Team {...props} />} />
+				<Route exact path={match.path} render={
+					() => <p>Please select a team.</p>} />
+			</div>
+		);
+	}
+}
 
 const OverallTable = Loadable({
 	loader: () => import("./OverallTable/SortableTable"),

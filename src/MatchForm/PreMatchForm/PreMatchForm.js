@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import RobotPreloadInput from './RobotPreloadInput/RobotPreloadInput';
 import ShipPreloadInput from './ShipPreloadsInput/ShipPreloadsInput';
 import StartPositionInput from './StartPositionInput/StartPositionInput';
-import TeamInput from './TeamInput/TeamInput';
 import RobotPhotoDisplay from './RobotPhotoDisplay/RobotPhotoDisplay';
 
 class PreMatchForm extends Component {
@@ -10,9 +9,7 @@ class PreMatchForm extends Component {
 		super(props);
 		this.state = {};
 		this.getJSON = this.getJSON.bind(this);
-		this.getAlliance = this.getAlliance.bind(this);
-
-		this.teamSlctRef = React.createRef(); //TODO: team select is disabled
+		
 		this.startPosRef = React.createRef();
 		this.robPrldRef = React.createRef();
 		this.shpPrldRef = React.createRef();
@@ -28,13 +25,12 @@ class PreMatchForm extends Component {
 		}
 		return obj;
 	}
-	getAlliance() {
-		return this.teamSlctRef.current.getAlliance();
-	}
 	render() {
 		return (
 			<div style={{ overflow: 'auto' }}>
-				<TeamInput matchNum={this.props.matchNum} ref={this.teamSlctRef} /><br />
+				<div>
+					<p>Team #: {this.props.teamNum}</p>
+				</div>
 				<div className="element">
 					<table>
 						<colgroup>
