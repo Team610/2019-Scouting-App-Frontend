@@ -99,7 +99,7 @@ export default class App extends React.Component {
 								<li><NavLink to="/teams">Teams</NavLink></li>
 								<li><NavLink to="/overall">Overall</NavLink></li>
 								<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
-								<li style={{ float: "right" }}><Logout logout={this.logout} /></li>
+								<li style={{ float: "right" }}>Welcome, {this.state.user.name} &nbsp;<Logout logout={this.logout} /></li>
 							</ul>
 
 							<Switch>
@@ -124,7 +124,7 @@ export default class App extends React.Component {
 								<li><NavLink to="/overall">Overall</NavLink></li>
 								<li><NavLink to="/config">Configs</NavLink></li>
 								<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
-								<li style={{ float: "right" }}><Logout logout={this.logout} /></li>
+								<li style={{ float: "right" }}>Welcome, {this.state.user.name} &nbsp; <Logout logout={this.logout} /></li>
 							</ul>
 
 							<Switch>
@@ -148,7 +148,7 @@ export default class App extends React.Component {
 								<li><NavLink to="/form">Form</NavLink></li>
 								<li><NavLink to="/overall">Overall</NavLink></li>
 								<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
-								<li style={{ float: "right" }}><Logout logout={this.logout} /></li>
+								<li style={{ float: "right" }}>Welcome, {this.state.user.name} &nbsp; <Logout logout={this.logout} /></li>
 							</ul>
 
 							<Switch>
