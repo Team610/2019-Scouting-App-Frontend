@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import Camera from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import "./robotPhoto.css";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import ButtonToolbar from "react-bootstrap/ButtonToolbar";
+
 
 class Review extends Component {
   constructor(props) {
