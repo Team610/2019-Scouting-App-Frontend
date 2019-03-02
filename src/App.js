@@ -224,7 +224,7 @@ class Teams extends React.Component {
 
 				<Route path={`${this.match.path}/:teamNum`} render={
 					(props) => <Team {...props} />} />
-				<Route exact path={match.path} render={
+				<Route exact path={this.match.path} render={
 					() => <p>Please select a team.</p>} />
 			</div>
 		);
