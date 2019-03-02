@@ -196,22 +196,22 @@ class Teams extends React.Component {
 		}).then((res) => {
 			res.json().then((json) => {
 				this.teamList = [];
-				for(let i=0; i<json.length; i++) {
+				for (let i = 0; i < json.length; i++) {
 					this.teamList.push(
 						<li key={json[i]}>
-							<NavLink to={`${this.match.path}/${json[i]}`}>json[i]</NavLink>
+							<NavLink to={`${this.match.path}/${json[i]}`}>{json[i]}</NavLink>
 						</li>
 					);
-					this.setState({
-						loaded: true
-					})
 				}
+				this.setState({
+					loaded: true
+				})
 			});
 		});
 	}
 	render() {
-		if(!this.state.loaded) {
-			return(
+		if (!this.state.loaded) {
+			return (
 				<p>Loading teams...</p>
 			);
 		}
@@ -221,11 +221,12 @@ class Teams extends React.Component {
 				<ul>
 					{this.teamList}
 				</ul>
-
-				<Route path={`${this.match.path}/:teamNum`} render={
-					(props) => <Team {...props} />} />
-				<Route exact path={this.match.path} render={
-					() => <p>Please select a team.</p>} />
+				<Route
+					path={`${this.match.path}/:teamNum`}
+					render={(props) => <Team {...props} />} />
+				<Route exact
+					path={this.match.path}
+					render={() => <p>Please select a team.</p>} />
 			</div>
 		);
 	}
@@ -239,7 +240,7 @@ const OverallTable = Loadable({
 const RobotPhotos = Loadable({
 	loader: () => import("./RobotPhotos/Camera/Photo"),
 	loading: Loading
-  });
+});
 
 const ConfigPage = Loadable({
 	loader: () => import("./ConfigPage/ConfigPage"),
