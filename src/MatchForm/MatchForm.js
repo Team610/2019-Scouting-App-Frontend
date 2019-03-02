@@ -24,6 +24,42 @@ class MatchForm extends Component {
 		this.viewRefs = [this.preMatchRef, this.inMatchRef, this.postMatchRef];
 		this.alliance = 'red';
 	}
+	componentDidMount() {
+		this.getMatchNum().then(res => {
+			this.matchNum = res;
+			this.getTeam().then(res => {
+				this.teamNum = res;
+				this.setState({
+					loading: false
+				});
+			});
+		});
+	}
+	async getMatchNum() {
+		try {
+			console.log('getting match num');
+			let num = await fetch('/api/v1/curMatch', {
+				method: 'GET'
+			});
+			num = await num.json();
+			console.log(`got match num: ${JSON.stringify(num)}`);
+			return typeof num['num'] === 'object' ? num['num']['low'] : num['num'];
+		} catch (err) {
+			console.log("unable to get match num");
+			console.log(err.message);
+			this.setState({
+				cannotLoad: true
+			})
+		}
+	}
+	async getTeam() {
+		try {
+			
+		} catch (err) {
+			console.log('unable to get team num');
+			console.log(err.message);
+		}
+	}
 	async submitForm() {
 		console.log(JSON.stringify(this.data));
 
