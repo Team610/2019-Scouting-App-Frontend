@@ -98,6 +98,7 @@ export default class App extends React.Component {
 								<li><NavLink to="/form">Form</NavLink></li>
 								<li><NavLink to="/teams">Teams</NavLink></li>
 								<li><NavLink to="/overall">Overall</NavLink></li>
+								<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
 								<li style={{ float: "right" }}><Logout logout={this.logout} /></li>
 							</ul>
 
@@ -106,6 +107,7 @@ export default class App extends React.Component {
 								<Route path="/form" render={() => <AllMatchForm user={this.state.user} />} />
 								<Route path="/teams" component={Teams} />
 								<Route path="/overall" component={OverallTable} />
+								<Route path="/robotPhotos" component={RobotPhotos} />
 								<Route component={Err404} />
 							</Switch>
 						</div>
@@ -121,6 +123,7 @@ export default class App extends React.Component {
 								<li><NavLink to="/teams">Teams</NavLink></li>
 								<li><NavLink to="/overall">Overall</NavLink></li>
 								<li><NavLink to="/config">Configs</NavLink></li>
+								<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
 								<li style={{ float: "right" }}><Logout logout={this.logout} /></li>
 							</ul>
 
@@ -130,6 +133,7 @@ export default class App extends React.Component {
 								<Route path="/teams" component={Teams} />
 								<Route path="/overall" component={OverallTable} />
 								<Route path="/config" component={ConfigPage} />
+								<Route path="/robotPhotos" component={RobotPhotos} />
 								<Route component={Err404} />
 							</Switch>
 						</div>
@@ -143,6 +147,7 @@ export default class App extends React.Component {
 								<li><NavLink to="/">Home</NavLink></li>
 								<li><NavLink to="/form">Form</NavLink></li>
 								<li><NavLink to="/overall">Overall</NavLink></li>
+								<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
 								<li style={{ float: "right" }}><Logout logout={this.logout} /></li>
 							</ul>
 
@@ -150,6 +155,7 @@ export default class App extends React.Component {
 								<Route exact path="/" component={Home} />
 								<Route path="/form" render={() => <MatchForm user={this.state.user} />} />
 								<Route path="/overall" component={OverallTable} />
+								<Route path="/robotPhotos" component={RobotPhotos} />
 								<Route component={Err404} />
 							</Switch>
 						</div>
@@ -161,7 +167,7 @@ export default class App extends React.Component {
 }
 
 const Home = () => <h2>Home</h2>;
-const Loading = (props) => <div>Loading {props.page}...</div>;
+const Loading = props => <div>Loading {props.page}...</div>;
 
 const MatchForm = Loadable({
 	loader: () => import("./MatchForm/MatchForm"),
@@ -229,6 +235,11 @@ const OverallTable = Loadable({
 	loader: () => import("./OverallTable/SortableTable"),
 	loading: Loading
 });
+
+const RobotPhotos = Loadable({
+	loader: () => import("./RobotPhotos/Camera/Photo"),
+	loading: Loading
+  });
 
 const ConfigPage = Loadable({
 	loader: () => import("./ConfigPage/ConfigPage"),
