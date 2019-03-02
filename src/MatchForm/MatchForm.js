@@ -26,7 +26,7 @@ class MatchForm extends Component {
 			this.matchNum = res.matchNum;
 			this.teamNum = res.teamNum;
 			this.alliance = res.alliance;
-			this.data = { matchNum: this.matchNum };
+			this.data = { matchNum: this.matchNum, teamNum: this.teamNum };
 			this.setState({
 				loading: false
 			});
