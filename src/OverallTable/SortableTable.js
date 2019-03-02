@@ -3,6 +3,7 @@ import './style.css';
 
 //https://www.w3schools.com/jsref/met_table_insertrow.asp
 
+
 class SortableTable extends Component {
     sortTable = (n) => {
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
@@ -42,15 +43,18 @@ class SortableTable extends Component {
     }
     render() {
         return (
-            <div>
+            <div style={{overflowX:'auto', width:'1000px'}}>
             <script src="sorttable.js"></script>
-                <table className="sortable" id="myTable2">
+                <table className="sortable" id="myTable2" style={{align: 'center'}}>
                     <thead>
                         <tr>
                             <th onClick={() => this.sortTable(0)}>Team</th>
-                            <th onClick={() => this.sortTable(1)}>Climb</th>
-                            <th onClick={() => this.sortTable(2)}>Cycles</th>
-                            <th onClick={() => this.sortTable(3)}>Avg Rp</th>
+                            <th onClick={() => this.sortTable(1)}>Hatch Time</th>
+                            <th onClick={() => this.sortTable(2)}>Hatch Number</th>
+                            <th onClick={() => this.sortTable(3)}>Cargo Time</th>
+                            <th onClick={() => this.sortTable(4)}>Cargo Number</th>
+                            <th onClick={() => this.sortTable(5)}>Climb Time</th>
+                            <th onClick={() => this.sortTable(6)}>Climb Level</th>
                         </tr>
                     </thead>
                     <tbody>
