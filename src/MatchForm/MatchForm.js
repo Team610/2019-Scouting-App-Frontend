@@ -36,8 +36,11 @@ class MatchForm extends Component {
 		try {
 			console.log('getting match, team nums');
 			let nums = await fetch('/api/v1/event/getNextUserMatch', {
-				method: 'GET',
-				body: JSON.stringify(this.props.user)
+				method: 'POST',
+				body: JSON.stringify(this.props.user),
+				headers: {
+					'Content-Type': 'application/json'
+				}
 			});
 			nums = await nums.json();
 			console.log(`got nums: ${JSON.stringify(nums)}`);
@@ -50,7 +53,7 @@ class MatchForm extends Component {
 			console.log(err.message);
 			this.setState({
 				cannotLoad: true
-			})
+			});
 		}
 	}
 	async submitForm() {
