@@ -54,7 +54,7 @@ class MatchForm extends Component {
 	}
 	async getTeam() {
 		try {
-
+			
 		} catch (err) {
 			console.log('unable to get team num');
 			console.log(err.message);
