@@ -5,6 +5,7 @@
     "dependencies": {
         "react": "^16.8.2",
         "react-dom": "^16.8.2",
+        "react-google-login": "^5.0.2",
         "react-loadable": "^5.5.0",
         "react-modal": "^3.8.1",
         "react-pie-menu": "^0.2.4",

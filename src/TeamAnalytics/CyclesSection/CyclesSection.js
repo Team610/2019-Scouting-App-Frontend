@@ -48,8 +48,8 @@ class CyclesSection extends Component {
 					<thead>
 						<tr>
 							<th />
-							<th>Hatches</th>
-							<th>Balls</th>
+							<th>Hatch</th>
+							<th>Cargo</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -60,17 +60,17 @@ class CyclesSection extends Component {
 						</tr>
 						<tr>
 							<td className="analyticsTable">Level 2</td>
-							<td className="analyticsTable">{this.state.avg_num_hatch_lv2} @ {this.state.avg_time_cargo_lv2} s</td>
+							<td className="analyticsTable">{this.state.avg_num_hatch_lv2} @ {this.state.avg_time_hatch_lv2} s</td>
 							<td className="analyticsTable">{this.state.avg_num_cargo_lv2} @ {this.state.avg_time_cargo_lv2} s</td>
 						</tr>
 						<tr>
 							<td className="analyticsTable">Level 1</td>
-							<td className="analyticsTable">{this.state.avg_num_hatch_lv1} @ {this.state.avg_time_cargo_lv1} s</td>
+							<td className="analyticsTable">{this.state.avg_num_hatch_lv1} @ {this.state.avg_time_hatch_lv1} s</td>
 							<td className="analyticsTable">{this.state.avg_num_cargo_lv1} @ {this.state.avg_time_cargo_lv1} s</td>
 						</tr>
 						<tr>
 							<td className="analyticsTable">Ship</td>
-							<td className="analyticsTable">{this.state.avg_num_hatch_lvS} @ {this.state.avg_time_cargo_lvS} s</td>
+							<td className="analyticsTable">{this.state.avg_num_hatch_lvS} @ {this.state.avg_time_hatch_lvS} s</td>
 							<td className="analyticsTable">{this.state.avg_num_cargo_lvS} @ {this.state.avg_time_cargo_lvS} s</td>
 						</tr>
 						<tr>
