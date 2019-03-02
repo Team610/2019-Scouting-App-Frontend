@@ -6,6 +6,7 @@ import './App.css'; //TODO: make CSS modularized
 import Login from './Auth/Login';
 import Logout from './Auth/Logout';
 
+<<<<<<< HEAD
 const googleClientId = "609299116953-at08rh33j3ggljmn33atjpp4uaqunc0s.apps.googleusercontent.com";
 
 export default class App extends React.Component {
@@ -150,6 +151,20 @@ export default class App extends React.Component {
 		}
 	}
 }
+=======
+const App = () => (
+    <Router>
+        <div>
+            <Header />
+            <Route exact path="/" component={Home} />
+            <Route path="/form" component={MatchForms} />
+            <Route path="/teams" component={Teams} />
+            <Route path="/overall" component={OverallTable} />
+        </div>
+    </Router>
+);
+//TODO: figure out how to implement 404 page <Route component={NoMatch} />
+>>>>>>> 0953467a94540132492894b9e9fc9e3f035aa22e
 
 const Home = () => <h2>Home</h2>;
 const Loading = (props) => <div>Loading {props.page}...</div>;

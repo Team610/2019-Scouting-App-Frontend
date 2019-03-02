@@ -11,54 +11,18 @@ class MatchForm extends Component {
 	constructor(props) {
 		super(props);
 		this.submitForm = this.submitForm.bind(this);
-		this.getMatchNum = this.getMatchNum.bind(this);
 		this.state = {
-			matchView: 'preMatch',
-			loading: true
+			matchView: 'preMatch'
 		}
 
+		this.matchNum = this.props.match.params.matchId;
 		this.data = { matchNum: this.matchNum };
+
 		this.preMatchRef = React.createRef();
 		this.inMatchRef = React.createRef();
 		this.postMatchRef = React.createRef();
 		this.viewRefs = [this.preMatchRef, this.inMatchRef, this.postMatchRef];
 		this.alliance = 'red';
-	}
-	componentDidMount() {
-		this.getMatchNum().then(res => {
-			this.matchNum = res;
-			this.getTeam().then(res => {
-				this.teamNum = res;
-				this.setState({
-					loading: false
-				});
-			});
-		});
-	}
-	async getMatchNum() {
-		try {
-			console.log('getting match num');
-			let num = await fetch('/api/v1/curMatch', {
-				method: 'GET'
-			});
-			num = await num.json();
-			console.log(`got match num: ${JSON.stringify(num)}`);
-			return typeof num['num'] === 'object' ? num['num']['low'] : num['num'];
-		} catch (err) {
-			console.log("unable to get match num");
-			console.log(err.message);
-			this.setState({
-				cannotLoad: true
-			})
-		}
-	}
-	async getTeam() {
-		try {
-
-		} catch (err) {
-			console.log('unable to get team num');
-			console.log(err.message);
-		}
 	}
 	async submitForm() {
 		console.log(JSON.stringify(this.data));
@@ -104,18 +68,6 @@ class MatchForm extends Component {
 			return (
 				<Redirect to="/" />
 			);
-		}
-		if (this.state.cannotLoad) {
-			return (
-				<div>
-					<p>Could not load form. Please try again.</p>
-				</div>
-			);
-		}
-		if (this.state.loading) {
-			return (
-				<div><p>Loading...</p></div>
-			)
 		}
 		if (this.state.matchView === 'preMatch') {
 			return (
