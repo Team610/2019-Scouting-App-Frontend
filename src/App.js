@@ -71,6 +71,7 @@ export default class App extends React.Component {
 			isAuth: false,
 			user: null
 		});
+		window.location.assign("https://accounts.google.com/Logout?hl=en&continue=https://support.google.com/mail/answer/8154%3Fhl%3Den");
 	}
 
 	render() {
