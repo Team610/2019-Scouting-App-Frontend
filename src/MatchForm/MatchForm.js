@@ -47,6 +47,7 @@ class MatchForm extends Component {
 			let obj = {};
 			obj.matchNum = typeof nums.matchNum === 'object' ? nums.matchNum.low : nums.matchNum;
 			obj.teamNum = typeof nums.teamNum === 'object' ? nums.teamNum.low : nums.teamNum;
+			obj.alliance = nums.alliance;
 			return obj;
 		} catch (err) {
 			console.log("unable to get match num");

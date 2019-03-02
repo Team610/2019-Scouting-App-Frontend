@@ -66,6 +66,7 @@ export default class App extends React.Component {
 
 	logout = () => {
 		sessionStorage.removeItem('user');
+		console.log('logged out!');
 		this.setState({
 			isAuth: false,
 			user: null
@@ -85,7 +86,7 @@ export default class App extends React.Component {
 				return (
 					<React.Fragment>
 						<p>Unable to log in</p>
-						<Logout logout={this.logout} />
+						<Logout onLogoutSuccess={this.logout} />
 					</React.Fragment>
 				);
 			}
