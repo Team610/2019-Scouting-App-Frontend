@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './style.css';
+import './Chart.js';
 
 //https://www.w3schools.com/jsref/met_table_insertrow.asp
 
