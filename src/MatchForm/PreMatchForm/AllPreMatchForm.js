@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import RobotPreloadInput from './RobotPreloadInput/RobotPreloadInput';
 import ShipPreloadInput from './ShipPreloadsInput/ShipPreloadsInput';
 import StartPositionInput from './StartPositionInput/StartPositionInput';
+import TeamInput from './TeamInput/TeamInput';
 import RobotPhotoDisplay from './RobotPhotoDisplay/RobotPhotoDisplay';
 
-class PreMatchForm extends Component {
+class AllPreMatchForm extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
 		this.getJSON = this.getJSON.bind(this);
-		
+		this.getAlliance = this.getAlliance.bind(this);
+
+		this.teamSlctRef = React.createRef();
 		this.startPosRef = React.createRef();
 		this.robPrldRef = React.createRef();
 		this.shpPrldRef = React.createRef();
@@ -25,12 +28,13 @@ class PreMatchForm extends Component {
 		}
 		return obj;
 	}
+	getAlliance() {
+		return this.teamSlctRef.current.getAlliance();
+	}
 	render() {
 		return (
 			<div style={{ overflow: 'auto' }}>
-				<div>
-					<p>Team #: {this.props.teamNum}</p>
-				</div>
+				<TeamInput matchNum={this.props.matchNum} ref={this.teamSlctRef} /><br />
 				<div className="element">
 					<table>
 						<colgroup>
@@ -55,4 +59,4 @@ class PreMatchForm extends Component {
 	}
 }
 
-export default PreMatchForm;
+export default AllPreMatchForm;

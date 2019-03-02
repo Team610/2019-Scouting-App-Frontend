@@ -32,6 +32,11 @@ class CommentsSection extends Component {
 						</tr>
 						<tr>
 							<td className="analyticsTable"/>
+							<td className="analyticsTable">No climb attempted</td>
+							<td className="analyticsTable">{this.props.data.tot_climb_states.climb_no_attempt?this.props.data.tot_climb_states.climb_no_attempt:0}</td>
+						</tr>
+						<tr>
+							<td className="analyticsTable"/>
 							<td className="analyticsTable">Tipped climbs</td>
 							<td className="analyticsTable">{this.props.data.tot_climb_states.climb_fall?this.props.data.tot_climb_states.climb_fall:0}</td>
 						</tr>

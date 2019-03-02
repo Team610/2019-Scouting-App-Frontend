@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import TeamAnalyticsHeader from './TeamAnalyticsHeader/teamAnalyticsHeader';
-import OverallSection from './OverallSection/overallSection';
-import CyclesSection from './CyclesSection/cyclesSection';
-import PreGameSection from './PreGameSection/preGameSection';
-import EndGameSection from './EndGameSection/endGameSection';
-import DefenseSection from './DefenseSection/defenseSection';
-import CommentsSection from './CommentsSection/commentsSection';
+import OverallSection from './OverallSection/OverallSection';
+import CyclesSection from './CyclesSection/CyclesSection';
+import PreGameSection from './PreGameSection/PreGameSection';
+import EndGameSection from './EndGameSection/EndGameSection';
+import DefenseSection from './DefenseSection/DefenseSection';
+import CommentsSection from './CommentsSection/CommentsSection';
 import './style.css';
 
 class Team extends Component {

@@ -40,10 +40,10 @@ class ClimbInput extends Component {
 			<React.Fragment>
 				<Modal open={this.state.open} onClose={this.onCloseModal} center>
 					<br/>
-					<button style={{margin:5}} onClick={()=>{this.onCloseModal(3)}}>Level 3</button><br/>
-					<button style={{margin:5}} onClick={()=>{this.onCloseModal(2)}}>Level 2</button><br/>
-					<button style={{margin:5}} onClick={()=>{this.onCloseModal(1)}}>Level 1</button><br/>
-					<button style={{margin:5}} onClick={()=>{this.onCloseModal(0)}}>Level 0</button><br/>
+					<button style={{margin:5,width:100,height:50}} onClick={()=>{this.onCloseModal(3)}}>Level 3</button><br/>
+					<button style={{margin:5,width:100,height:50}} onClick={()=>{this.onCloseModal(2)}}>Level 2</button><br/>
+					<button style={{margin:5,width:100,height:50}} onClick={()=>{this.onCloseModal(1)}}>Level 1</button><br/>
+					<button style={{margin:5,width:100,height:50}} onClick={()=>{this.onCloseModal(0)}}>Level 0</button><br/>
 				</Modal>
 			</React.Fragment>
 		);

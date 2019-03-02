@@ -37,23 +37,23 @@ class DefenseInput extends Component {
 			<React.Fragment>
 				<Modal open={this.state.open} onClose={this.onCloseModal} center>
 					<br />
-					<button style={{ margin: 5 }}
+					<button style={{ margin: 5,width:100,height:50 }}
 							onClick={() => { this.onCloseModal('rocket_goalkeep') }}>
 						Rocket Goalkeep
 					</button><br />
-					<button style={{ margin: 5 }}
+					<button style={{ margin: 5,width:100,height:50 }}
 							onClick={() => { this.onCloseModal('ship_goalkeep') }}>
 						Ship Goalkeep
 					</button><br />
-					<button style={{ margin: 5 }}
+					<button style={{ margin: 5,width:100,height:50 }}
 							onClick={() => { this.onCloseModal('pinning') }}>
 						Pinning
 					</button><br />
-					<button style={{ margin: 5 }}
+					<button style={{ margin: 5,width:100,height:50 }}
 							onClick={() => { this.onCloseModal('driving_around') }}>
 						Driving Around
 					</button><br />
-					<button style={{ margin: 5 }}
+					<button style={{ margin: 5,width:100,height:50 }}
 							onClick={() => { this.onCloseModal('tough_defense') }}>
 						Tough Defense
 					</button><br />

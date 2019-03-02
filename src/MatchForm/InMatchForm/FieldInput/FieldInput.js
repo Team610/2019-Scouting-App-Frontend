@@ -17,6 +17,7 @@ class FieldIMG extends Component {
 		this.rocketMenu = this.rocketMenu.bind(this);
 		this.shipMenu = this.shipMenu.bind(this);
 		this.closeMenu = this.closeMenu.bind(this);
+		this.changeIntake = this.changeIntake.bind(this);
 
 		//Initialize empty state
 		this.leftSide = true;
@@ -35,7 +36,7 @@ class FieldIMG extends Component {
 			'ss_cycle_cargo_lv1': [], 'ss_cycle_cargo_lv2': [], 'ss_cycle_cargo_lv3': [], 'ss_cycle_cargo_lvS': [],
 			'to_cycle_hatch_lv1': [], 'to_cycle_hatch_lv2': [], 'to_cycle_hatch_lv3': [], 'to_cycle_hatch_lvS': [],
 			'to_cycle_cargo_lv1': [], 'to_cycle_cargo_lv2': [], 'to_cycle_cargo_lv3': [], 'to_cycle_cargo_lvS': [],
-			'climb_lvl': '1', 'climb_time': 0.0
+			'climb_lvl': '0', 'climb_time': 0.0
 		};
 		this.state = {
 			menuRequested: false
@@ -82,7 +83,7 @@ class FieldIMG extends Component {
 					onMouseDown={this.handleClick}
 					style={{ float: "left" }} />
 				{this.intake ?
-					<div style={{ float: "left", padding: "5px", color: "yellow", fontSize: "20px" }}>
+					<div style={{ float: "left", padding: "5px", color: "yellow", fontSize: "20px" }} onClick={this.changeIntake}>
 						{this.startState.intake === "cargo" ? "Cargo cycle" : "Hatch cycle"}
 					</div> : null}
 				{this.menuActive ? this.loadMenu() : null}
@@ -197,6 +198,13 @@ class FieldIMG extends Component {
 		return zone;
 	}
 
+	changeIntake() {
+		let newType = this.startState.intake === "cargo" ? "hatch" : "cargo";
+		console.log(`switching intake type to ${newType}`);
+		this.startState.intake = newType;
+		this.setState({ menuRequested: false });
+	}
+
 	loadMenu() {
 		//Load the appropriate menu
 		console.log(`loading ${this.menu} menu`);
@@ -217,7 +225,7 @@ class FieldIMG extends Component {
 	recordCycleStart(intake) {
 		console.log('recording cycle start');
 		let startTime = new Date().getTime();
-		this.startState = { "time": startTime, "intake": intake, "ss": startTime - this.initTime < 15000 ? true : false };
+		this.startState = { "time": this.startState.time, "intake": intake, "ss": startTime - this.initTime < 15000 ? true : false };
 
 		this.intake = true;
 		this.menuActive = false;
@@ -225,7 +233,8 @@ class FieldIMG extends Component {
 	}
 	recordCycleEnd(level) {
 		console.log('recording cycle end');
-		let dur = (new Date().getTime() - this.startState.time) / 1000;
+		let endTime = new Date().getTime();
+		let dur = (endTime - this.startState.time) / 1000;
 		if (this.startState.ss) {
 			console.log(`ss ${this.startState.intake} lv${level}`);
 			this.data[`ss_cycle_${this.startState['intake']}_lv${level}`].push(dur);
@@ -236,6 +245,7 @@ class FieldIMG extends Component {
 
 		this.intake = false;
 		this.menuActive = false;
+		this.startState = { "time": endTime };
 		this.setState({ menuRequested: false });
 	}
 
@@ -316,6 +326,7 @@ class FieldIMG extends Component {
 	shipMenu() {
 		console.log('going cargo ship');
 		this.recordCycleEnd('S');
+		return;
 	}
 }
 

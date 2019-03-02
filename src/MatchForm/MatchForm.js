@@ -11,21 +11,51 @@ class MatchForm extends Component {
 	constructor(props) {
 		super(props);
 		this.submitForm = this.submitForm.bind(this);
+		this.getMatchTeamNums = this.getMatchTeamNums.bind(this);
 		this.state = {
-			matchView:'preMatch'
+			matchView: 'preMatch'
 		}
-
-		this.matchNum = this.props.match.params.matchId;
-		this.data = { matchNum: this.matchNum };
 
 		this.preMatchRef = React.createRef();
 		this.inMatchRef = React.createRef();
 		this.postMatchRef = React.createRef();
 		this.viewRefs = [this.preMatchRef, this.inMatchRef, this.postMatchRef];
-		this.alliance = 'red';
+	}
+	componentDidMount() {
+		this.getMatchTeamNums().then(res => {
+			this.matchNum = res.matchNum;
+			this.teamNum = res.teamNum;
+			this.alliance = res.alliance;
+			this.data = { matchNum: this.matchNum };
+			this.setState({
+				loading: false
+			});
+		});
+	}
+	async getMatchTeamNums() {
+		try {
+			console.log('getting match, team nums');
+			let nums = await fetch('/api/v1/event/getNextUserMatch', {
+				method: 'GET',
+				body: JSON.stringify(this.props.user)
+			});
+			nums = await nums.json();
+			console.log(`got nums: ${JSON.stringify(nums)}`);
+			let obj = {};
+			obj.matchNum = typeof nums.matchNum === 'object' ? nums.matchNum.low : nums.matchNum;
+			obj.teamNum = typeof nums.teamNum === 'object' ? nums.teamNum.low : nums.teamNum;
+			return obj;
+		} catch (err) {
+			console.log("unable to get match num");
+			console.log(err.message);
+			this.setState({
+				cannotLoad: true
+			})
+		}
 	}
 	async submitForm() {
 		console.log(JSON.stringify(this.data));
+		this.data.user = this.props.user;
 
 		// Submit the form!
 		try {
@@ -37,6 +67,7 @@ class MatchForm extends Component {
 					'Content-Type': 'application/json'
 				}
 			});
+			console.log('successfully submitted');
 		} catch (err) {
 			console.log("could not submit form");
 			console.log(err.message);
@@ -48,18 +79,17 @@ class MatchForm extends Component {
 	collectData(view) {
 		let ref;
 		if (view === 'preMatch') { ref = this.preMatchRef; }
-		else if (view === 'inMatch') {ref=this.inMatchRef;}
-		else if (view === 'postMatch') {ref=this.postMatchRef;}
+		else if (view === 'inMatch') { ref = this.inMatchRef; }
+		else if (view === 'postMatch') { ref = this.postMatchRef; }
 		let viewJSON = ref.current.getJSON();
 		for (let key in viewJSON) {
 			this.data[key] = viewJSON[key];
 		}
 		if (view === 'preMatch') {
-			this.setState({matchView:'inMatch'});
-			this.alliance = this.preMatchRef.current.getAlliance();
+			this.setState({ matchView: 'inMatch' });
 		} else if (view === 'inMatch') {
-			this.setState({matchView:'postMatch'});
-		} else if (view==='postMatch') {
+			this.setState({ matchView: 'postMatch' });
+		} else if (view === 'postMatch') {
 			this.submitForm();
 		}
 	}
@@ -73,21 +103,21 @@ class MatchForm extends Component {
 			return (
 				<div>
 					<MatchFormHeader matchNum={this.matchNum} /><hr />
-					<PreMatchForm callNext = {()=>this.collectData('preMatch')} matchNum={this.matchNum} ref={this.preMatchRef} />
+					<PreMatchForm callNext={() => this.collectData('preMatch')} teamNum={this.teamNum} matchNum={this.matchNum} ref={this.preMatchRef} />
 				</div>
 			);
 		} else if (this.state.matchView === 'inMatch') {
 			return (
 				<div>
 					<MatchFormHeader matchNum={this.matchNum} /><hr />
-					<InMatchForm callNext={()=>this.collectData('inMatch')} alliance={this.alliance} blueSide={fieldConfig.blueSide} robotPreload={this.data.robot_preload} ref={this.inMatchRef} />
+					<InMatchForm callNext={() => this.collectData('inMatch')} alliance={this.alliance} blueSide={fieldConfig.blueSide} robotPreload={this.data.robot_preload} ref={this.inMatchRef} />
 				</div>
 			);
 		} else if (this.state.matchView === 'postMatch') {
 			return (
 				<div>
 					<MatchFormHeader matchNum={this.matchNum} /><hr />
-					<PostMatchForm callNext={()=>this.collectData('postMatch')} ref={this.postMatchRef} />
+					<PostMatchForm callNext={() => this.collectData('postMatch')} ref={this.postMatchRef} />
 				</div>
 			);
 		}
