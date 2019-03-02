@@ -90,9 +90,12 @@ class SortableTable extends Component {
 					<thead>
 						<tr>
 							<th onClick={() => this.sortTable(0)}>Team</th>
-							<th onClick={() => this.sortTable(1)}>Climb</th>
-							<th onClick={() => this.sortTable(2)}>Cycles</th>
-							<th onClick={() => this.sortTable(3)}>Avg Rp</th>
+							<th onClick={() => this.sortTable(1)}>Hatch Time</th>
+							<th onClick={() => this.sortTable(1)}>Hatch Number</th>
+							<th onClick={() => this.sortTable(1)}>Cargo Time</th>
+							<th onClick={() => this.sortTable(1)}>Cargo Number</th>
+							<th onClick={() => this.sortTable(1)}>Climb Time</th>
+							<th onClick={() => this.sortTable(1)}>Climb Level</th>
 						</tr>
 					</thead>
 					<tbody>

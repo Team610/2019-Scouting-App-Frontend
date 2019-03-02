@@ -23,7 +23,7 @@ class FieldIMG extends Component {
 		this.leftSide = true;
 		this.menu = '';
 		this.menuActive = false;
-		this.intake = true;
+		this.intake = this.props.robotPreload === 'neither' ? false : true;
 		this.mouseX = 0;
 		this.mouseY = 0;
 		let time = new Date().getTime();

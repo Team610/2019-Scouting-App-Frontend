@@ -7,11 +7,18 @@ class RobotPreload extends Component {
 		this.getJSON = this.getJSON.bind(this);
 		this.cargoIncrement = this.cargoIncrement.bind(this);
 		this.hatchIncrement = this.hatchIncrement.bind(this);
+		this.setToZero = this.setToZero.bind(this);
 	}
 	getJSON() {
-		return ({
-			[this.props.id]: this.state.cargo ? "cargo" : "hatch"
-		}); //TODO: make this less sketchy
+		if(this.state.cargo!==this.state.hatch) {
+			return ({
+				[this.props.id]: this.state.cargo ? "cargo" : "hatch"
+			});
+		} else {
+			return ({
+				[this.props.id]: "neither"
+			});
+		}
 	}
 	cargoIncrement() {
 		this.setState({
@@ -25,6 +32,12 @@ class RobotPreload extends Component {
 			hatch: this.state.hatch < 1 ? this.state.hatch + 1 : 1
 		});
 	}
+	setToZero() {
+		this.setState({
+			cargo: 0,
+			hatch: 0
+		});
+	}
 	render() {
 		return (
 			<React.Fragment>
@@ -34,6 +47,9 @@ class RobotPreload extends Component {
 				</label><br />
 				<label>
 					<button type="button" onClick={this.hatchIncrement} className="increment-button">Hatch: {this.state.hatch}</button>
+				</label>
+				<label>
+					<button type="button" onClick={this.setToZero} className="increment-button" style={{color:'#dd0000', backgroundColor:'#ff8888'}}>Reset to 0</button>
 				</label>
 			</React.Fragment>
 		);

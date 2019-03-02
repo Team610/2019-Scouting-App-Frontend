@@ -42,6 +42,9 @@ class ShipPreload extends Component {
 				<label>
 					<button type="button" onClick={this.hatchIncrement} className="increment-button">Hatch: {this.state.hatch}</button>
 				</label>
+				<label>
+					<button type="button" onClick={this.hatchIncrement} className="increment-button" style={{visibility:'hidden'}}>Hatch: {this.state.hatch}</button>
+				</label>
 			</React.Fragment>
 		);
 	}
