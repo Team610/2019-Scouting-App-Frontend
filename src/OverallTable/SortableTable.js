@@ -43,7 +43,6 @@ class SortableTable extends Component {
     render() {
         return (
             <div>
-            <script src="sorttable.js"></script>
                 <table className="sortable" id="myTable2">
                     <thead>
                         <tr>

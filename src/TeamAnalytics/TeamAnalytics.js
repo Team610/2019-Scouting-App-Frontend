@@ -14,18 +14,31 @@ class Team extends Component {
 		this.state = {
 			dataAvailable:false
 		}
-		this.teamNum = this.props.match.params.teamNum
+		this.teamNum = this.props.match.params.teamNum;
 	}
-	async componentWillMount() {
+	async componentDidMount() {
 		let data = await fetch(`/api/v1/stats/team/${this.teamNum}/agg`);
 		data = await data.json();
-		this.setState({
-			dataAvailable: true,
-			data: data[this.teamNum]
-		});
+		if (!data) {
+			this.setState({
+				dataAvailable: false,
+				err: true
+			});
+		} else {
+			this.setState({
+				dataAvailable: true,
+				data: data[this.teamNum]
+			});
+		}
 	}
     render() {
-		console.log(JSON.stringify(this.state.data));
+		if(this.state.err) {
+			return(
+				<div>
+					<p>Team not found</p>
+				</div>
+			)
+		}
 		if(!this.state.dataAvailable) {
 			return(
 				<div>
