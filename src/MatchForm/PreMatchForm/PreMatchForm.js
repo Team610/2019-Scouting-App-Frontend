@@ -13,7 +13,7 @@ class PreMatchForm extends Component {
 		this.startPosRef = React.createRef();
 		this.robPrldRef = React.createRef();
 		this.shpPrldRef = React.createRef();
-		this.fieldRefs = [this.teamSlctRef, this.startPosRef, this.robPrldRef, this.shpPrldRef];
+		this.fieldRefs = [this.startPosRef, this.robPrldRef, this.shpPrldRef];
 	}
 	getJSON() {
 		let obj = {};
