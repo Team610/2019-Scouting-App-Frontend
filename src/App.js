@@ -6,7 +6,6 @@ import './App.css'; //TODO: make CSS modularized
 import Login from './Auth/Login';
 import Logout from './Auth/Logout';
 
-<<<<<<< HEAD
 const googleClientId = "609299116953-at08rh33j3ggljmn33atjpp4uaqunc0s.apps.googleusercontent.com";
 
 export default class App extends React.Component {
@@ -19,6 +18,16 @@ export default class App extends React.Component {
 		this.googleResponse = this.googleResponse.bind(this);
 		this.onLoginFail = this.onLoginFail.bind(this);
 		this.logout = this.logout.bind(this);
+	}
+	componentDidMount() {
+		let userStored = sessionStorage.getItem('user');
+		console.log(userStored);
+		if (userStored && JSON.parse(userStored).role >= 0) {
+			this.setState({
+				user: JSON.parse(userStored),
+				isAuth: true
+			});
+		}
 	}
 
 	googleResponse(res) {
@@ -34,17 +43,15 @@ export default class App extends React.Component {
 			res.json().then(user => {
 				if (user.role.low >= 0) {
 					user.role = user.role.low;
-					console.log(`role: ${user.role}`);
+				}
+				if (user.role >= 0) {
+					sessionStorage.setItem('user', JSON.stringify(user));
 					this.setState({
 						user: user,
 						isAuth: true
 					});
-				} else if (user.role >= 0) {
-					this.setState({
-						user: user,
-						isAuth: true
-					})
 				} else {
+					sessionStorage.removeItem('user');
 					this.setState({
 						user: null,
 						isAuth: true
@@ -58,6 +65,7 @@ export default class App extends React.Component {
 	}
 
 	logout = () => {
+		sessionStorage.removeItem('user');
 		this.setState({
 			isAuth: false,
 			user: null
@@ -95,7 +103,7 @@ export default class App extends React.Component {
 
 							<Switch>
 								<Route exact path="/" component={Home} />
-								<Route path="/form" component={AllMatchForm} />
+								<Route path="/form" render={()=><AllMatchForm user = {this.state.user} />} />
 								<Route path="/teams" component={Teams} />
 								<Route path="/overall" component={OverallTable} />
 								<Route component={Err404} />
@@ -118,7 +126,7 @@ export default class App extends React.Component {
 
 							<Switch>
 								<Route exact path="/" component={Home} />
-								<Route path="/form" component={AllMatchForm} />
+								<Route path="/form" render={()=><AllMatchForm user = {this.state.user} />} />
 								<Route path="/teams" component={Teams} />
 								<Route path="/overall" component={OverallTable} />
 								<Route path="/config" component={ConfigPage} />
@@ -140,7 +148,7 @@ export default class App extends React.Component {
 
 							<Switch>
 								<Route exact path="/" component={Home} />
-								<Route path="/form" component={MatchForm} />
+								<Route path="/form" render={()=><AllMatchForm user = {this.state.user} />} />
 								<Route path="/overall" component={OverallTable} />
 								<Route component={Err404} />
 							</Switch>
@@ -151,20 +159,6 @@ export default class App extends React.Component {
 		}
 	}
 }
-=======
-const App = () => (
-    <Router>
-        <div>
-            <Header />
-            <Route exact path="/" component={Home} />
-            <Route path="/form" component={MatchForms} />
-            <Route path="/teams" component={Teams} />
-            <Route path="/overall" component={OverallTable} />
-        </div>
-    </Router>
-);
-//TODO: figure out how to implement 404 page <Route component={NoMatch} />
->>>>>>> 0953467a94540132492894b9e9fc9e3f035aa22e
 
 const Home = () => <h2>Home</h2>;
 const Loading = (props) => <div>Loading {props.page}...</div>;
@@ -173,33 +167,10 @@ const MatchForm = Loadable({
 	loader: () => import("./MatchForm/MatchForm"),
 	loading: Loading
 });
-const AllMatchForm = () => <p>WIP all match forms</p>;
-
-const MatchForms = ({ match }) => (
-	<div>
-		<h2>Forms</h2>
-		<ul>
-			<li><NavLink to={`${match.url}/1`}>Match 1</NavLink></li>
-			<li><NavLink to={`${match.url}/2`}>Match 2</NavLink></li>
-			<li><NavLink to={`${match.url}/3`}>Match 3</NavLink></li>
-			<li><NavLink to={`${match.url}/4`}>Match 4</NavLink></li>
-			<li><NavLink to={`${match.url}/5`}>Match 5</NavLink></li>
-			<li><NavLink to={`${match.url}/6`}>Match 6</NavLink></li>
-			<li><NavLink to={`${match.url}/7`}>Match 7</NavLink></li>
-			<li><NavLink to={`${match.url}/8`}>Match 8</NavLink></li>
-			<li><NavLink to={`${match.url}/9`}>Match 9</NavLink></li>
-			<li><NavLink to={`${match.url}/10`}>Match 10</NavLink></li>
-			<li><NavLink to={`${match.url}/11`}>Match 11</NavLink></li>
-			<li><NavLink to={`${match.url}/12`}>Match 12</NavLink></li>
-			<li><NavLink to={`${match.url}/13`}>Match 13</NavLink></li>
-		</ul>
-
-		<Route path={`${match.path}/:matchId`} render={
-			(props) => <MatchForm {...props} />} />
-		<Route exact path={match.path} render={
-			() => <p>Please select a match number.</p>} />
-	</div>
-);
+const AllMatchForm = Loadable({
+	loader: ()=>import("./MatchForm/AllMatchSelect"),
+	loading: Loading
+});
 
 const Team = Loadable({
 	loader: () => import("./TeamAnalytics/TeamAnalytics"),

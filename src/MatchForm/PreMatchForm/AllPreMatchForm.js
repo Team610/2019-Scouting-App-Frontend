@@ -5,14 +5,14 @@ import StartPositionInput from './StartPositionInput/StartPositionInput';
 import TeamInput from './TeamInput/TeamInput';
 import RobotPhotoDisplay from './RobotPhotoDisplay/RobotPhotoDisplay';
 
-class PreMatchForm extends Component {
+class AllPreMatchForm extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
 		this.getJSON = this.getJSON.bind(this);
 		this.getAlliance = this.getAlliance.bind(this);
 
-		this.teamSlctRef = React.createRef(); //TODO: team select is disabled
+		this.teamSlctRef = React.createRef();
 		this.startPosRef = React.createRef();
 		this.robPrldRef = React.createRef();
 		this.shpPrldRef = React.createRef();
@@ -59,4 +59,4 @@ class PreMatchForm extends Component {
 	}
 }
 
-export default PreMatchForm;
+export default AllPreMatchForm;

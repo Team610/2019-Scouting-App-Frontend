@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import MatchFormHeader from './MatchFormHeader/MatchFormHeader';
-import PreMatchForm from './PreMatchForm/PreMatchForm';
+import AllPreMatchForm from './PreMatchForm/AllPreMatchForm';
 import InMatchForm from './InMatchForm/InMatchForm';
 import PostMatchForm from './PostMatchForm/PostMatchForm';
 import { Redirect } from 'react-router';
 import "./style.css";
 let fieldConfig = require('../config.json');
 
-class MatchForm extends Component {
+export default class AllMatchForm extends Component {
 	constructor(props) {
 		super(props);
 		this.submitForm = this.submitForm.bind(this);
@@ -15,7 +15,7 @@ class MatchForm extends Component {
 			matchView: 'preMatch'
 		}
 
-		this.matchNum = this.props.match.params.matchId;
+		this.matchNum = this.props.matchNum;
 		this.data = { matchNum: this.matchNum };
 
 		this.preMatchRef = React.createRef();
@@ -24,44 +24,9 @@ class MatchForm extends Component {
 		this.viewRefs = [this.preMatchRef, this.inMatchRef, this.postMatchRef];
 		this.alliance = 'red';
 	}
-	componentDidMount() {
-		this.getMatchNum().then(res => {
-			this.matchNum = res;
-			this.getTeam().then(res => {
-				this.teamNum = res;
-				this.setState({
-					loading: false
-				});
-			});
-		});
-	}
-	async getMatchNum() {
-		try {
-			console.log('getting match num');
-			let num = await fetch('/api/v1/curMatch', {
-				method: 'GET'
-			});
-			num = await num.json();
-			console.log(`got match num: ${JSON.stringify(num)}`);
-			return typeof num['num'] === 'object' ? num['num']['low'] : num['num'];
-		} catch (err) {
-			console.log("unable to get match num");
-			console.log(err.message);
-			this.setState({
-				cannotLoad: true
-			})
-		}
-	}
-	async getTeam() {
-		try {
-			
-		} catch (err) {
-			console.log('unable to get team num');
-			console.log(err.message);
-		}
-	}
 	async submitForm() {
 		console.log(JSON.stringify(this.data));
+		this.data.user = this.props.user;
 
 		// Submit the form!
 		try {
@@ -73,6 +38,7 @@ class MatchForm extends Component {
 					'Content-Type': 'application/json'
 				}
 			});
+			console.log("successfully submitted");
 		} catch (err) {
 			console.log("could not submit form");
 			console.log(err.message);
@@ -109,7 +75,7 @@ class MatchForm extends Component {
 			return (
 				<div>
 					<MatchFormHeader matchNum={this.matchNum} /><hr />
-					<PreMatchForm callNext={() => this.collectData('preMatch')} matchNum={this.matchNum} ref={this.preMatchRef} />
+					<AllPreMatchForm callNext={() => this.collectData('preMatch')} matchNum={this.matchNum} ref={this.preMatchRef} />
 				</div>
 			);
 		} else if (this.state.matchView === 'inMatch') {
@@ -135,5 +101,3 @@ class MatchForm extends Component {
 		);
 	}
 }
-
-export default MatchForm;
