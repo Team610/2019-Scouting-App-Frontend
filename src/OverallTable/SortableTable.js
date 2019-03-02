@@ -1,11 +1,52 @@
 import React, { Component } from 'react';
 import './style.css';
-import './Chart.js';
+import Chart from './components/Chart';
 
 //https://www.w3schools.com/jsref/met_table_insertrow.asp
 
-
 class SortableTable extends Component {
+    constructor() {
+      super();
+      this.state = {
+        chartData:{}
+      }
+    }
+
+    componentWillMount() {
+      this.getChartData();
+    }
+
+    getChartData(){
+      // Ajax calls here
+      this.setState({
+        chartData:{
+          labels: ['Match 1', 'Match 2', 'Match 34', 'Match 43', '44', 'Match 45'],
+          datasets:[
+            {
+              label:'Time',
+              data:[
+                3,
+                5,
+                3,
+                3,
+                2,
+                1
+              ],
+              backgroundColor:[
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(255, 159, 64, 0.6)',
+                'rgba(255, 99, 132, 0.6)'
+              ]
+            }
+          ]
+        }
+      });
+    }
+
     sortTable = (n) => {
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
         table = document.getElementById("myTable2");
@@ -45,6 +86,7 @@ class SortableTable extends Component {
     render() {
         return (
             <div style={{overflowX:'auto', width:'1000px'}}>
+            <Chart chartData={this.state.chartData} team="610" legendPosition="bottom"/>
             <script src="sorttable.js"></script>
                 <table className="sortable" id="myTable2" style={{align: 'center'}}>
                     <thead>
