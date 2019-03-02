@@ -5,6 +5,7 @@ import "./robotPhoto.css";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
+import "./robotPhoto.css";
 
 class Review extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class Review extends Component {
     console.log(this.teamNumber);
     return (
       <div>
-        <img src={this.image} />
+        <img className="robotImage" src={this.image} />
       </div>
     );
   }

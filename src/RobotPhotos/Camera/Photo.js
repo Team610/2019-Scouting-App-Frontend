@@ -14,9 +14,6 @@ class RobotCamera extends Component {
       file: "",
       orientation: ""
     };
-
-    this.facing = true;
-    this.facingMode = "FACING_MODES.ENVIRONMENT";
   }
 
   onTakePhoto(dataUri) {
@@ -25,18 +22,6 @@ class RobotCamera extends Component {
     this.setState({ orientation: document.getElementById("dropdown").value });
     this.setState({ submit: true });
     // console.log(this.state.submit);
-  }
-
-  flipCamera() {
-    console.log("flip");
-    if (this.facing === false) {
-      this.facing = true;
-    } else {
-      this.facing = false;
-    }
-    this.facingMode = this.facing
-      ? "FACING_MODES.ENVIRONMENT"
-      : "FACING_MODES.USER";
   }
 
   setOrientation(orientation) {
@@ -55,13 +40,14 @@ class RobotCamera extends Component {
     ) : null;
   }
 
+  getusermedia() {}
+
   render() {
     return (
       <div className="Camera">
-        <button onClick={this.flipCamera()}>Flip camera</button>
+        {/* <button onClick={this.flipCamera()}>Flip camera</button> */}
         <Camera
           imageType="IMAGE_TYPES.JPG"
-          idealFacingMode={this.state.facingMode}
           onTakePhoto={dataUri => {
             this.onTakePhoto(dataUri);
           }}
@@ -79,28 +65,36 @@ class RobotCamera extends Component {
           </select>
         </div>
         {this.renderSubmit()}
-
-        <button
-          onClick={() => {
-            let obj = {};
-            obj.teamNum = this.state.teamNum;
-            obj.orientation = this.state.orientation;
-            obj.image = this.state.file;
-            console.log("yeet");
-          }}
-        >
-          Submit Photo
-        </button>
-        <button
-          id="retake"
-          onClick={() => {
-            if (this.state.submit) {
-              this.setState({ submit: false });
-            }
-          }}
-        >
-          Retake Photo
-        </button>
+        <table>
+          <body>
+            <tr>
+              <button
+                class="submit"
+                onClick={() => {
+                  let obj = {};
+                  obj.teamNum = this.state.teamNum;
+                  obj.orientation = this.state.orientation;
+                  obj.image = this.state.file;
+                }}
+              >
+                Submit Photo
+              </button>
+            </tr>
+            <tr>
+              <button
+                class="retake"
+                // style="size:100px"
+                onClick={() => {
+                  if (this.state.submit) {
+                    this.setState({ submit: false });
+                  }
+                }}
+              >
+                Retake Photo
+              </button>
+            </tr>
+          </body>
+        </table>
       </div>
     );
   }
