@@ -6,7 +6,7 @@ class DefenseSection extends Component {
 	}
 	render() {
 		return (
-			<div>
+			<div className="analytics-section">
 				<h1 className="comp">
 					<table className="header">
 						<thead>
@@ -55,15 +55,9 @@ class DefenseSection extends Component {
 							<td className="analyticsTable">{this.props.data.tot_time_def_driving_around}s</td>
 							<td className="analyticsTable">{this.props.data.tot_matches_def_driving_around}</td>
 						</tr>
-						<tr>
-							<td className="analyticsTable" />
-							<td className="analyticsTable" />
-							<td className="analyticsTable">
-								<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
-							</td>
-						</tr>
 					</tbody>
 				</table>
+				<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
 			</div>
 		);
 	}
