@@ -1,12 +1,18 @@
-table.analyticsTable,
-td.analyticsTable {
+table.analyticsTable {
 	width: 60%;
 	margin-left: 10px;
-	text-align: left;
+	text-align: right;
+	padding-left: 10px;
+}
+
+td.analyticsTable {
+	margin-left: 10px;
+	text-align: right;
 	padding-left: 10px;
 }
 th {
-	padding: 10pt;
+	padding-top: 10pt;
+	padding-bottom: 10pt;
 }
 
 .h {
@@ -41,8 +47,7 @@ th {
 	text-align: left;
 	padding-left: 0px;
 }
-.b11,
-.b21 {
+.tab-btns {
 	border-radius: 2px;
 	width: 40px;
 	color: black;
@@ -50,10 +55,12 @@ th {
 }
 
 .matchdata {
-	width: 150px;
-	height: 30px;
+	width: 120px;
+	height: 27px;
 	border-radius: 2px;
 	background-color: white;
+	position: absolute;
+	right: 40%;
 }
 
 .header {
@@ -71,10 +78,15 @@ th {
 }
 .teamPageHeader {
 	opacity: 1;
+	z-index: 1;
 	padding: 5px;
 	font-size: 15pt;
 	background-color: #282c34;
 	border: solid #FFF;
 	border-width: 0px;
 	border-bottom-width: 2px;
+}
+
+.analytics-section {
+	padding-bottom: 10px;
 }

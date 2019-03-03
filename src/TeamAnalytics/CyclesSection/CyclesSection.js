@@ -28,17 +28,17 @@ class CyclesSection extends Component {
 	}
 	render() {
 		return (
-			<div>
+			<div className="analytics-section">
 				<h1 className="comp">
 					<table className="header">
 						<thead>
 							<tr>
 								<td className="name">Cycles</td>
 								<td className="b1">
-									<button className="b11" onClick={() => this.teleop()}>TO</button>
+									<button className="tab-btns" onClick={() => this.teleop()}>TO</button>
 								</td>
 								<td className="b2">
-									<button className="b21" onClick={() => this.sandstorm()}>SS</button>
+									<button className="tab-btns" onClick={() => this.sandstorm()}>SS</button>
 								</td>
 							</tr>
 						</thead>
@@ -47,24 +47,24 @@ class CyclesSection extends Component {
 				<table className="analyticsTable">
 					<thead>
 						<tr>
-							<th />
+							<th>Level</th>
 							<th>Hatch</th>
 							<th>Cargo</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td className="analyticsTable">Level 3</td>
+							<td className="analyticsTable">3</td>
 							<td className="analyticsTable">{this.state.avg_num_hatch_lv3} @ {this.state.avg_time_hatch_lv3} s</td>
 							<td className="analyticsTable">{this.state.avg_num_cargo_lv3} @ {this.state.avg_time_cargo_lv3} s</td>
 						</tr>
 						<tr>
-							<td className="analyticsTable">Level 2</td>
+							<td className="analyticsTable">2</td>
 							<td className="analyticsTable">{this.state.avg_num_hatch_lv2} @ {this.state.avg_time_hatch_lv2} s</td>
 							<td className="analyticsTable">{this.state.avg_num_cargo_lv2} @ {this.state.avg_time_cargo_lv2} s</td>
 						</tr>
 						<tr>
-							<td className="analyticsTable">Level 1</td>
+							<td className="analyticsTable">1</td>
 							<td className="analyticsTable">{this.state.avg_num_hatch_lv1} @ {this.state.avg_time_hatch_lv1} s</td>
 							<td className="analyticsTable">{this.state.avg_num_cargo_lv1} @ {this.state.avg_time_cargo_lv1} s</td>
 						</tr>
@@ -73,15 +73,9 @@ class CyclesSection extends Component {
 							<td className="analyticsTable">{this.state.avg_num_hatch_lvS} @ {this.state.avg_time_hatch_lvS} s</td>
 							<td className="analyticsTable">{this.state.avg_num_cargo_lvS} @ {this.state.avg_time_cargo_lvS} s</td>
 						</tr>
-						<tr>
-							<td className="analyticsTable" />
-							<td className="analyticsTable" />
-							<td className="analyticsTable">
-								<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
-							</td>
-						</tr>
 					</tbody>
 				</table>
+				<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
 			</div>
 		);
 	}

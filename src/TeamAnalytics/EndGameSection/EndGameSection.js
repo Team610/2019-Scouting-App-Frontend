@@ -6,7 +6,7 @@ class Endgame extends Component {
 	}
 	render() {
 		return (
-			<div>
+			<div className="analytics-section">
 				<h1 className="comp">Endgame</h1>
 				<table className="analyticsTable">
 					<thead>
@@ -32,15 +32,9 @@ class Endgame extends Component {
 							<td className="analyticsTable">{this.props.data.tot_num_climb_lvl[1]?this.props.data.tot_num_climb_lvl[1]:0}</td>
 							<td className="analyticsTable">{this.props.data.avg_time_climb_lv1?this.props.data.avg_time_climb_lv1:0}s</td>
 						</tr>
-						<tr>
-							<td className="analyticsTable"/>
-							<td className="analyticsTable"/>
-							<td className="analyticsTable">
-								<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
-							</td>
-						</tr>
 					</tbody>
 				</table>
+				<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
 			</div>
 		);
 	}

@@ -6,7 +6,7 @@ class PreGameSection extends Component {
 	}
 	render() {
 		return (
-			<div>
+			<div className="analytics-section">
 				<h1 className="comp">Preloads</h1>
 				<table className="analyticsTable">
 					<thead>
@@ -39,15 +39,9 @@ class PreGameSection extends Component {
 								{this.props.data.tot_robot_preload.cargo?this.props.data.tot_robot_preload.cargo:0}
 							</td>
 						</tr>
-						<tr>
-							<td className="analyticsTable" />
-							<td className="analyticsTable" />
-							<td className="analyticsTable">
-								<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
-							</td>
-						</tr>
 					</tbody>
 				</table>
+				<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
 			</div>
 		);
 	}

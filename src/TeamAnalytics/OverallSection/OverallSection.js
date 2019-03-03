@@ -16,7 +16,7 @@ class OverallSection extends Component {
 	}
 	render() {
 		return (
-			<div>
+			<div className="analytics-section">
 				<h1 className="comp">Overall</h1>
 				<table className="analyticsTable">
 					<thead>
@@ -36,13 +36,6 @@ class OverallSection extends Component {
 							</td>
 							<td className="analyticsTable">
 								{this.tot_climbs} @ {this.props.data.avg_time_climb_tot} s
-							</td>
-						</tr>
-						<tr>
-							<td className="analyticsTable" />
-							<td className="analyticsTable" />
-							<td className="analyticsTable">
-								<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
 							</td>
 						</tr>
 					</tbody>
