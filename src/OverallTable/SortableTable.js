@@ -6,12 +6,24 @@ class SortableTable extends Component {
 	constructor() {
 		super();
 		this.state = {
-			chartData: {}
+			chartData: {},
+			dataLoaded: false
 		}
+		this.getData = this.getData.bind(this);
 	}
-
-	componentWillMount() {
-		this.getChartData();
+	componentDidMount() {
+		// this.getChartData();
+		this.getData();
+	}
+	getData() {
+		fetch('/api/v1/stats/teams/agg').then((res) => {
+			res.json().then((json) => {
+				this.data = json;
+				this.setState({
+					dataLoaded: true
+				});
+			});
+		});
 	}
 
 	getChartData() {
@@ -83,46 +95,47 @@ class SortableTable extends Component {
 		}
 	}
 	render() {
+		//<Chart chartData={this.state.chartData} team="610" legendPosition="bottom"/>
+		if(!this.state.dataLoaded) {
+			return(<p>Loading data</p>);
+		}
+		console.log(this.data[188]);
+		let rows = [];
+		for (let team of Object.keys(this.data)) {
+			let avg_num_hatch = Math.round((this.data[team].avg_num_ss_hatch_tot + this.data[team].avg_num_to_hatch_tot) * 1000) / 1000;
+			let avg_time_hatch = Math.round((this.data[team].avg_time_ss_hatch_tot * this.data[team].avg_num_ss_hatch_tot / avg_num_hatch + this.data[team].avg_time_to_hatch_tot * this.data[team].avg_num_to_hatch_tot / avg_num_hatch) * 1000) / 1000;
+			let avg_num_cargo = Math.round((this.data[team].avg_num_ss_cargo_tot + this.data[team].avg_num_to_cargo_tot) * 1000) / 1000;
+			let avg_time_cargo = Math.round((this.data[team].avg_time_ss_cargo_tot * this.data[team].avg_num_ss_cargo_tot / avg_num_cargo + this.data[team].avg_time_to_cargo_tot * this.data[team].avg_num_to_cargo_tot / avg_num_cargo) * 1000) / 1000;
+			let lvl2_climbs = this.data[team].tot_num_climb_lvl[2]===undefined?0:parseInt(this.data[team].tot_num_climb_lvl[2]);
+			let lvl3_climbs = this.data[team].tot_num_climb_lvl[3]===undefined?0:parseInt(this.data[team].tot_num_climb_lvl[3]);
+			let tot_climbs = lvl2_climbs+lvl3_climbs;
+			let avg_time_climb = Math.round(this.data[team].avg_time_climb_tot*1000)/1000;
+			rows.push(<tr key={team}>
+				<td>{team}</td>
+				<td>{avg_num_hatch}</td>
+				<td>{avg_time_hatch}</td>
+				<td>{avg_num_cargo}</td>
+				<td>{avg_time_cargo}</td>
+				<td>{tot_climbs}</td>
+				<td>{avg_time_climb}</td>
+			</tr>);
+		}
 		return (
 			<div>
-				<Chart chartData={this.state.chartData} team="610" legendPosition="bottom"/>
 				<table className="sortable" id="myTable2">
 					<thead>
 						<tr>
 							<th onClick={() => this.sortTable(0)}>Team</th>
-							<th onClick={() => this.sortTable(1)}>Hatch Time</th>
-							<th onClick={() => this.sortTable(1)}>Hatch Number</th>
-							<th onClick={() => this.sortTable(1)}>Cargo Time</th>
-							<th onClick={() => this.sortTable(1)}>Cargo Number</th>
-							<th onClick={() => this.sortTable(1)}>Climb Time</th>
-							<th onClick={() => this.sortTable(1)}>Climb Level</th>
+							<th onClick={() => this.sortTable(1)}>Hatch #</th>
+							<th onClick={() => this.sortTable(2)}>Hatch (s)</th>
+							<th onClick={() => this.sortTable(3)}>Cargo #</th>
+							<th onClick={() => this.sortTable(4)}>Cargo (s)</th>
+							<th onClick={() => this.sortTable(5)}>Climb #</th>
+							<th onClick={() => this.sortTable(6)}>Climb (s)</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td> 610</td>
-							<td> 8s</td>
-							<td> 6s</td>
-							<td>3.5</td>
-						</tr>
-						<tr>
-							<td> 188</td>
-							<td>10s</td>
-							<td> 5s</td>
-							<td>3.2</td>
-						</tr>
-						<tr>
-							<td>4476</td>
-							<td>11s</td>
-							<td> 8s</td>
-							<td>2.5</td>
-						</tr>
-						<tr>
-							<td> 771</td>
-							<td>12s</td>
-							<td> 4s</td>
-							<td>2.8</td>
-						</tr>
+						{rows}
 					</tbody>
 				</table>
 			</div>
