@@ -1,6 +1,24 @@
 import React, { Component } from "react";
 
-class Endgame extends Component {
+class EndGameSection extends Component {
+	constructor(props) {
+		super(props);
+		//util funcs
+		this.validFlt = this.validFlt.bind(this);
+		this.validInt = this.validInt.bind(this);
+	}
+	//utils
+	validFlt(num) {
+		let a = num;
+		if(Number.isNaN(num)||!num) a=0;
+		return parseFloat(Math.round(a * 1000) / 1000).toFixed(3);
+	}
+	validInt(int) {
+		let a = int;
+		if(Number.isNaN(int)||!int) a=0;
+		return parseInt(a);
+	}
+	
 	showMatchData() {
 		console.log("showing endgame match data");
 	}
@@ -19,25 +37,27 @@ class Endgame extends Component {
 					<tbody>
 						<tr>
 							<td className="analyticsTable">Level 3</td>
-							<td className="analyticsTable">{this.props.data.tot_num_climb_lvl[3]?this.props.data.tot_num_climb_lvl[3]:0}</td>
-							<td className="analyticsTable">{this.props.data.avg_time_climb_lv3?this.props.data.avg_time_climb_lv3:0}s</td>
+							<td className="analyticsTable">{this.validInt(this.props.data.tot_num_climb_lvl[3])}</td>
+							<td className="analyticsTable">{this.validFlt(this.props.data.avg_time_climb_lv3)} s</td>
 						</tr>
 						<tr>
 							<td className="analyticsTable">Level 2</td>
-							<td className="analyticsTable">{this.props.data.tot_num_climb_lvl[2]?this.props.data.tot_num_climb_lvl[2]:0}</td>
-							<td className="analyticsTable">{this.props.data.avg_time_climb_lv2?this.props.data.avg_time_climb_lv2:0}s</td>
+							<td className="analyticsTable">{this.validInt(this.props.data.tot_num_climb_lvl[2])}</td>
+							<td className="analyticsTable">{this.validFlt(this.props.data.avg_time_climb_lv2)} s</td>
 						</tr>
 						<tr>
 							<td className="analyticsTable">Level 1</td>
-							<td className="analyticsTable">{this.props.data.tot_num_climb_lvl[1]?this.props.data.tot_num_climb_lvl[1]:0}</td>
-							<td className="analyticsTable">{this.props.data.avg_time_climb_lv1?this.props.data.avg_time_climb_lv1:0}s</td>
+							<td className="analyticsTable">{this.validInt(this.props.data.tot_num_climb_lvl[1])}</td>
+							<td className="analyticsTable">{this.validFlt(this.props.data.avg_time_climb_lv1)} s</td>
 						</tr>
 					</tbody>
 				</table>
+				<br/>
 				<button className="matchdata" onClick={this.showMatchData}>View Match Data</button>
+				<br/>
 			</div>
 		);
 	}
 }
 
-export default Endgame;
+export default EndGameSection;

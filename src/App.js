@@ -1,8 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, NavLink, Switch } from "react-router-dom";
-// import SampleImportPage from "./pages/samplePage";
 import Loadable from "react-loadable";
-import './App.css'; //TODO: make CSS modularized
+import './App.css';
 import Login from './Auth/Login';
 import Logout from './Auth/Logout';
 
@@ -180,59 +179,10 @@ const AllMatchForm = Loadable({
 	loading: Loading
 });
 
-const Team = Loadable({
+const Teams = Loadable({
 	loader: () => import("./TeamAnalytics/TeamAnalytics"),
 	loading: Loading
 });
-class Teams extends React.Component {
-	constructor(props) {
-		super(props);
-		this.match = this.props.match;
-		this.state = {
-			loaded: false
-		}
-	}
-	componentDidMount() {
-		fetch('/api/v1/event/getEventTeams', {
-			method: 'GET'
-		}).then((res) => {
-			res.json().then((json) => {
-				this.teamList = [];
-				for (let i = 0; i < json.length; i++) {
-					this.teamList.push(
-						<li key={json[i]}>
-							<NavLink to={`${this.match.path}/${json[i]}`}>{json[i]}</NavLink>
-						</li>
-					);
-				}
-				this.setState({
-					loaded: true
-				})
-			});
-		});
-	}
-	render() {
-		if (!this.state.loaded) {
-			return (
-				<p>Loading teams...</p>
-			);
-		}
-		return (
-			<div>
-				<h2>Teams</h2>
-				<ul>
-					{this.teamList}
-				</ul>
-				<Route
-					path={`${this.match.path}/:teamNum`}
-					render={(props) => <Team {...props} />} />
-				<Route exact
-					path={this.match.path}
-					render={() => <p>Please select a team.</p>} />
-			</div>
-		);
-	}
-}
 
 const OverallTable = Loadable({
 	loader: () => import("./OverallTable/SortableTable"),

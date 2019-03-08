@@ -1,16 +1,33 @@
 import React, { Component } from "react";
 
-class OverallSection extends Component {
+export default class OverallSection extends Component {
 	constructor(props) {
 		super(props);
-		this.avg_num_hatch = Math.round((this.props.data.avg_num_ss_hatch_tot + this.props.data.avg_num_to_hatch_tot) * 1000) / 1000;
-		this.avg_time_hatch = Math.round((this.props.data.avg_time_ss_hatch_tot * this.props.data.avg_num_ss_hatch_tot / this.avg_num_hatch + this.props.data.avg_time_to_hatch_tot * this.props.data.avg_num_to_hatch_tot / this.avg_num_hatch) * 1000) / 1000;
-		this.avg_num_cargo = Math.round((this.props.data.avg_num_ss_cargo_tot + this.props.data.avg_num_to_cargo_tot) * 1000) / 1000;
-		this.avg_time_cargo = Math.round((this.props.data.avg_time_ss_cargo_tot * this.props.data.avg_num_ss_cargo_tot / this.avg_num_cargo + this.props.data.avg_time_to_cargo_tot * this.props.data.avg_num_to_cargo_tot / this.avg_num_cargo) * 1000) / 1000;
-		let lvl2_climbs = this.props.data.tot_num_climb_lvl[2]===undefined?0:parseInt(this.props.data.tot_num_climb_lvl[2]);
-		let lvl3_climbs = this.props.data.tot_num_climb_lvl[3]===undefined?0:parseInt(this.props.data.tot_num_climb_lvl[3]);
-		this.tot_climbs = lvl2_climbs+lvl3_climbs;
+		//util funcs
+		this.validFlt = this.validFlt.bind(this);
+		this.validInt = this.validInt.bind(this);
+
+		this.avg_num_hatch = this.validFlt(this.props.data.avg_num_ss_hatch_tot + this.props.data.avg_num_to_hatch_tot);
+		this.avg_time_hatch = this.validFlt(this.props.data.avg_time_ss_hatch_tot * this.props.data.avg_num_ss_hatch_tot / this.avg_num_hatch + this.props.data.avg_time_to_hatch_tot * this.props.data.avg_num_to_hatch_tot / this.avg_num_hatch);
+		this.avg_num_cargo = this.validFlt(this.props.data.avg_num_ss_cargo_tot + this.props.data.avg_num_to_cargo_tot);
+		this.avg_time_cargo = this.validFlt(this.props.data.avg_time_ss_cargo_tot * this.props.data.avg_num_ss_cargo_tot / this.avg_num_cargo + this.props.data.avg_time_to_cargo_tot * this.props.data.avg_num_to_cargo_tot / this.avg_num_cargo);
+		let lvl2_climbs = this.validInt(this.props.data.tot_num_climb_lvl[2]);
+		let lvl3_climbs = this.validInt(this.props.data.tot_num_climb_lvl[3]);
+		this.tot_climbs = this.validInt(lvl2_climbs+lvl3_climbs);
+		this.avg_time_climb = this.validFlt(this.props.data.avg_time_climb_lv2 * lvl2_climbs / this.tot_climbs + this.props.data.avg_time_climb_lv3 * lvl3_climbs / this.tot_climbs);
 	}
+	//utils
+	validFlt(num) {
+		let a = num;
+		if(Number.isNaN(num)||!num) a=0;
+		return parseFloat(Math.round(a * 1000) / 1000).toFixed(3);
+	}
+	validInt(int) {
+		let a = int;
+		if(Number.isNaN(int)||!int) a=0;
+		return parseInt(a);
+	}
+
 	showMatchData() {
 		console.log("show overall match data");
 	}
@@ -35,7 +52,7 @@ class OverallSection extends Component {
 								{this.avg_num_cargo} @ {this.avg_time_cargo} s
 							</td>
 							<td className="analyticsTable">
-								{this.tot_climbs} @ {this.props.data.avg_time_climb_tot} s
+								{this.tot_climbs} @ {this.avg_time_climb} s
 							</td>
 						</tr>
 					</tbody>
@@ -44,5 +61,3 @@ class OverallSection extends Component {
 		);
 	}
 }
-
-export default OverallSection;

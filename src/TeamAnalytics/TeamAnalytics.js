@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TeamAnalyticsHeader from './TeamAnalyticsHeader/teamAnalyticsHeader';
+import TeamAnalyticsHeader from './TeamAnalyticsHeader/TeamAnalyticsHeader';
 import OverallSection from './OverallSection/OverallSection';
 import CyclesSection from './CyclesSection/CyclesSection';
 import PreGameSection from './PreGameSection/PreGameSection';
@@ -8,58 +8,107 @@ import DefenseSection from './DefenseSection/DefenseSection';
 import CommentsSection from './CommentsSection/CommentsSection';
 import './style.css';
 
-class Team extends Component {
+export default class TeamAnalytics extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dataAvailable:false
+			teamNum: -1,
+			dataAvailable: false,
+			teamListAvailable: false
 		}
-		this.teamNum = this.props.match.params.teamNum;
+		this.setTeamNum = this.setTeamNum.bind(this);
+		this.getTeamList = this.getTeamList.bind(this);
 	}
 	async componentDidMount() {
-		let data = await fetch(`/api/v1/stats/team/${this.teamNum}/agg`);
-		data = await data.json();
-		console.log(data);
-		if (!data) {
+		this.teamList = await this.getTeamList();
+		this.setState({
+			teamListAvailable: true
+		});
+	}
+	async setTeamNum(num) {
+		if(num !== this.state.teamNum) {
 			this.setState({
-				dataAvailable: false,
-				err: true
+				teamNum: num,
+				dataAvailable: false
 			});
-		} else {
+			let res = await fetch(`/api/v1/stats/team/${num}/agg`);
+			res = await res.json();
+			this.data = res[num];
+			console.log(this.data);
+			console.log(`set to team ${this.state.teamNum}`);
 			this.setState({
-				dataAvailable: true,
-				data: data[this.teamNum]
+				dataAvailable: true
 			});
 		}
 	}
-    render() {
-		if(this.state.err) {
+	async getTeamList() {
+		let res = await fetch(`/api/v1/event/getEventTeams`);
+		res = await res.json();
+		console.log("got team list");
+		return res;
+	}
+	render() {
+		if(!this.state.teamListAvailable) {
+			console.log('loading team list');
 			return(
 				<div>
-					<p>Team not found</p>
-				</div>
-			)
-		}
-		if(!this.state.dataAvailable) {
-			return(
-				<div>
-					<TeamAnalyticsHeader num={this.teamNum} />
-					<p>Data loading...</p>
+					Loading...
 				</div>
 			);
 		}
-        return (
-            <div>
-				<TeamAnalyticsHeader teamNum={this.teamNum} />
-				<OverallSection data={this.state.data} />
-				<CyclesSection data={this.state.data} />
-				<PreGameSection data={this.state.data} />
-				<EndGameSection data={this.state.data} />
-				<DefenseSection data={this.state.data} />
-				<CommentsSection data={this.state.data} />
-            </div>
-        );
-    }
+		if(this.state.teamNum===-1) {
+			console.log('no team selected');
+			return(
+				<div>
+					<TeamSelect teamList={this.teamList} setTeamNum={this.setTeamNum} />
+					<p>Please select a team.</p>
+				</div>
+			);
+		} else if(!this.state.dataAvailable) {
+			console.log(`loading team ${this.state.teamNum}`)
+			return(
+				<div>
+					<TeamSelect teamList={this.teamList} setTeamNum={this.setTeamNum} /><br/>
+					Data for Team {this.state.teamNum} loading...
+				</div>
+			);
+		} else {
+			console.log(`loaded team ${this.state.teamNum}`)
+			return(
+				<div>
+					<TeamSelect teamList={this.teamList} setTeamNum={this.setTeamNum} /><br/>
+					<TeamAnalyticsHeader teamNum={this.state.teamNum} />
+					<OverallSection data={this.data} />
+					<CyclesSection data={this.data} />
+					<PreGameSection data={this.data} />
+					<EndGameSection data={this.data} />
+					<DefenseSection data={this.data} />
+					<CommentsSection data={this.data} />
+				</div>
+			);
+		}
+	}
 }
 
-export default Team;
+class TeamSelect extends Component {
+	constructor(props) {
+		super(props);
+		this.liList = [];
+		let json = this.props.teamList;
+		for(let i=0; i<json.length; i++) {
+			this.liList.push(
+				<li key={json[i]}>
+					<button onClick={() => {this.props.setTeamNum(json[i]);}}>{json[i]}</button>
+				</li>
+			);
+		}
+	}
+	render() {
+		return (
+			<React.Fragment>
+				<h2>Teams</h2>
+				<ul>{this.liList}</ul>
+			</React.Fragment>
+		);
+	}
+}
