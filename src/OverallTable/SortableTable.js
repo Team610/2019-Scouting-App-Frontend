@@ -1,20 +1,31 @@
 import React, { Component } from 'react';
 import './style.css';
-import Chart from './Chart/Chart';
 
 class SortableTable extends Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
+		//util funcs
+		this.validFlt = this.validFlt.bind(this);
+		this.validInt = this.validInt.bind(this);
+
 		this.state = {
-			chartData: {},
 			dataLoaded: false
 		}
 		this.getData = this.getData.bind(this);
-	}
-	componentDidMount() {
-		// this.getChartData();
 		this.getData();
 	}
+	//utils
+	validFlt(num) {
+		let a = num;
+		if (Number.isNaN(num) || !num) a = 0;
+		return parseFloat(Math.round(a * 1000) / 1000).toFixed(3);
+	}
+	validInt(int) {
+		let a = int;
+		if (Number.isNaN(int) || !int) a = 0;
+		return parseInt(a);
+	}
+
 	getData() {
 		fetch('/api/v1/stats/teams/agg').then((res) => {
 			res.json().then((json) => {
@@ -26,40 +37,9 @@ class SortableTable extends Component {
 		});
 	}
 
-	getChartData() {
-		// Ajax calls here
-		this.setState({
-			chartData: {
-				labels: ['Match 1', 'Match 2', 'Match 34', 'Match 43', '44', 'Match 45'],
-				datasets: [
-					{
-						label: 'Time',
-						data: [
-							3,
-							5,
-							3,
-							3,
-							2,
-							1
-						],
-						backgroundColor: [
-							'rgba(255, 99, 132, 0.6)',
-							'rgba(54, 162, 235, 0.6)',
-							'rgba(255, 206, 86, 0.6)',
-							'rgba(75, 192, 192, 0.6)',
-							'rgba(153, 102, 255, 0.6)',
-							'rgba(255, 159, 64, 0.6)',
-							'rgba(255, 99, 132, 0.6)'
-						]
-					}
-				]
-			}
-		});
-	}
-
 	sortTable = (n) => {
 		//https://www.w3schools.com/jsref/met_table_insertrow.asp
-		var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+		let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
 		table = document.getElementById("myTable2");
 		switching = true;
 		dir = "asc";
@@ -71,12 +51,12 @@ class SortableTable extends Component {
 				x = rows[i].getElementsByTagName("TD")[n];
 				y = rows[i + 1].getElementsByTagName("TD")[n];
 				if (dir === "asc") {
-					if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+					if (Number(x.innerHTML) > Number(y.innerHTML)) {
 						shouldSwitch = true;
 						break;
 					}
 				} else if (dir === "desc") {
-					if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+					if (Number(x.innerHTML) < Number(y.innerHTML)) {
 						shouldSwitch = true;
 						break;
 					}
@@ -95,43 +75,47 @@ class SortableTable extends Component {
 		}
 	}
 	render() {
-		//<Chart chartData={this.state.chartData} team="610" legendPosition="bottom"/>
-		if(!this.state.dataLoaded) {
-			return(<p>Loading data</p>);
+		if (!this.state.dataLoaded) {
+			return (<p>Loading data...</p>);
 		}
-		console.log(this.data[188]);
 		let rows = [];
 		for (let team of Object.keys(this.data)) {
-			let avg_num_hatch = Math.round((this.data[team].avg_num_ss_hatch_tot + this.data[team].avg_num_to_hatch_tot) * 1000) / 1000;
-			let avg_time_hatch = Math.round((this.data[team].avg_time_ss_hatch_tot * this.data[team].avg_num_ss_hatch_tot / avg_num_hatch + this.data[team].avg_time_to_hatch_tot * this.data[team].avg_num_to_hatch_tot / avg_num_hatch) * 1000) / 1000;
-			let avg_num_cargo = Math.round((this.data[team].avg_num_ss_cargo_tot + this.data[team].avg_num_to_cargo_tot) * 1000) / 1000;
-			let avg_time_cargo = Math.round((this.data[team].avg_time_ss_cargo_tot * this.data[team].avg_num_ss_cargo_tot / avg_num_cargo + this.data[team].avg_time_to_cargo_tot * this.data[team].avg_num_to_cargo_tot / avg_num_cargo) * 1000) / 1000;
-			let lvl2_climbs = this.data[team].tot_num_climb_lvl[2]===undefined?0:parseInt(this.data[team].tot_num_climb_lvl[2]);
-			let lvl3_climbs = this.data[team].tot_num_climb_lvl[3]===undefined?0:parseInt(this.data[team].tot_num_climb_lvl[3]);
-			let tot_climbs = lvl2_climbs+lvl3_climbs;
-			let avg_time_climb = Math.round(this.data[team].avg_time_climb_tot*1000)/1000;
-			rows.push(<tr key={team}>
-				<td>{team}</td>
-				<td>{avg_num_hatch}</td>
-				<td>{avg_time_hatch}</td>
-				<td>{avg_num_cargo}</td>
-				<td>{avg_time_cargo}</td>
-				<td>{tot_climbs}</td>
-				<td>{avg_time_climb}</td>
-			</tr>);
+			let avg_num_hatch = this.validFlt(this.data[team].avg_num_ss_hatch_tot + this.data[team].avg_num_to_hatch_tot);
+			let avg_time_hatch = this.validFlt(this.data[team].avg_time_ss_hatch_tot * this.data[team].avg_num_ss_hatch_tot / avg_num_hatch + this.data[team].avg_time_to_hatch_tot * this.data[team].avg_num_to_hatch_tot / avg_num_hatch);
+			let avg_num_cargo = this.validFlt(this.data[team].avg_num_ss_cargo_tot + this.data[team].avg_num_to_cargo_tot);
+			let avg_time_cargo = this.validFlt(this.data[team].avg_time_ss_cargo_tot * this.data[team].avg_num_ss_cargo_tot / avg_num_cargo + this.data[team].avg_time_to_cargo_tot * this.data[team].avg_num_to_cargo_tot / avg_num_cargo);
+			let lvl2_climbs = this.validInt(this.data[team].tot_num_climb_lvl[2]);
+			let lvl3_climbs = this.validInt(this.data[team].tot_num_climb_lvl[3]);
+			let tot_climbs = this.validInt(lvl2_climbs + lvl3_climbs);
+			let avg_time_climb = this.validFlt(this.data[team].avg_time_climb_lv2 * lvl2_climbs / tot_climbs + this.data[team].avg_time_climb_lv3 * lvl3_climbs / tot_climbs);
+			rows.push(
+				<tr key={team}>
+					<td className='overall-freeze-col'>{team}</td>
+					<td className='overall-data'>{avg_num_hatch}</td>
+					<td className='overall-data'>{avg_time_hatch}</td>
+					<td className='overall-data'>{avg_num_cargo}</td>
+					<td className='overall-data'>{avg_time_cargo}</td>
+					<td className='overall-data'>{tot_climbs}</td>
+					<td className='overall-data'>{avg_time_climb}</td>
+				</tr>
+			);
 		}
 		return (
-			<div>
-				<table className="sortable" id="myTable2">
+			<div style={{
+				overflowX:"scroll",
+				marginLeft: "59px",
+				marginTop: "28px"
+			}}>
+				<table className="overall-table" id="myTable2">
 					<thead>
 						<tr>
-							<th onClick={() => this.sortTable(0)}>Team</th>
-							<th onClick={() => this.sortTable(1)}>Hatch #</th>
-							<th onClick={() => this.sortTable(2)}>Hatch (s)</th>
-							<th onClick={() => this.sortTable(3)}>Cargo #</th>
-							<th onClick={() => this.sortTable(4)}>Cargo (s)</th>
-							<th onClick={() => this.sortTable(5)}>Climb #</th>
-							<th onClick={() => this.sortTable(6)}>Climb (s)</th>
+							<th className='overall-freeze-col' onClick={() => this.sortTable(0)}>Team</th>
+							<th className='overall-data' onClick={() => this.sortTable(1)}>Hatch #</th>
+							<th className='overall-data' onClick={() => this.sortTable(2)}>Hatch (s)</th>
+							<th className='overall-data' onClick={() => this.sortTable(3)}>Cargo #</th>
+							<th className='overall-data' onClick={() => this.sortTable(4)}>Cargo (s)</th>
+							<th className='overall-data' onClick={() => this.sortTable(5)}>Climb #</th>
+							<th className='overall-data' onClick={() => this.sortTable(6)}>Climb (s)</th>
 						</tr>
 					</thead>
 					<tbody>

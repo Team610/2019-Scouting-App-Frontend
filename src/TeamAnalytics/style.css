@@ -71,11 +71,6 @@ th {
 }
 
 /*sticky team page header*/
-.sticky {
-	position: -webkit-sticky; /* Safari */
-	position: sticky;
-	top: 0;
-}
 .teamPageHeader {
 	opacity: 1;
 	z-index: 1;

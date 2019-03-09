@@ -78,12 +78,12 @@ export default class TeamAnalytics extends Component {
 				<div>
 					<TeamSelect teamList={this.teamList} setTeamNum={this.setTeamNum} /><br/>
 					<TeamAnalyticsHeader teamNum={this.state.teamNum} />
-					<OverallSection data={this.data} />
-					<CyclesSection data={this.data} />
-					<PreGameSection data={this.data} />
-					<EndGameSection data={this.data} />
-					<DefenseSection data={this.data} />
-					<CommentsSection data={this.data} />
+					<OverallSection teamNum={this.state.teamNum} data={this.data} />
+					<CyclesSection teamNum={this.state.teamNum} data={this.data} />
+					<PreGameSection teamNum={this.state.teamNum} data={this.data} />
+					<EndGameSection teamNum={this.state.teamNum} data={this.data} />
+					<DefenseSection teamNum={this.state.teamNum} data={this.data} />
+					<CommentsSection teamNum={this.state.teamNum} data={this.data} />
 				</div>
 			);
 		}

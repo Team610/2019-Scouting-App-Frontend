@@ -28,9 +28,6 @@ export default class OverallSection extends Component {
 		return parseInt(a);
 	}
 
-	showMatchData() {
-		console.log("show overall match data");
-	}
 	render() {
 		return (
 			<div className="analytics-section">

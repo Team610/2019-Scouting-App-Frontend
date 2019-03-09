@@ -90,7 +90,7 @@ export default class App extends React.Component {
 					</React.Fragment>
 				);
 			}
-			if (this.state.user.role === 1 || this.state.user.role === 0) {
+			if (this.state.user.role === 1) {
 				return (
 					<Router>
 						<div>
