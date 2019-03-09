@@ -19,6 +19,7 @@ export default class AllMatchSelect extends Component {
 		if(!this.state.matchNum) {
 			return (
 				<div>
+					<br/>
 					<label>Match num: <input type="number" id="matchNumInput" min="1" max="80" /></label>
 					<button onClick={this.selectMatchNum}>Submit</button>
 				</div>

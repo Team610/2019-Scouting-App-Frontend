@@ -81,7 +81,7 @@ class EndGameSection extends Component {
 					</div>
 				);
 			} else {
-				console.log(`show preload graphs`);
+				console.log(`show endgame graphs`);
 				return (
 					<div className="analytics-section">
 						<h1 className="comp">Climbs</h1>
@@ -93,6 +93,7 @@ class EndGameSection extends Component {
 				);
 			}
 		} else {
+			console.log(`show endgame aggs`);
 			return (
 				<div className="analytics-section">
 					<h1 className="comp">Climbs</h1>

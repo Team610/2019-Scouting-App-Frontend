@@ -93,73 +93,19 @@ export default class App extends React.Component {
 			if (this.state.user.role === 1) {
 				return (
 					<Router>
-						<div>
-							<ul>
-								<li><NavLink to="/">Home</NavLink></li>
-								<li><NavLink to="/form">Form</NavLink></li>
-								<li><NavLink to="/teams">Teams</NavLink></li>
-								<li><NavLink to="/overall">Overall</NavLink></li>
-								<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
-								<li style={{ float: "right" }}>Welcome, {this.state.user.name} &nbsp;<Logout logout={this.logout} /></li>
-							</ul>
-
-							<Switch>
-								<Route exact path="/" component={Home} />
-								<Route path="/form" render={() => <AllMatchForm user={this.state.user} />} />
-								<Route path="/teams" component={Teams} />
-								<Route path="/overall" component={OverallTable} />
-								<Route path="/robotPhotos" component={RobotPhotos} />
-								<Route component={Err404} />
-							</Switch>
-						</div>
+						<AdminRouter user={this.state.user} logout={this.logout} />
 					</Router>
 				);
 			} else if (this.state.user.role === 2) {
 				return (
 					<Router>
-						<div>
-							<ul>
-								<li><NavLink to="/">Home</NavLink></li>
-								<li><NavLink to="/form">Form</NavLink></li>
-								<li><NavLink to="/teams">Teams</NavLink></li>
-								<li><NavLink to="/overall">Overall</NavLink></li>
-								<li><NavLink to="/config">Configs</NavLink></li>
-								<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
-								<li style={{ float: "right" }}>Welcome, {this.state.user.name} &nbsp; <Logout logout={this.logout} /></li>
-							</ul>
-
-							<Switch>
-								<Route exact path="/" component={Home} />
-								<Route path="/form" render={() => <AllMatchForm user={this.state.user} />} />
-								<Route path="/teams" component={Teams} />
-								<Route path="/overall" component={OverallTable} />
-								<Route path="/config" component={ConfigPage} />
-								<Route path="/robotPhotos" component={RobotPhotos} />
-								<Route component={Err404} />
-							</Switch>
-						</div>
+						<SuperAdminRouter user={this.state.user} logout={this.logout} />
 					</Router>
 				);
 			} else {
 				return (
 					<Router>
-						<div>
-							<ul>
-								<li><NavLink to="/">Home</NavLink></li>
-								<li><NavLink to="/form">Form</NavLink></li>
-								<li><NavLink to="/overall">Overall</NavLink></li>
-								<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
-								<li style={{ float: "right" }}>Welcome, {this.state.user.name} &nbsp; <Logout logout={this.logout} /></li>
-							</ul>
-
-							<Switch>
-								<Route exact path="/" component={Home} />
-								<Route path="/form" render={() => <MatchForm user={this.state.user} />} />
-								<Route path="/overall" component={OverallTable} />
-								<Route path="/robotPhotos" component={RobotPhotos} />
-								<Route component={Err404} />
-							</Switch>
-						</div>
+						<ScoutRouter user={this.state.user} logout={this.logout} />
 					</Router>
 				);
 			}
@@ -169,6 +115,70 @@ export default class App extends React.Component {
 
 const Home = () => <h2>Home</h2>;
 const Loading = props => <div>Loading {props.page}...</div>;
+
+const SuperAdminRouter = (props) => (
+	<div>
+		<ul>
+			<li><NavLink to="/">Home</NavLink></li>
+			<li><NavLink to="/form">Form</NavLink></li>
+			<li><NavLink to="/teams">Teams</NavLink></li>
+			<li><NavLink to="/overall">Overall</NavLink></li>
+			<li><NavLink to="/config">Configs</NavLink></li>
+			<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
+			<li style={{ float: "right" }}>Welcome, {props.user.name} &nbsp; <Logout logout={props.logout} /></li>
+		</ul>
+
+		<Switch>
+			<Route exact path="/" component={Home} />
+			<Route path="/form" render={() => <AllMatchForm user={props.user} />} />
+			<Route path="/teams" component={Teams} />
+			<Route path="/overall" component={OverallTable} />
+			<Route path="/config" component={ConfigPage} />
+			<Route path="/robotPhotos" component={RobotPhotos} />
+			<Route component={Err404} />
+		</Switch>
+	</div>
+);
+const AdminRouter = (props) => (
+	<div>
+		<ul>
+			<li><NavLink to="/">Home</NavLink></li>
+			<li><NavLink to="/form">Form</NavLink></li>
+			<li><NavLink to="/teams">Teams</NavLink></li>
+			<li><NavLink to="/overall">Overall</NavLink></li>
+			<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
+			<li style={{ float: "right" }}>Welcome, {props.user.name} &nbsp;<Logout logout={props.logout} /></li>
+		</ul>
+
+		<Switch>
+			<Route exact path="/" component={Home} />
+			<Route path="/form" render={() => <AllMatchForm user={props.user} />} />
+			<Route path="/teams" component={Teams} />
+			<Route path="/overall" component={OverallTable} />
+			<Route path="/robotPhotos" component={RobotPhotos} />
+			<Route component={Err404} />
+		</Switch>
+	</div>
+);
+const ScoutRouter = (props) => (
+	<div>
+		<ul>
+			<li><NavLink to="/">Home</NavLink></li>
+			<li><NavLink to="/form">Form</NavLink></li>
+			<li><NavLink to="/overall">Overall</NavLink></li>
+			<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
+			<li style={{ float: "right" }}>Welcome, {props.user.name} &nbsp; <Logout logout={props.logout} /></li>
+		</ul>
+
+		<Switch>
+			<Route exact path="/" component={Home} />
+			<Route path="/form" render={() => <MatchForm user={props.user} />} />
+			<Route path="/overall" component={OverallTable} />
+			<Route path="/robotPhotos" component={RobotPhotos} />
+			<Route component={Err404} />
+		</Switch>
+	</div>
+);
 
 const MatchForm = Loadable({
 	loader: () => import("./MatchForm/MatchForm"),

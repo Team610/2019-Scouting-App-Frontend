@@ -26,7 +26,7 @@ export default class TeamAnalytics extends Component {
 		});
 	}
 	async setTeamNum(num) {
-		if(num !== this.state.teamNum) {
+		if (num !== this.state.teamNum) {
 			this.setState({
 				teamNum: num,
 				dataAvailable: false
@@ -48,35 +48,35 @@ export default class TeamAnalytics extends Component {
 		return res;
 	}
 	render() {
-		if(!this.state.teamListAvailable) {
+		if (!this.state.teamListAvailable) {
 			console.log('loading team list');
-			return(
+			return (
 				<div>
 					Loading...
 				</div>
 			);
 		}
-		if(this.state.teamNum===-1) {
+		if (this.state.teamNum === -1) {
 			console.log('no team selected');
-			return(
+			return (
 				<div>
 					<TeamSelect teamList={this.teamList} setTeamNum={this.setTeamNum} />
 					<p>Please select a team.</p>
 				</div>
 			);
-		} else if(!this.state.dataAvailable) {
-			console.log(`loading team ${this.state.teamNum}`)
-			return(
+		} else if (!this.state.dataAvailable) {
+			console.log(`loading team ${this.state.teamNum}`);
+			return (
 				<div>
-					<TeamSelect teamList={this.teamList} setTeamNum={this.setTeamNum} /><br/>
+					<TeamSelect teamList={this.teamList} setTeamNum={this.setTeamNum} /><br />
 					Data for Team {this.state.teamNum} loading...
 				</div>
 			);
 		} else {
-			console.log(`loaded team ${this.state.teamNum}`)
-			return(
+			console.log(`loaded team ${this.state.teamNum}`);
+			return (
 				<div>
-					<TeamSelect teamList={this.teamList} setTeamNum={this.setTeamNum} /><br/>
+					<TeamSelect teamList={this.teamList} teamNum={this.state.teamNum} setTeamNum={this.setTeamNum} /><br />
 					<TeamAnalyticsHeader teamNum={this.state.teamNum} />
 					<OverallSection teamNum={this.state.teamNum} data={this.data} />
 					<CyclesSection teamNum={this.state.teamNum} data={this.data} />
@@ -91,23 +91,20 @@ export default class TeamAnalytics extends Component {
 }
 
 class TeamSelect extends Component {
-	constructor(props) {
-		super(props);
-		this.liList = [];
+	render() {
 		let json = this.props.teamList;
-		for(let i=0; i<json.length; i++) {
-			this.liList.push(
+		let liList = [];
+		for (let i = 0; i < json.length; i++) {
+			liList.push(
 				<li key={json[i]}>
-					<button onClick={() => {this.props.setTeamNum(json[i]);}}>{json[i]}</button>
+					<a onClick={() => { this.props.setTeamNum(json[i]); }} className={json[i] === this.props.teamNum ? 'active' : ''}>{json[i]}</a>
 				</li>
 			);
 		}
-	}
-	render() {
 		return (
 			<React.Fragment>
 				<h2>Teams</h2>
-				<ul>{this.liList}</ul>
+				<ul>{liList}</ul>
 			</React.Fragment>
 		);
 	}

@@ -40,7 +40,7 @@ class PreGameSection extends Component {
 		});
 	}
 	getChartData() {
-		console.log('getting chart data');
+		console.log('getting preload chart data');
 		let teamNum = this.props.teamNum;
 		fetch(`/api/v1/stats/team/${teamNum}/mbm`).then((res) => {
 			res.json().then((res) => {
@@ -116,6 +116,7 @@ class PreGameSection extends Component {
 				);
 			}
 		} else {
+			console.log(`show preload aggs`);
 			return (
 				<div className="analytics-section">
 					<h1 className="comp">Preloads</h1>

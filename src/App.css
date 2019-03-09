@@ -2,6 +2,7 @@
 body {
   background-color: #282c34;
   color: white;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 /*Link styling*/
@@ -33,19 +34,6 @@ li a {
 /* Change the link color to #111 (black) on hover */
 li a:hover {
   background-color: #111;
-}
-
-/*Button styling*/
-.increment-button {
-  background-color: #bb33dd;
-}
-.btn-inactive {
-  background-color: gray;
-  color: darkgray;
-}
-.btn-active {
-  background-color: darkgreen;
-  color: white;
 }
 
 .active {
