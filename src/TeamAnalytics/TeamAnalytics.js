@@ -32,6 +32,12 @@ export default class TeamAnalytics extends Component {
 				dataAvailable: false
 			});
 			let res = await fetch(`/api/v1/stats/team/${num}/agg`);
+			if(!res.ok) {
+				this.setState({
+					err: new Error("Could not fetch team data. Please try again.")
+				});
+				return;
+			}
 			res = await res.json();
 			this.data = res[num];
 			console.log(this.data);
@@ -43,11 +49,26 @@ export default class TeamAnalytics extends Component {
 	}
 	async getTeamList() {
 		let res = await fetch(`/api/v1/event/getEventTeams`);
+		if(!res.ok) {
+			this.setState({
+				err: new Error("Could not fetch team list. Please try again.")
+			});
+			return;
+		}
 		res = await res.json();
 		console.log("got team list");
 		return res;
 	}
 	render() {
+		if (this.state.err) {
+			console.log(this.state.err.message);
+			return (
+				<div>
+					<p>Could not load data.</p>
+					<p>{this.state.err.message}</p>
+				</div>
+			);
+		}
 		if (!this.state.teamListAvailable) {
 			console.log('loading team list');
 			return (

@@ -1,13 +1,14 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import MatchFormHeader from './MatchFormHeader/MatchFormHeader';
 import AllPreMatchForm from './PreMatchForm/AllPreMatchForm';
 import InMatchForm from './InMatchForm/InMatchForm';
 import PostMatchForm from './PostMatchForm/PostMatchForm';
 import { Redirect } from 'react-router';
+import SubmitError from './SubmitError';
 import "./style.css";
 let fieldConfig = require('../config.json');
 
-export default class AllMatchForm extends Component {
+export default class AllMatchForm extends Component { //TODO: figure out how to avoid duplicate code between MatchForm.js and AllMatchForm.js
 	constructor(props) {
 		super(props);
 		this.submitForm = this.submitForm.bind(this);
@@ -31,23 +32,29 @@ export default class AllMatchForm extends Component {
 		// Submit the form!
 		try {
 			console.log("trying to submit form");
-			await fetch('/api/v1/submitForm', {
+			let res = await fetch('/api/v1/submitForm', {
 				method: 'POST',
 				body: JSON.stringify(this.data),
 				headers: {
 					'Content-Type': 'application/json'
 				}
 			});
+			if(!res.ok) {
+				console.log("could not submit form - !res.ok block");
+				throw new SubmitError("Could not sumbit form. Please try again.");
+			}
 			console.log("successfully submitted");
 		} catch (err) {
-			console.log("could not submit form");
-			console.log(err.message);
+			console.log("could not submit form - catch block");
+			console.log(err.stack);
+			return {'status':1,'message':'Could not submit form. Please try again.'};
 		}
 		this.setState({
 			redirect: true
 		});
+		return {'status':0, message: 'success'};
 	}
-	collectData(view) {
+	async collectData(view) {
 		let ref;
 		if (view === 'preMatch') { ref = this.preMatchRef; }
 		else if (view === 'inMatch') { ref = this.inMatchRef; }
@@ -62,7 +69,10 @@ export default class AllMatchForm extends Component {
 		} else if (view === 'inMatch') {
 			this.setState({ matchView: 'postMatch' });
 		} else if (view === 'postMatch') {
-			this.submitForm();
+			let res = await this.submitForm();
+			if(res.status>0) {
+				throw new SubmitError("Could not sumbit form. Please try again.");
+			}
 		}
 	}
 	render() {
