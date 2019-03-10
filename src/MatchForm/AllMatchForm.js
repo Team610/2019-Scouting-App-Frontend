@@ -12,6 +12,7 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 	constructor(props) {
 		super(props);
 		this.submitForm = this.submitForm.bind(this);
+		this.saveToLocal = this.saveToLocal.bind(this);
 		this.state = {
 			matchView: 'preMatch'
 		}
@@ -24,6 +25,31 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 		this.postMatchRef = React.createRef();
 		this.viewRefs = [this.preMatchRef, this.inMatchRef, this.postMatchRef];
 		this.alliance = 'red';
+	}
+	componentDidMount() {
+		window.addEventListener(
+			"beforeunload",
+			this.saveToLocal
+		);
+	}
+	componentWillUnmount() {
+		this.saveToLocal();
+		window.removeEventListener(
+			"beforeunload",
+			this.saveToLocal
+		);
+	}
+	saveToLocal() { //TODO: un-duplicate the code below
+		let ref;
+		if (this.state.matchView === 'preMatch') { ref = this.preMatchRef; }
+		else if (this.state.matchView === 'inMatch') { ref = this.inMatchRef; }
+		else if (this.state.matchView === 'postMatch') { ref = this.postMatchRef; }
+		let viewJSON = ref.current.getJSON();
+		for (let key in viewJSON) {
+			this.data[key] = viewJSON[key];
+		}
+
+		localStorage.setItem("form", JSON.stringify(this.data));
 	}
 	async submitForm() {
 		console.log(JSON.stringify(this.data));
@@ -55,6 +81,7 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 		return {'status':0, message: 'success'};
 	}
 	async collectData(view) {
+		//Data collection
 		let ref;
 		if (view === 'preMatch') { ref = this.preMatchRef; }
 		else if (view === 'inMatch') { ref = this.inMatchRef; }
@@ -63,6 +90,8 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 		for (let key in viewJSON) {
 			this.data[key] = viewJSON[key];
 		}
+
+		//Render next view or submit as appropriate
 		if (view === 'preMatch') {
 			this.setState({ matchView: 'inMatch' });
 			this.alliance = this.preMatchRef.current.getAlliance();
