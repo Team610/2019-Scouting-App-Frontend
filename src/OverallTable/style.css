@@ -10,23 +10,22 @@
 	position: absolute;
 	left: 0;
 	padding: 8px;
-	width: 50px;
+	width: 60px;
 	opacity: 1;
 	z-index: 1;
 	background-color: #282c34;
-}
-.overall-freeze-row {
-	border: 1px solid #dddddd;
-	padding: 8px;
-	width: 50px;
-	height: 20px;
+	text-align: right;
 }
 
 .overall-data {
 	border: 1px solid #dddddd;
-	padding: 8px;
-	width: 100px;
+	padding: 4px;
+	width: 96px;
+	height: 25px;
 }
 td.overall-data {
 	text-align: right;
+}
+th.overall-data {
+	text-align: center;
 }

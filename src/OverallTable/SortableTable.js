@@ -7,116 +7,253 @@ class SortableTable extends Component {
 		//util funcs
 		this.validFlt = this.validFlt.bind(this);
 		this.validInt = this.validInt.bind(this);
+		this.calcCol = this.calcCol.bind(this);
+		this.processNum = this.processNum.bind(this);
 
+		this.columns = [
+			//fields defined using post-script; data[...] denotes number from raw stats, alias[...] denotes already calc'd number
+			{
+				name: "Hatch #",
+				field: "flt.data.avg_num_ss_hatch_tot flt.data.avg_num_to_hatch_tot +",
+				alias: "avg_num_hatch",
+				type: "flt"
+			},
+			{
+				name: "Hatch (s)",
+				field: "flt.alias.avg_num_hatch flt.data.avg_time_ss_hatch_tot flt.data.avg_num_ss_hatch_tot * flt.data.avg_time_to_hatch_tot flt.data.avg_num_to_hatch_tot * + /",
+				alias: "avg_time_hatch",
+				type: "flt" //Weighted average between sandstorm and teleop hatches
+			},
+			{
+				name: "Cargo #",
+				field: "flt.data.avg_num_ss_cargo_tot flt.data.avg_num_to_cargo_tot +",
+				alias: "avg_num_cargo",
+				type: "flt"
+			},
+			{
+				name: "Cargo (s)",
+				field: "flt.alias.avg_num_cargo flt.data.avg_time_ss_cargo_tot flt.data.avg_num_ss_cargo_tot * flt.data.avg_time_to_cargo_tot flt.data.avg_num_to_cargo_tot * + /",
+				alias: "avg_time_cargo",
+				type: "flt"
+			},
+			{
+				name: "Climb #",
+				field: "int.data.tot_num_climb_lvl.2 int.data.tot_num_climb_lvl.3 +",
+				alias: "tot_climbs",
+				type: "int"
+			},
+			{
+				name: "Climb (s)",
+				field: "int.alias.tot_climbs flt.data.avg_time_climb_lv2 int.data.tot_num_climb_lvl.2 * flt.data.avg_time_climb_lv3 int.data.tot_num_climb_lvl.3 * + /",
+				alias: "avg_time_climb", //Weighted average between lv2 and lv3 climbs
+				type: "flt"
+			}
+		]
 		this.state = {
-			dataLoaded: false
+			dataLoaded: false,
+			columns: ["avg_num_hatch", "avg_time_hatch", "avg_num_cargo", "avg_time_cargo", "tot_climbs", "avg_time_climb"],
+			dir: 'd',
+			lastCol: 'team'
 		}
 		this.getData = this.getData.bind(this);
 		this.getData();
 	}
 	//utils
 	validFlt(num) {
-		let a = num;
+		let a = Number(num);
 		if (Number.isNaN(num) || !num) a = 0;
 		return parseFloat(Math.round(a * 1000) / 1000).toFixed(3);
 	}
 	validInt(int) {
-		let a = int;
+		let a = Number(int);
 		if (Number.isNaN(int) || !int) a = 0;
 		return parseInt(a);
 	}
 
 	getData() {
 		fetch('/api/v1/stats/teams/agg').then((res) => {
+			if (!res.ok) {
+				throw new Error("could not load data");
+			}
 			res.json().then((json) => {
 				this.data = json;
+				this.alias = {};
+				for (let team of Object.keys(this.data)) {
+					this.alias[team] = {};
+					for (let col of this.columns) {
+						this.alias[team][col.alias] = col.type === 'flt' ? this.validFlt(this.calcCol(col.field, team)) : this.validInt(this.calcCol(col.field, team));
+					}
+				}
+				console.log('got all match-by-match stats');
+				// console.log(this.alias);
 				this.setState({
-					dataLoaded: true
+					dataLoaded: true,
+					order: Object.keys(this.data)
 				});
+			});
+		}).catch((err) => {
+			this.setState({
+				dataLoaded: false,
+				err: err
 			});
 		});
 	}
+	calcCol(field, team) {
+		let operands = field.split(" ");
+		let stack = [];
+		for (let i = 0; i < operands.length; i++) {
+			if (typeof operands[i] === 'string' && operands[i].length === 1) {
+				let o1 = this.processNum(stack.pop(), team);
+				let o2 = this.processNum(stack.pop(), team);
 
-	sortTable = (n) => {
-		//https://www.w3schools.com/jsref/met_table_insertrow.asp
-		let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-		table = document.getElementById("myTable2");
-		switching = true;
-		dir = "asc";
-		while (switching) {
-			switching = false;
-			rows = table.rows;
-			for (i = 1; i < (rows.length - 1); i++) {
-				shouldSwitch = false;
-				x = rows[i].getElementsByTagName("TD")[n];
-				y = rows[i + 1].getElementsByTagName("TD")[n];
-				if (dir === "asc") {
-					if (Number(x.innerHTML) > Number(y.innerHTML)) {
-						shouldSwitch = true;
-						break;
-					}
-				} else if (dir === "desc") {
-					if (Number(x.innerHTML) < Number(y.innerHTML)) {
-						shouldSwitch = true;
-						break;
-					}
+				let op = operands[i];
+				if (op === '+') {
+					stack.push(o1 + o2);
+				} else if (op === '-') { //Minuend is second, subtrahend is first
+					stack.push(o1 - o2);
+				} else if (op === '*') {
+					stack.push(o1 * o2);
+				} else if (op === '/') { //Numerator is second, denominator is first
+					stack.push(o1 / o2);
+				} else if (op === '^') { //Base is second, power is first
+					stack.push(Math.pow(o1, o2));
+				} else {
+					stack.push(0);
+					console.log(`operand not properly set: ${op}`);
 				}
-			}
-			if (shouldSwitch) {
-				rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-				switching = true;
-				switchcount++;
 			} else {
-				if (switchcount === 0 && dir === "asc") {
-					dir = "desc";
-					switching = true;
+				stack.push(operands[i]);
+			}
+		}
+		return stack[0];
+	}
+	processNum(arr, team) {
+		if (typeof arr === 'number') {
+			return arr;
+		} else {
+			arr = arr.split('.');
+			let num;
+			if (arr[1] === 'data') {
+				num = this.data[team][arr[2]];
+			} else if (arr[1] === 'alias') {
+				num = this.alias[team][arr[2]];
+			} else {
+				num = 0;
+				console.log(`Value source not set properly: ${arr[1]}`);
+			}
+			if (arr[3]) {
+				num = num[arr[3]] ? num[arr[3]] : 0;
+			}
+			return Number(num);
+		}
+	}
+
+	sortTable = (col) => {
+		//If the column is the same as before, flip the direction. Otherwise, keep the same direction.
+		let dir = col === this.state.lastCol ? this.state.dir === 'a' ? 'd' : 'a' : this.state.dir;
+
+		let newOrder = this.state.order;
+		//handle special case of sorting team, since sorted list already exists
+		if (col === 'team') {
+			if (dir === 'd') {
+				newOrder = Object.keys(this.alias);
+			} else if (dir === 'a') {
+				newOrder = Object.keys(this.alias).reverse();
+			}
+		} else {
+			//Insertion sort up until the max value
+			let max = newOrder.length;
+			for (let i = 0; i < max; i++) {
+				//handle special case of val is 0: dump to bottom of list, don't actually increment, and reduce max
+				if (this.alias[newOrder[i]][col] === 0 || this.alias[newOrder[i]][col] === '0.000') {
+					let temp = newOrder[max - 1];
+					newOrder[max - 1] = newOrder[i];
+					newOrder[i] = temp;
+					max--;
+					i--;
+					continue;
+				}
+
+				let j = i;
+				//If arr[j] compared with arr[j-1] needs to be swapped, swap. Else, arr[j] is already in place.
+				while (j > 0) {
+					let cur = Number(this.alias[newOrder[j]][col]);
+					let pre = Number(this.alias[newOrder[j - 1]][col]);
+					if ((dir === 'd' && cur > pre) || (dir === 'a' && cur < pre)) {
+						//swap
+						let temp = newOrder[j - 1];
+						newOrder[j - 1] = newOrder[j];
+						newOrder[j] = temp;
+						j--;
+					} else {
+						break;
+					}
 				}
 			}
 		}
+		this.setState({
+			order: newOrder,
+			dir: dir,
+			lastCol: col
+		});
 	}
 	render() {
+		if (this.state.err) {
+			return (<p>Data could not load.</p>);
+		}
 		if (!this.state.dataLoaded) {
 			return (<p>Loading data...</p>);
 		}
+		let heads = [
+			<th key='Team' className='overall-freeze-col' onClick={() => this.sortTable('team')}>Team {this.state.lastCol === 'team' ? this.state.dir === 'a' ? '↑' : '↓' : null}</th>
+		];
+		for (let statCol of this.columns) {
+			for (let i = 0; i < this.state.columns.length; i++) {
+				if (statCol.alias === this.state.columns[i]) {
+					heads.push(
+						<th
+							key={this.state.columns[i]}
+							className='overall-data'
+							onClick={() => this.sortTable(statCol.alias)}
+						>
+							{statCol.name} {statCol.alias === this.state.lastCol ? this.state.dir === 'a' ? '\u2191' : '\u2193' : null}
+						</th>
+					);
+					break;
+				}
+			}
+		}
+
 		let rows = [];
-		for (let team of Object.keys(this.data)) {
-			let avg_num_hatch = this.validFlt(this.data[team].avg_num_ss_hatch_tot + this.data[team].avg_num_to_hatch_tot);
-			let avg_time_hatch = this.validFlt(this.data[team].avg_time_ss_hatch_tot * this.data[team].avg_num_ss_hatch_tot / avg_num_hatch + this.data[team].avg_time_to_hatch_tot * this.data[team].avg_num_to_hatch_tot / avg_num_hatch);
-			let avg_num_cargo = this.validFlt(this.data[team].avg_num_ss_cargo_tot + this.data[team].avg_num_to_cargo_tot);
-			let avg_time_cargo = this.validFlt(this.data[team].avg_time_ss_cargo_tot * this.data[team].avg_num_ss_cargo_tot / avg_num_cargo + this.data[team].avg_time_to_cargo_tot * this.data[team].avg_num_to_cargo_tot / avg_num_cargo);
-			let lvl2_climbs = this.validInt(this.data[team].tot_num_climb_lvl[2]);
-			let lvl3_climbs = this.validInt(this.data[team].tot_num_climb_lvl[3]);
-			let tot_climbs = this.validInt(lvl2_climbs + lvl3_climbs);
-			let avg_time_climb = this.validFlt(this.data[team].avg_time_climb_lv2 * lvl2_climbs / tot_climbs + this.data[team].avg_time_climb_lv3 * lvl3_climbs / tot_climbs);
+		for (let team of this.state.order) {
+			let teamData = [];
+			for (let statCol of this.columns) {
+				for (let i = 0; i < this.state.columns.length; i++) {
+					if (statCol.alias === this.state.columns[i]) {
+						teamData.push(
+							<td key={this.state.columns[i]} className='overall-data'>{this.alias[team][statCol.alias]}</td>
+						);
+						break;
+					}
+				}
+			}
 			rows.push(
 				<tr key={team}>
 					<td className='overall-freeze-col'>{team}</td>
-					<td className='overall-data'>{avg_num_hatch}</td>
-					<td className='overall-data'>{avg_time_hatch}</td>
-					<td className='overall-data'>{avg_num_cargo}</td>
-					<td className='overall-data'>{avg_time_cargo}</td>
-					<td className='overall-data'>{tot_climbs}</td>
-					<td className='overall-data'>{avg_time_climb}</td>
+					{teamData}
 				</tr>
 			);
 		}
+
 		return (
 			<div style={{
-				overflowX:"scroll",
-				marginLeft: "59px",
+				overflowX: "scroll",
+				marginLeft: "68px",
 				marginTop: "28px"
 			}}>
-				<table className="overall-table" id="myTable2">
+				<table className="overall-table" id="overallTable">
 					<thead>
-						<tr>
-							<th className='overall-freeze-col' onClick={() => this.sortTable(0)}>Team</th>
-							<th className='overall-data' onClick={() => this.sortTable(1)}>Hatch #</th>
-							<th className='overall-data' onClick={() => this.sortTable(2)}>Hatch (s)</th>
-							<th className='overall-data' onClick={() => this.sortTable(3)}>Cargo #</th>
-							<th className='overall-data' onClick={() => this.sortTable(4)}>Cargo (s)</th>
-							<th className='overall-data' onClick={() => this.sortTable(5)}>Climb #</th>
-							<th className='overall-data' onClick={() => this.sortTable(6)}>Climb (s)</th>
-						</tr>
+						<tr>{heads}</tr>
 					</thead>
 					<tbody>
 						{rows}
