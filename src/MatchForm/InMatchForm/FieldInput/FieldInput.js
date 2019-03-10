@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import PieMenu, { Slice } from "react-pie-menu";
 import DefenseInput from "./DefenseInput/DefenseInput";
 import ClimbInput from "./ClimbInput/ClimbInput";
+import Menu from './PieMenu';
 
-class FieldIMG extends Component {
+export default class FieldInput extends Component {
 	constructor(props) {
 		super(props);
 
@@ -21,11 +21,11 @@ class FieldIMG extends Component {
 
 		this.imgPath = `./${this.props.alliance}-`;
 		if ((this.props.alliance === 'blue' && this.props.blueSide === 'left') ||
-				(this.props.alliance === 'red' && this.props.blueSide === 'right')) {
+			(this.props.alliance === 'red' && this.props.blueSide === 'right')) {
 			this.imgPath += 'left';
 			this.leftSide = true;
 		} else if ((this.props.alliance === 'blue' && this.props.blueSide === 'right') ||
-				(this.props.alliance === 'red' && this.props.blueSide === 'left')) {
+			(this.props.alliance === 'red' && this.props.blueSide === 'left')) {
 			this.imgPath += 'right';
 			this.leftSide = false;
 		} else {
@@ -195,13 +195,6 @@ class FieldIMG extends Component {
 		return zone;
 	}
 
-	changeIntake() {
-		let newType = this.startState.intake === "cargo" ? "hatch" : "cargo";
-		console.log(`switching intake type to ${newType}`);
-		this.startState.intake = newType;
-		this.setState({ menuRequested: false });
-	}
-
 	loadMenu() {
 		//Load the appropriate menu
 		console.log(`loading ${this.menu} menu`);
@@ -241,29 +234,35 @@ class FieldIMG extends Component {
 		this.startState = { "time": endTime };
 		this.setState({ menuRequested: false });
 	}
+	changeIntake() {
+		let newType = this.startState.intake === "cargo" ? "hatch" : "cargo";
+		console.log(`switching intake type to ${newType}`);
+		this.startState.intake = newType;
+		this.setState({ menuRequested: false });
+	}
 
 	intakeMenu() {
+		let intakeSlices = [
+			{
+				label: 'Hatch',
+				logMsg: 'selecting hatch',
+				val: 'hatch'
+			},
+			{
+				blank: true
+			},
+			{
+				label: 'Cargo',
+				logMsg: 'selecting cargo',
+				val: 'cargo'
+			},
+			{
+				blank: true
+			}
+		];
 		return (
-			<Menu 
-				slices={[
-					{
-						label: 'Hatch',
-						logMsg: 'selecting hatch',
-						val: 'hatch',
-						num: '0'
-					},
-					{
-						blank: true
-					},
-					{
-						label: 'Cargo',
-						logMsg: 'selecting cargo',
-						val: 'cargo'
-					},
-					{
-						blank: true
-					}
-				]}
+			<Menu
+				slices={intakeSlices}
 				func={this.recordCycleStart}
 				mouseX={this.mouseX}
 				mouseY={this.mouseY}
@@ -271,30 +270,31 @@ class FieldIMG extends Component {
 		);
 	}
 	rocketMenu() {
+		let rocketSlices = [
+			{
+				label: 'Level 3',
+				logMsg: 'going rocket high',
+				val: 3
+			},
+			{
+				label: 'Level 2',
+				logMsg: 'going rocket middle',
+				val: 2
+			},
+			{
+				label: 'Level 1',
+				logMsg: 'going rocket low',
+				val: 1
+			},
+			{
+				label: 'Level 2',
+				logMsg: 'going rocket middle',
+				val: 2
+			}
+		]
 		return (
 			<Menu
-				slices={[
-					{
-						label: 'Level 3',
-						logMsg: 'going rocket high',
-						val: 3
-					},
-					{
-						label: 'Level 2',
-						logMsg: 'going rocket middle',
-						val: 2
-					},
-					{
-						label: 'Level 1',
-						logMsg: 'going rocket low',
-						val: 1
-					},
-					{
-						label: 'Level 2',
-						logMsg: 'going rocket middle',
-						val: 2
-					}
-				]}
+				slices={rocketSlices}
 				func={this.recordCycleEnd}
 				mouseX={this.mouseX}
 				mouseY={this.mouseY}
@@ -302,46 +302,24 @@ class FieldIMG extends Component {
 		);
 	}
 	shipMenu() {
-		console.log('going cargo ship');
-		this.recordCycleEnd('S');
-		return;
-	}
-}
-
-class Menu extends Component {
-	constructor(props) {
-		super(props);
-		this.sliceList = [];
-		for (let slice of this.props.slices) {
-			if (slice.blank) {
-				this.sliceList.push(<Slice key={Math.random()} />);
-				continue;
-			}
-			this.sliceList.push(
-				<Slice
-					key={Math.random()}
-					onSelect={() => {
-						console.log(slice.logMsg);
-						this.props.func(slice.val);
-					}}
-				>
-					<span className="nonSelectable">{slice.label}</span>
-				</Slice>
-			);
+		let confBtnStyle = {
+			position: "absolute",
+			height: '40px',
+			width: '100px',
+			left: this.mouseX-50,
+			top: this.mouseY-20,
+			backgroundColor: '#6D6D6D',
+			border: 'none',
+			fontSize: '16px',
+			textAlign: 'center'
 		}
-	}
-	render() {
 		return (
-			<PieMenu
-				radius="125px"
-				centerRadius="25px"
-				centerX={`${this.props.mouseX}px`}
-				centerY={`${this.props.mouseY}px`}
+			<button
+				onClick={() => { console.log('going cargo ship'); this.recordCycleEnd('S'); }}
+				style={confBtnStyle}
 			>
-				{this.sliceList}
-			</PieMenu>
+				Confirm
+			</button>
 		);
 	}
 }
-
-export default FieldIMG;
