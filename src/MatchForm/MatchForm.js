@@ -24,10 +24,7 @@ class MatchForm extends Component {
 	}
 	componentDidMount() {
 		this.getMatchTeamNums().then(res => {
-			this.matchNum = res.matchNum;
-			this.teamNum = res.teamNum;
-			this.alliance = res.alliance;
-			this.data = { matchNum: this.matchNum, teamNum: this.teamNum };
+			this.data = { matchNum: res.matchNum, teamNum: res.teamNum, alliance: res.alliance };
 			this.setState({
 				loading: false
 			});
@@ -61,6 +58,9 @@ class MatchForm extends Component {
 	async submitForm() {
 		console.log(JSON.stringify(this.data));
 		this.data.user = this.props.user;
+		let alliance = this.data.alliance;
+		delete this.data.alliance;
+		//Strip the alliance from the form
 
 		// Submit the form!
 		try {
@@ -73,6 +73,7 @@ class MatchForm extends Component {
 				}
 			});
 			if(!res.ok) {
+				this.data.alliance = alliance;
 				console.log("could not submit form - !res.ok block");
 				throw new SubmitError("Could not sumbit form. Please try again.");
 			}
@@ -116,28 +117,40 @@ class MatchForm extends Component {
 		if (this.state.matchView === 'preMatch') {
 			return (
 				<div>
-					<MatchFormHeader matchNum={this.matchNum} /><hr />
-					<PreMatchForm callNext={() => this.collectData('preMatch')} teamNum={this.teamNum} matchNum={this.matchNum} ref={this.preMatchRef} />
+					<MatchFormHeader matchNum={this.data.matchNum} teamNum={this.data.teamNum} /><hr />
+					<PreMatchForm
+						callNext={() => this.collectData('preMatch')}
+						teamNum={this.data.teamNum}
+						matchNum={this.data.matchNum}
+						alliance={this.data.alliance}
+						ref={this.preMatchRef} />
 				</div>
 			);
 		} else if (this.state.matchView === 'inMatch') {
 			return (
 				<div>
-					<MatchFormHeader matchNum={this.matchNum} /><hr />
-					<InMatchForm callNext={() => this.collectData('inMatch')} alliance={this.alliance} blueSide={fieldConfig.blueSide} robotPreload={this.data.robot_preload} ref={this.inMatchRef} />
+					<MatchFormHeader matchNum={this.data.matchNum} teamNum={this.data.teamNum} /><hr />
+					<InMatchForm
+						callNext={() => this.collectData('inMatch')}
+						alliance={this.data.alliance}
+						blueSide={fieldConfig.blueSide}
+						robotPreload={this.data.robot_preload}
+						ref={this.inMatchRef} />
 				</div>
 			);
 		} else if (this.state.matchView === 'postMatch') {
 			return (
 				<div>
-					<MatchFormHeader matchNum={this.matchNum} /><hr />
-					<PostMatchForm callNext={() => this.collectData('postMatch')} ref={this.postMatchRef} />
+					<MatchFormHeader matchNum={this.data.matchNum} teamNum={this.data.teamNum} /><hr />
+					<PostMatchForm
+						callNext={() => this.collectData('postMatch')}
+						ref={this.postMatchRef} />
 				</div>
 			);
 		}
 		return (
 			<div>
-				<MatchFormHeader matchNum={this.matchNum} /><hr />
+				<MatchFormHeader matchNum={this.data.matchNum} teamNum={this.data.teamNum} /><hr />
 				Loading...
 			</div>
 		);

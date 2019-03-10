@@ -4,17 +4,18 @@ class TeamInput extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: '',
+			value: this.props.data ? this.props.data.teamNum : '',
+			alliance: this.props.data ? this.props.data.alliance : '',
             teamsLoaded: false
-        }
+		}
         this.selectTeam = this.selectTeam.bind(this);
         this.renderTeamBtns = this.renderTeamBtns.bind(this);
         this.getTeams = this.getTeams.bind(this);
 		this.getJSON = this.getJSON.bind(this);
 		this.getAlliance = this.getAlliance.bind(this);
-		
+
 		this.getTeams();
-    }
+	}
     getJSON() {
         return ({
             teamNum: this.state.value
@@ -40,7 +41,7 @@ class TeamInput extends Component {
             this.renderTeamBtns('');
         } catch(err) {
             console.log("could not load teams");
-            console.log(err.message);
+            console.log(err.stack);
             this.setState({
                 teamsLoaded: false
             });
@@ -59,7 +60,8 @@ class TeamInput extends Component {
 			);
 		}
 		return teams;
-    }
+	}
+	
     render() {
         if(this.state.teamsLoaded) {
 			let teamBtns = this.renderTeamBtns(this.state.value);

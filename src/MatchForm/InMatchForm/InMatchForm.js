@@ -4,7 +4,6 @@ import FieldInput from './FieldInput/FieldInput';
 class InMatchForm extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
 		this.getJSON = this.getJSON.bind(this);
 		
 		this.fieldInputRef = React.createRef();
@@ -23,7 +22,13 @@ class InMatchForm extends Component {
     render() {
         return (
             <React.Fragment>
-                <FieldInput callNext={this.props.callNext} alliance={this.props.alliance} blueSide={this.props.blueSide} robotPreload={this.props.robotPreload} ref={this.fieldInputRef} />
+				<FieldInput
+					callNext={this.props.callNext}
+					alliance={this.props.alliance}
+					blueSide={this.props.blueSide}
+					robotPreload={this.props.robotPreload}
+					data = {this.props.data}
+					ref={this.fieldInputRef} />
             </React.Fragment>
         );
     }

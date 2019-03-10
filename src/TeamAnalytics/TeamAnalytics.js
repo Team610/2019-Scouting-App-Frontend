@@ -32,7 +32,7 @@ export default class TeamAnalytics extends Component {
 				dataAvailable: false
 			});
 			let res = await fetch(`/api/v1/stats/team/${num}/agg`);
-			if(!res.ok) {
+			if (!res.ok) {
 				this.setState({
 					err: new Error("Could not fetch team data. Please try again.")
 				});
@@ -49,7 +49,7 @@ export default class TeamAnalytics extends Component {
 	}
 	async getTeamList() {
 		let res = await fetch(`/api/v1/event/getEventTeams`);
-		if(!res.ok) {
+		if (!res.ok) {
 			this.setState({
 				err: new Error("Could not fetch team list. Please try again.")
 			});
@@ -115,10 +115,14 @@ class TeamSelect extends Component {
 	render() {
 		let json = this.props.teamList;
 		let liList = [];
+		let btnClass = 'btn-link';
 		for (let i = 0; i < json.length; i++) {
 			liList.push(
 				<li key={json[i]}>
-					<a onClick={() => { this.props.setTeamNum(json[i]); }} className={json[i] === this.props.teamNum ? 'active' : ''}>{json[i]}</a>
+					<button
+						onClick={() => { this.props.setTeamNum(json[i]); }}
+						className={`${btnClass} ${json[i] === this.props.teamNum ? 'active' : ''}`}
+						href='#'>{json[i]}</button>
 				</li>
 			);
 		}

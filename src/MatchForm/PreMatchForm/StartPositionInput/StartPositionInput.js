@@ -3,9 +3,8 @@ import React, { Component } from 'react';
 class StartPositionInput extends Component {
 	constructor(props) {
 		super(props);
-		// Set base state
 		this.state = {
-			value: "false"
+			value: this.props.data ? this.props.data.start_on_lvl_2 : "false"
 		};
 		this.getJSON = this.getJSON.bind(this);
 		this.handleChange = this.handleChange.bind(this);

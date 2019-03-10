@@ -23,6 +23,7 @@ class PreMatchForm extends Component {
 				obj[key] = fieldJSON[key];
 			}
 		}
+		obj.alliance = this.props.alliance;
 		return obj;
 	}
 	render() {

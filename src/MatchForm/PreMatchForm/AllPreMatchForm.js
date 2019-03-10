@@ -10,7 +10,6 @@ class AllPreMatchForm extends Component {
 		super(props);
 		this.state = {};
 		this.getJSON = this.getJSON.bind(this);
-		this.getAlliance = this.getAlliance.bind(this);
 
 		this.teamSlctRef = React.createRef();
 		this.startPosRef = React.createRef();
@@ -26,15 +25,15 @@ class AllPreMatchForm extends Component {
 				obj[key] = fieldJSON[key];
 			}
 		}
+		//Team's alliance is passed around in data
+		obj.alliance = this.teamSlctRef.current.getAlliance();
 		return obj;
 	}
-	getAlliance() {
-		return this.teamSlctRef.current.getAlliance();
-	}
 	render() {
+		console.log(`Prematch form did ${this.props.data ? '' : 'not '}receive data`);
 		return (
 			<div style={{ overflow: 'auto' }}>
-				<TeamInput matchNum={this.props.matchNum} ref={this.teamSlctRef} /><br />
+				<TeamInput matchNum={this.props.matchNum} ref={this.teamSlctRef} data={this.props.data} /><br />
 				<div className="element">
 					<table>
 						<colgroup>
@@ -43,19 +42,19 @@ class AllPreMatchForm extends Component {
 						</colgroup>
 						<tbody>
 							<tr>
-								<td><RobotPreloadInput id='robot_preload' ref={this.robPrldRef} /></td>
-								<td><ShipPreloadInput id='ship_preloads' ref={this.shpPrldRef} /></td>
+								<td><RobotPreloadInput id='robot_preload' ref={this.robPrldRef} data={this.props.data} /></td>
+								<td><ShipPreloadInput id='ship_preloads' ref={this.shpPrldRef} data={this.props.data} /></td>
 							</tr>
 						</tbody>
 					</table>
-					<StartPositionInput id='start_position' ref={this.startPosRef} />
+					<StartPositionInput id='start_position' ref={this.startPosRef} data={this.props.data} />
 				</div>
 				<div className="element">
 					<RobotPhotoDisplay id='robo_photo' />
 				</div>
 				<button onClick={this.props.callNext}>Start</button>
 			</div>
-		); //TODO: figure out who has responsibility for fetching correct match# and team# from DB
+		); //TODO: figure out who has responsibility for fetching correct match# and team# from DB; figure out who has responsibility for the preload/startPos input ids
 	}
 }
 

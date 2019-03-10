@@ -114,7 +114,22 @@ export default class App extends React.Component {
 }
 
 const Home = () => <h2>Home</h2>;
-const Loading = props => <div>Loading {props.page}...</div>;
+class Loading extends React.Component {
+	render() {
+		// console.log(this.props);
+		if (this.props.error) {
+			return (
+				<div>Error! Please try again.</div>
+			);
+		} else if (this.props.pastDelay) {
+			return (
+				<div>Loading {this.props.page}...</div>
+			);
+		} else {
+			return null;
+		}
+	}
+}
 
 const SuperAdminRouter = (props) => (
 	<div>

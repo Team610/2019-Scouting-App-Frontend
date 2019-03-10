@@ -19,15 +19,30 @@ class FieldIMG extends Component {
 		this.closeMenu = this.closeMenu.bind(this);
 		this.changeIntake = this.changeIntake.bind(this);
 
+		this.imgPath = `./${this.props.alliance}-`;
+		if ((this.props.alliance === 'blue' && this.props.blueSide === 'left') ||
+				(this.props.alliance === 'red' && this.props.blueSide === 'right')) {
+			this.imgPath += 'left';
+			this.leftSide = true;
+		} else if ((this.props.alliance === 'blue' && this.props.blueSide === 'right') ||
+				(this.props.alliance === 'red' && this.props.blueSide === 'left')) {
+			this.imgPath += 'right';
+			this.leftSide = false;
+		} else {
+			this.imgPath = './blue-left';
+			this.leftSide = true;
+			alert('Alliance/side not properly set.');
+		}
+		this.imgPath += '.png';
+
 		//Initialize empty state
-		this.leftSide = true;
 		this.menu = '';
 		this.menuActive = false;
 		this.intake = this.props.robotPreload === 'neither' ? false : true;
 		this.mouseX = 0;
 		this.mouseY = 0;
 		let time = new Date().getTime();
-		this.startState = { "time": time, "intake": this.props.robotPreload, "ss": true };
+		this.startState = { "time": time, "intake": this.props.robotPreload, "gamePeriod": 'ss' };
 		this.initTime = time;
 		this.defenseRef = React.createRef();
 		this.climbRef = React.createRef();
@@ -55,31 +70,13 @@ class FieldIMG extends Component {
 	}
 
 	render() {
-		let imgPath = "";
-		if (this.props.alliance === 'blue') {
-			if (this.props.blueSide === 'left') {
-				imgPath = './BL.png';
-				this.leftSide = true;
-			} else {
-				imgPath = './BR.png';
-				this.leftSide = false;
-			}
-		} else {
-			if (this.props.blueSide === 'left') {
-				imgPath = './RR.png';
-				this.leftSide = false;
-			} else {
-				imgPath = './RL.png';
-				this.leftSide = true;
-			}
-		}
 		return (
 			<div ref={field => (this.instance = field)} id='fieldmap'>
 				<img alt="field"
 					className="nonSelectable"
 					ref={image => (this.image = image)}
 					height={window.innerHeight * 0.7}
-					src={require(`${imgPath}`)}
+					src={require(`${this.imgPath}`)}
 					onMouseDown={this.handleClick}
 					style={{ float: "left" }} />
 				{this.intake ?
@@ -225,7 +222,7 @@ class FieldIMG extends Component {
 	recordCycleStart(intake) {
 		console.log('recording cycle start');
 		let startTime = new Date().getTime();
-		this.startState = { "time": this.startState.time, "intake": intake, "ss": startTime - this.initTime < 15000 ? true : false };
+		this.startState = { "time": this.startState.time, "intake": intake, "gamePeriod": startTime - this.initTime < 15000 ? 'ss' : 'to' };
 
 		this.intake = true;
 		this.menuActive = false;
@@ -235,13 +232,9 @@ class FieldIMG extends Component {
 		console.log('recording cycle end');
 		let endTime = new Date().getTime();
 		let dur = (endTime - this.startState.time) / 1000;
-		if (this.startState.ss) {
-			console.log(`ss ${this.startState.intake} lv${level}`);
-			this.data[`ss_cycle_${this.startState['intake']}_lv${level}`].push(dur);
-		} else {
-			console.log(`to ${this.startState.intake} lv${level}`);
-			this.data[`to_cycle_${this.startState['intake']}_lv${level}`].push(dur);
-		}
+
+		console.log(`${this.startState.gamePeriod} ${this.startState.intake} lv${level}`);
+		this.data[`${this.startState.gamePeriod}_cycle_${this.startState.intake}_lv${level}`].push(dur);
 
 		this.intake = false;
 		this.menuActive = false;
@@ -251,82 +244,103 @@ class FieldIMG extends Component {
 
 	intakeMenu() {
 		return (
-			<PieMenu
-				radius="125px"
-				centerX={`${this.mouseX}px`}
-				centerY={`${this.mouseY}px`}
-				centerRadius='25px'
-			>
-				<Slice
-					onSelect={() => {
-						console.log('selecting hatch');
-						this.recordCycleStart("hatch");
-					}}
-				>
-					<span className="nonSelectable">Hatch</span>
-				</Slice>
-				<Slice />
-				<Slice
-					onSelect={() => {
-						console.log('selecting cargo');
-						this.recordCycleStart("cargo");
-					}}
-				>
-					<span className="nonSelectable">Cargo</span>
-				</Slice>
-				<Slice />
-			</PieMenu>
+			<Menu 
+				slices={[
+					{
+						label: 'Hatch',
+						logMsg: 'selecting hatch',
+						val: 'hatch',
+						num: '0'
+					},
+					{
+						blank: true
+					},
+					{
+						label: 'Cargo',
+						logMsg: 'selecting cargo',
+						val: 'cargo'
+					},
+					{
+						blank: true
+					}
+				]}
+				func={this.recordCycleStart}
+				mouseX={this.mouseX}
+				mouseY={this.mouseY}
+			/>
 		);
 	}
 	rocketMenu() {
 		return (
-			<PieMenu
-				radius="125px"
-				centerRadius="25px"
-				centerX={`${this.mouseX}px`}
-				centerY={`${this.mouseY}px`}
-			>
-				<Slice
-					onSelect={() => {
-						console.log('going rocket high');
-						this.recordCycleEnd(3);
-					}}
-				>
-					<span className="nonSelectable">Level 3</span>
-				</Slice>
-				<Slice
-					onSelect={() => {
-						console.log('going rocket middle');
-						this.recordCycleEnd(2);
-					}}
-				>
-					<span className="nonSelectable">Level 2</span>
-				</Slice>
-
-				<Slice
-					onSelect={() => {
-						console.log('going rocket low');
-						this.recordCycleEnd(1);
-					}}
-				>
-					<span className="nonSelectable">Level 1</span>
-				</Slice>
-
-				<Slice
-					onSelect={() => {
-						console.log('going rocket middle');
-						this.recordCycleEnd(2);
-					}}
-				>
-					<span className="nonSelectable">Level 2</span>
-				</Slice>
-			</PieMenu>
+			<Menu
+				slices={[
+					{
+						label: 'Level 3',
+						logMsg: 'going rocket high',
+						val: 3
+					},
+					{
+						label: 'Level 2',
+						logMsg: 'going rocket middle',
+						val: 2
+					},
+					{
+						label: 'Level 1',
+						logMsg: 'going rocket low',
+						val: 1
+					},
+					{
+						label: 'Level 2',
+						logMsg: 'going rocket middle',
+						val: 2
+					}
+				]}
+				func={this.recordCycleEnd}
+				mouseX={this.mouseX}
+				mouseY={this.mouseY}
+			/>
 		);
 	}
 	shipMenu() {
 		console.log('going cargo ship');
 		this.recordCycleEnd('S');
 		return;
+	}
+}
+
+class Menu extends Component {
+	constructor(props) {
+		super(props);
+		this.sliceList = [];
+		for (let slice of this.props.slices) {
+			if (slice.blank) {
+				this.sliceList.push(<Slice key={Math.random()} />);
+				continue;
+			}
+			this.sliceList.push(
+				<Slice
+					key={Math.random()}
+					onSelect={() => {
+						console.log(slice.logMsg);
+						this.props.func(slice.val);
+					}}
+				>
+					<span className="nonSelectable">{slice.label}</span>
+				</Slice>
+			);
+		}
+	}
+	render() {
+		return (
+			<PieMenu
+				radius="125px"
+				centerRadius="25px"
+				centerX={`${this.props.mouseX}px`}
+				centerY={`${this.props.mouseY}px`}
+			>
+				{this.sliceList}
+			</PieMenu>
+		);
 	}
 }
 
