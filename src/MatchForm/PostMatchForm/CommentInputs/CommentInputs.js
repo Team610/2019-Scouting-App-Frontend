@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import CommentCheckboxInput from './CommentCheckboxInput';
 import CommentRadioInput from './CommentRadioInput';
 
-class CommentInputs extends Component {
+export default class CommentInputs extends Component {
 	constructor(props) {
 		super(props);
 		this.getJSON = this.getJSON.bind(this);
@@ -39,15 +39,30 @@ class CommentInputs extends Component {
 						]
 					}
 					description="Climb Comments"
-					ref={this.climbRadioRef} /><br />
+					ref={this.climbRadioRef}
+					data={this.props.data} />
 				<p className="subheader"> Other Comments </p>
-				<CommentCheckboxInput inputId="robot_dc" description=" Robot DC'd midmatch." ref={this.dcCboxRef} /><br />
-				<CommentCheckboxInput inputId="robot_noshow" description=" Robot was a no-show." ref={this.noshowCboxRef} /><br />
-				<CommentCheckboxInput inputId="robot_strand" description=" Robot was stranded on a game piece." ref={this.strandCboxRef} /><br />
-				<CommentCheckboxInput inputId="robot_drop" description=" Robot droppped several game pieces." ref={this.dropCboxRef} />
+				<CommentCheckboxInput
+					inputId="robot_dc"
+					description=" Robot DC'd midmatch."
+					ref={this.dcCboxRef}
+					data={this.props.data} />
+				<CommentCheckboxInput
+					inputId="robot_noshow"
+					description=" Robot was a no-show."
+					ref={this.noshowCboxRef}
+					data={this.props.data} />
+				<CommentCheckboxInput
+					inputId="robot_strand"
+					description=" Robot was stranded on a game piece."
+					ref={this.strandCboxRef}
+					data={this.props.data} />
+				<CommentCheckboxInput
+					inputId="robot_drop"
+					description=" Robot droppped several game pieces."
+					ref={this.dropCboxRef}
+					data={this.props.data} />
 			</React.Fragment>
 		);
 	}
 }
-
-export default CommentInputs;

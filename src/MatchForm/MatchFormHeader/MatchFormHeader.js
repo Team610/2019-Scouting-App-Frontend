@@ -4,7 +4,7 @@ class MatchFormHeader extends Component {
     render() {
         return(
             <React.Fragment>
-                <p><strong>Match {this.props.matchNum} &nbsp; &nbsp;Team {this.props.teamNum}</strong></p>
+                <p className="subheader">Match {this.props.matchNum} &nbsp; &nbsp;Team {this.props.teamNum}</p>
             </React.Fragment>
         );
     }

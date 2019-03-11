@@ -3,7 +3,7 @@ import CommentInputs from './CommentInputs/CommentInputs';
 import CommentTextbox from './CommentTextbox/CommentTextbox';
 import SubmitError from '../SubmitError';
 
-class PostMatchForm extends Component {
+export default class PostMatchForm extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
@@ -25,11 +25,35 @@ class PostMatchForm extends Component {
 		return obj;
 	}
 	render() {
+		let submitStyle = {
+			backgroundColor: '#30E030',
+			border: 'none'
+		}
+		let discardStyle = {
+			backgroundColor: '#DD0000',
+			border: 'none',
+			float: 'right'
+		}
 		return (
 			<React.Fragment>
-				<CommentInputs ref={this.cmtInputsRef} />
-				<CommentTextbox ref={this.cmtTxtboxRef} />
-				<button id='submit-btn' onClick={this.callNext} className='increment-button' style={{backgroundColor: '#88ff88'}}>Submit</button>
+				<CommentInputs ref={this.cmtInputsRef} data={this.props.data} />
+				<CommentTextbox ref={this.cmtTxtboxRef} data={this.props.data} />
+				<button
+					id='submit-btn'
+					onClick={this.callNext}
+					className='increment-button'
+					style={submitStyle}
+				>
+					Submit
+				</button>
+				<button
+					id='discard-btn'
+					onClick={this.props.discard}
+					className='increment-button'
+					style={discardStyle}
+				>
+					Discard
+				</button>
 			</React.Fragment>
 		);
 	}
@@ -52,5 +76,3 @@ class PostMatchForm extends Component {
 		}
 	}
 }
-
-export default PostMatchForm;

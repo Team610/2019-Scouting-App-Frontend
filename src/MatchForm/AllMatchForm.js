@@ -15,6 +15,7 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 		this.saveToLocal = this.saveToLocal.bind(this);
 		this.getNextView = this.getNextView.bind(this);
 		this.collectCurView = this.collectCurView.bind(this);
+		this.discardForm = this.discardForm.bind(this);
 
 		this.data = { matchNum: this.props.matchNum };
 
@@ -80,8 +81,19 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 	}
 	saveToLocal() {
 		this.collectCurView();
+		console.log(this.data);
 		localStorage.setItem("form", JSON.stringify(this.data));
 		localStorage.setItem("lastView", this.state.matchView);
+	}
+	discardForm() {
+		let discard = window.confirm('Discard the form?');
+		if (discard) {
+			localStorage.removeItem('form');
+			localStorage.removeItem('lastView');
+			this.setState({
+				redirect: true
+			});
+		}
 	}
 	async submitForm() {
 		console.log(JSON.stringify(this.data));
@@ -152,6 +164,7 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 					<PostMatchForm
 						callNext={this.getNextView}
 						data={this.state.onSavedView ? this.data : false}
+						discard={this.discardForm}
 						ref={this.postMatchRef} />
 				</div>
 			);
