@@ -40,28 +40,33 @@ export default class CommentInputs extends Component {
 					}
 					description="Climb Comments"
 					ref={this.climbRadioRef}
-					data={this.props.data} />
+					data={this.props.data}
+					loadData={this.props.loadData} />
 				<p className="subheader"> Other Comments </p>
 				<CommentCheckboxInput
 					inputId="robot_dc"
 					description=" Robot DC'd midmatch."
 					ref={this.dcCboxRef}
-					data={this.props.data} />
+					data={this.props.data}
+					loadData={this.props.loadData} />
 				<CommentCheckboxInput
 					inputId="robot_noshow"
 					description=" Robot was a no-show."
 					ref={this.noshowCboxRef}
-					data={this.props.data} />
+					data={this.props.data}
+					loadData={this.props.loadData} />
 				<CommentCheckboxInput
 					inputId="robot_strand"
 					description=" Robot was stranded on a game piece."
 					ref={this.strandCboxRef}
-					data={this.props.data} />
+					data={this.props.data}
+					loadData={this.props.loadData} />
 				<CommentCheckboxInput
 					inputId="robot_drop"
 					description=" Robot droppped several game pieces."
 					ref={this.dropCboxRef}
-					data={this.props.data} />
+					data={this.props.data}
+					loadData={this.props.loadData} />
 			</React.Fragment>
 		);
 	}

@@ -145,7 +145,7 @@ const SuperAdminRouter = (props) => (
 
 		<Switch>
 			<Route exact path="/" component={Home} />
-			<Route path="/form" render={() => <AllMatchForm user={props.user} />} />
+			<Route path="/form" render={() => <AdminMatchSelect user={props.user} />} />
 			<Route path="/teams" component={Teams} />
 			<Route path="/overall" component={OverallTable} />
 			<Route path="/config" component={ConfigPage} />
@@ -167,7 +167,7 @@ const AdminRouter = (props) => (
 
 		<Switch>
 			<Route exact path="/" component={Home} />
-			<Route path="/form" render={() => <AllMatchForm user={props.user} />} />
+			<Route path="/form" render={() => <AdminMatchSelect user={props.user} />} />
 			<Route path="/teams" component={Teams} />
 			<Route path="/overall" component={OverallTable} />
 			<Route path="/robotPhotos" component={RobotPhotos} />
@@ -187,7 +187,7 @@ const ScoutRouter = (props) => (
 
 		<Switch>
 			<Route exact path="/" component={Home} />
-			<Route path="/form" render={() => <MatchForm user={props.user} />} />
+			<Route path="/form" render={() => <ScoutMatchForm user={props.user} />} />
 			<Route path="/overall" component={OverallTable} />
 			<Route path="/robotPhotos" component={RobotPhotos} />
 			<Route component={Err404} />
@@ -195,12 +195,12 @@ const ScoutRouter = (props) => (
 	</div>
 );
 
-const MatchForm = Loadable({
-	loader: () => import("./MatchForm/MatchForm"),
+const ScoutMatchForm = Loadable({
+	loader: () => import("./MatchForm/ScoutMatchForm"),
 	loading: Loading
 });
-const AllMatchForm = Loadable({
-	loader: () => import("./MatchForm/AllMatchSelect"),
+const AdminMatchSelect = Loadable({
+	loader: () => import("./MatchForm/AdminMatchSelect"),
 	loading: Loading
 });
 

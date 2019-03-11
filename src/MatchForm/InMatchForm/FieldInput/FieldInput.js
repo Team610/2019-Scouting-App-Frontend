@@ -13,29 +13,31 @@ export default class FieldInput extends Component {
 		this.recordCycleStart = this.recordCycleStart.bind(this);
 		this.recordCycleEnd = this.recordCycleEnd.bind(this);
 		this.changeIntake = this.changeIntake.bind(this);
-		
+
 		this.loadMenu = this.loadMenu.bind(this);
 		this.closeMenu = this.closeMenu.bind(this);
 		this.intakeMenu = this.intakeMenu.bind(this);
 		this.rocketMenu = this.rocketMenu.bind(this);
 		this.shipMenu = this.shipMenu.bind(this);
 
-		if ((this.props.alliance === 'blue' && this.props.blueSide === 'left') ||
-			(this.props.alliance === 'red' && this.props.blueSide === 'right')) {
+		let alliance = this.props.data.alliance;
+		if ((alliance === 'blue' && this.props.data.blueSide === 'left') ||
+			(alliance === 'red' && this.props.data.blueSide === 'right')) {
 			this.leftSide = true;
-		} else if ((this.props.alliance === 'blue' && this.props.blueSide === 'right') ||
-			(this.props.alliance === 'red' && this.props.blueSide === 'left')) {
+		} else if ((alliance === 'blue' && this.props.data.blueSide === 'right') ||
+			(alliance === 'red' && this.props.data.blueSide === 'left')) {
 			this.leftSide = false;
 		} else {
+			alliance = 'blue';
 			this.leftSide = true;
 			alert('Alliance/side not properly set.');
 		}
-		this.imgPath = `./${this.props.alliance}-${this.leftSide ? 'left' : 'right'}.png`;
+		this.imgPath = `./${alliance}-${this.leftSide ? 'left' : 'right'}.png`;
 
 		//Initialize empty state
 		this.menu = '';
 		this.menuActive = false;
-		this.intake = this.props.robotPreload === 'neither' ? false : true;
+		this.intake = this.props.loadData ? false : this.props.data.robot_preload === 'neither' ? false : true; //not dynamic
 
 		this.mouseX = 0;
 		this.mouseY = 0;
@@ -48,20 +50,24 @@ export default class FieldInput extends Component {
 			for (let gamePiece of gamePieces) {
 				for (let scoreLoc of scoreLocs) {
 					let str = `${gameMode}_cycle_${gamePiece}_${scoreLoc}`
-					this.data[str] = this.props.data ? this.props.data[str] : [];
+					this.data[str] = this.props.loadData ? this.props.data[str] : [];
 				}
 			}
 		}
-		this.data.climb_lvl = this.props.data ? this.props.data.climb_lvl : '0';
-		this.data.climb_time = this.props.data ? this.props.data.climb_time : 0.0;
+		this.data.climb_lvl = this.props.loadData ? this.props.data.climb_lvl : '0';
+		this.data.climb_time = this.props.loadData ? this.props.data.climb_time : 0.0;
 
 		let time = new Date().getTime();
-		this.startState = { "time": time, "intake": this.props.robotPreload, "gamePeriod": this.props.data ? 'to' : 'ss' };
-		this.data.initTime = this.props.data ? this.props.data.initTime : time;
+		this.data.initTime = this.props.loadData ? this.props.data.initTime : time;
+		this.startState = {
+			"time": this.props.loadData ? this.data.initTime : time,
+			"intake": this.props.loadData ? '' : this.props.data.robot_preload,
+			"gamePeriod": (time - this.data.initTime) / 1000 > 15 ? 'to' : 'ss'
+		};
 
 		this.defenseRef = React.createRef();
 		this.climbRef = React.createRef();
-		
+
 		this.state = {
 			menuRequested: false
 		};
@@ -95,8 +101,16 @@ export default class FieldInput extends Component {
 						{this.startState.intake === "cargo" ? "Cargo cycle" : "Hatch cycle"}
 					</div> : null}
 				{this.menuActive ? this.loadMenu() : null}
-				<DefenseInput ref={this.defenseRef} />
-				<ClimbInput callNext={this.props.callNext} ref={this.climbRef} initTime={this.data.initTime} />
+				<DefenseInput
+					ref={this.defenseRef}
+					data={this.data}
+					loadData={this.props.loadData} />
+				<ClimbInput
+					callNext={this.props.callNext}
+					ref={this.climbRef}
+					initTime={this.data.initTime}
+					data={this.data}
+					loadData={this.props.loadData} />
 			</div>
 		);
 	}
@@ -208,8 +222,13 @@ export default class FieldInput extends Component {
 
 	recordCycleStart(intake) {
 		console.log('recording cycle start');
-		let startTime = new Date().getTime();
-		this.startState = { "time": this.startState.time, "intake": intake, "gamePeriod": startTime - this.data.initTime < 15000 ? 'ss' : 'to' };
+		let dur = (new Date().getTime() - this.data.initTime) / 1000;
+		console.log(`${this.startState.gamePeriod} ${intake} @ ${this.startState.time}`);
+		this.startState = {
+			"time": this.startState.time,
+			"intake": intake,
+			"gamePeriod": dur < 15 ? 'ss' : 'to'
+		};
 
 		this.intake = true;
 		this.menuActive = false;
@@ -219,7 +238,6 @@ export default class FieldInput extends Component {
 		console.log('recording cycle end');
 		let endTime = new Date().getTime();
 		let dur = (endTime - this.startState.time) / 1000;
-
 		console.log(`${this.startState.gamePeriod} ${this.startState.intake} lv${level}`);
 		this.data[`${this.startState.gamePeriod}_cycle_${this.startState.intake}_lv${level}`].push(dur);
 

@@ -3,18 +3,19 @@ import React, { Component } from 'react';
 export default class CommentRadioInput extends Component {
 	constructor(props) {
 		super(props);
-		this.value = this.props.data ? this.props.data[this.props.inputId] : "None selected";
+		this.state = {
+			value: this.props.loadData ? this.props.data[this.props.inputId] : "None selected"
+		}
 		this.handleChange = this.handleChange.bind(this);
 		this.getJSON = this.getJSON.bind(this);
 	}
 	getJSON() {
 		let obj = {};
-		obj[this.props.inputId] = this.value;
+		obj[this.props.inputId] = this.state.value;
 		return obj;
 	}
 	handleChange(event) {
-		this.value = event.target.value;
-		this.forceUpdate();
+		this.setState({	value: event.target.value });
 	}
 	render() {
 		let choiceList = [];
@@ -25,7 +26,7 @@ export default class CommentRadioInput extends Component {
 						name={this.props.inputId}
 						value={choice.value}
 						onChange={this.handleChange}
-						checked = {this.value === choice.value ? true : false}
+						checked = {this.state.value === choice.value ? true : false}
 					/>
 					{choice.description}
 					<br />
