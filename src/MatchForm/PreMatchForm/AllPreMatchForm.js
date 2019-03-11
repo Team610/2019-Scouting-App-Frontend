@@ -5,7 +5,7 @@ import StartPositionInput from './StartPositionInput/StartPositionInput';
 import TeamInput from './TeamInput/TeamInput';
 import RobotPhotoDisplay from './RobotPhotoDisplay/RobotPhotoDisplay';
 
-class AllPreMatchForm extends Component {
+export default class AllPreMatchForm extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
@@ -30,7 +30,6 @@ class AllPreMatchForm extends Component {
 		return obj;
 	}
 	render() {
-		console.log(`Prematch form did ${this.props.data ? '' : 'not '}receive data`);
 		return (
 			<div style={{ overflow: 'auto' }}>
 				<TeamInput matchNum={this.props.matchNum} ref={this.teamSlctRef} data={this.props.data} /><br />
@@ -57,5 +56,3 @@ class AllPreMatchForm extends Component {
 		); //TODO: figure out who has responsibility for fetching correct match# and team# from DB; figure out who has responsibility for the preload/startPos input ids
 	}
 }
-
-export default AllPreMatchForm;

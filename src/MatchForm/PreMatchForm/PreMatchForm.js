@@ -4,7 +4,7 @@ import ShipPreloadInput from './ShipPreloadsInput/ShipPreloadsInput';
 import StartPositionInput from './StartPositionInput/StartPositionInput';
 import RobotPhotoDisplay from './RobotPhotoDisplay/RobotPhotoDisplay';
 
-class PreMatchForm extends Component {
+export default class PreMatchForm extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
@@ -29,9 +29,6 @@ class PreMatchForm extends Component {
 	render() {
 		return (
 			<div style={{ overflow: 'auto' }}>
-				<div>
-					<p>Team #: {this.props.teamNum}</p>
-				</div>
 				<div className="element">
 					<table>
 						<colgroup>
@@ -40,12 +37,12 @@ class PreMatchForm extends Component {
 						</colgroup>
 						<tbody>
 							<tr>
-								<td><RobotPreloadInput id='robot_preload' ref={this.robPrldRef} /></td>
-								<td><ShipPreloadInput id='ship_preloads' ref={this.shpPrldRef} /></td>
+								<td><RobotPreloadInput id='robot_preload' ref={this.robPrldRef} data={this.props.data} /></td>
+								<td><ShipPreloadInput id='ship_preloads' ref={this.shpPrldRef} data={this.props.data} /></td>
 							</tr>
 						</tbody>
 					</table>
-					<StartPositionInput id='start_position' ref={this.startPosRef} />
+					<StartPositionInput id='start_position' ref={this.startPosRef} data={this.props.data} />
 				</div>
 				<div className="element">
 					<RobotPhotoDisplay id='robo_photo' />
@@ -55,5 +52,3 @@ class PreMatchForm extends Component {
 		); //TODO: figure out who has responsibility for fetching correct match# and team# from DB
 	}
 }
-
-export default PreMatchForm;

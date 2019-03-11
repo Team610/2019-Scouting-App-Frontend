@@ -3,7 +3,7 @@ import MatchFormHeader from './MatchFormHeader/MatchFormHeader';
 import AllPreMatchForm from './PreMatchForm/AllPreMatchForm';
 import InMatchForm from './InMatchForm/FieldInput/FieldInput'; //InMatchForm component itself is not used at all!
 import PostMatchForm from './PostMatchForm/PostMatchForm';
-import { Redirect } from 'react-router';
+import { Prompt, Redirect } from 'react-router';
 import SubmitError from './SubmitError';
 import "./style.css";
 let fieldConfig = require('../config.json');
@@ -16,8 +16,7 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 		this.getNextView = this.getNextView.bind(this);
 		this.collectCurView = this.collectCurView.bind(this);
 		this.discardForm = this.discardForm.bind(this);
-
-		this.data = { matchNum: this.props.matchNum };
+	
 
 		this.preMatchRef = React.createRef();
 		this.inMatchRef = React.createRef();
@@ -27,32 +26,33 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 		let form = localStorage.getItem("form");
 		if (form) {
 			this.data = JSON.parse(form);
+			this.data.user = this.props.user;
 			let view = localStorage.getItem("lastView");
 			this.state = {
 				matchView: view,
-				onSavedView: true
+				onSavedView: true,
+				block: true
 			};
 		} else {
+			this.data = {
+				matchNum: this.props.matchNum,
+				user: this.props.user
+			};
 			this.state = {
 				matchView: 'preMatch',
-				onSavedView: false
+				onSavedView: false,
+				block: true
 			}
 		}
 	}
 	componentDidMount() {
-		window.addEventListener(
-			"beforeunload",
-			this.saveToLocal
-		);
+		window.addEventListener("beforeunload",	this.saveToLocal);
 		this.interval = window.setInterval(this.saveToLocal, 10000);
 	}
 	componentWillUnmount() {
 		if (!this.state.redirect)
 			this.saveToLocal();
-		window.removeEventListener(
-			"beforeunload",
-			this.saveToLocal
-		);
+		window.removeEventListener("beforeunload", this.saveToLocal);
 		window.clearInterval(this.interval);
 	}
 
@@ -81,7 +81,6 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 	}
 	saveToLocal() {
 		this.collectCurView();
-		console.log(this.data);
 		localStorage.setItem("form", JSON.stringify(this.data));
 		localStorage.setItem("lastView", this.state.matchView);
 	}
@@ -91,14 +90,13 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 			localStorage.removeItem('form');
 			localStorage.removeItem('lastView');
 			this.setState({
-				redirect: true
+				redirect: true,
+				block: false
 			});
 		}
 	}
 	async submitForm() {
-		console.log(JSON.stringify(this.data));
-		this.data.user = this.props.user;
-
+		// console.log(JSON.stringify(this.data));
 		try {
 			console.log("trying to submit form");
 			let res = await fetch('/api/v1/submitForm', {
@@ -121,33 +119,32 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 			return { 'status': 1, 'message': 'Could not submit form. Please try again.' };
 		}
 		this.setState({
-			redirect: true
+			redirect: true,
+			block: false
 		});
 		return { 'status': 0, message: 'success' };
 	}
 
 	render() {
-		console.log("Current match view: "+this.state.matchView);
+		console.log("Current match view: " + this.state.matchView);
 		if (this.state.redirect) {
-			return (
-				<Redirect to="/" />
-			);
+			return <Redirect to="/" />;
 		}
 		if (this.state.matchView === 'preMatch') {
 			return (
 				<div>
-					<MatchFormHeader matchNum={this.data.matchNum} teamNum='' /><hr />
+					<Header block={this.state.block} matchNum={this.data.matchNum} teamNum={this.data.teamNum} />
 					<AllPreMatchForm
 						callNext={this.getNextView}
 						matchNum={this.data.matchNum}
-						data={this.state.onSavedView ? this.data : false }
+						data={this.state.onSavedView ? this.data : false}
 						ref={this.preMatchRef} />
 				</div>
 			);
 		} else if (this.state.matchView === 'inMatch') {
 			return (
 				<div>
-					<MatchFormHeader matchNum={this.data.matchNum} teamNum={this.data.teamNum} /><hr />
+					<Header block={this.state.block} matchNum={this.data.matchNum} teamNum={this.data.teamNum} />
 					<InMatchForm
 						callNext={this.getNextView}
 						alliance={this.data.alliance}
@@ -160,7 +157,7 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 		} else if (this.state.matchView === 'postMatch') {
 			return (
 				<div>
-					<MatchFormHeader matchNum={this.data.matchNum} teamNum={this.data.teamNum} /><hr />
+					<Header block={this.state.block} matchNum={this.data.matchNum} teamNum={this.data.teamNum} />
 					<PostMatchForm
 						callNext={this.getNextView}
 						data={this.state.onSavedView ? this.data : false}
@@ -174,6 +171,22 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 				<MatchFormHeader matchNum={this.data.matchNum} teamNum='' /><hr />
 				Loading...
 			</div>
+		);
+	}
+}
+
+class Header extends Component {
+	render() {
+		return (
+			<React.Fragment>
+				<Prompt
+					when={this.props.block}
+					message={location =>
+						`Are you sure you want to go to ${location.pathname} ?`
+					}
+				/>
+				<MatchFormHeader matchNum={this.props.matchNum} teamNum={this.props.teamNum} /> <hr />
+			</React.Fragment>
 		);
 	}
 }
