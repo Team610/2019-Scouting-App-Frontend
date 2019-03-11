@@ -1,14 +1,31 @@
-table {
-  font-family: sans-serif;
-  border-collapse: collapse;
-  border-spacing: 0;
-  border: 1px solid #ddd;
-  align: center;
+.overall-table {
+	font-family: sans-serif;
+	border-collapse: collapse;
+	border-spacing: 0;
+	table-layout: fixed;
 }
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-  width: 150px;
+.overall-freeze-col {
+	border: 1px solid #dddddd;
+	position: absolute;
+	left: 0;
+	padding: 8px;
+	width: 60px;
+	opacity: 1;
+	z-index: 1;
+	background-color: #282c34;
+	text-align: right;
+}
+
+.overall-data {
+	border: 1px solid #dddddd;
+	padding: 4px;
+	width: 96px;
+	height: 25px;
+}
+td.overall-data {
+	text-align: right;
+}
+th.overall-data {
+	text-align: center;
 }

@@ -3,7 +3,21 @@ import React, { Component } from 'react';
 class ShipPreload extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { cargo: 1, hatch: 1 };
+		let cargoCount, hatchCount;
+		if (this.props.data) {
+			cargoCount = 0;
+			hatchCount = 0;
+			for (let preload of this.props.data.ship_preloads) {
+				preload === 'cargo' ? cargoCount++ : hatchCount++;
+			}
+		} else {
+			cargoCount = 1;
+			hatchCount = 1;
+		}
+		this.state = {
+			cargo: cargoCount,
+			hatch: hatchCount
+		};
 		this.getJSON = this.getJSON.bind(this);
 		this.cargoIncrement = this.cargoIncrement.bind(this);
 		this.hatchIncrement = this.hatchIncrement.bind(this);

@@ -2,11 +2,17 @@
 body {
   background-color: #282c34;
   color: white;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 /*Link styling*/
 a {
   color: #61dafb;
+}
+button.btn-link {
+	background-color: #333;
+	border: none;
+	font-size: 16px;
 }
 
 li{
@@ -21,35 +27,21 @@ ul {
   background-color: #333;
 }
 
-li a {
+li a, li button.btn-link {
   display: block;
   color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-family: sans-serif;
 }
 
 /* Change the link color to #111 (black) on hover */
-li a:hover {
+li a:hover, li button.btn-link:hover {
   background-color: #111;
 }
 
-/*Button styling*/
-.increment-button {
-  background-color: #bb33dd;
-}
-.btn-inactive {
-  background-color: gray;
-  color: darkgray;
-}
-.btn-active {
-  background-color: darkgreen;
-  color: white;
-}
-
 .active {
-  background-color: #054A05;
+  background-color: #054A05 !important;
 }
 
 /* Non-selectable stuff */
@@ -60,4 +52,10 @@ li a:hover {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+}
+
+.sticky {
+	position: -webkit-sticky; /* Safari */
+	position: sticky;
+	top: 0;
 }

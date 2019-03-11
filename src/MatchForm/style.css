@@ -21,6 +21,19 @@ table.preloadstable, td.preloadstable{
   width: 160px
 }
 
+/*Button styling*/
+.btn-inactive {
+	background-color: gray;
+	color: #222222;
+	height: 30px;
+	font-size: 14px;
+}
+.btn-active {
+	background-color: darkgreen;
+	color: white;
+	height: 30px;
+	font-size: 14px;
+}
 .increment-button{
   background-color: white;
   border: 3px solid #DDDDDD;
@@ -48,6 +61,5 @@ table.preloadstable, td.preloadstable{
 
 .element{
   margin-left: 10px;
-  display: inline-block;
   float:left;
 }

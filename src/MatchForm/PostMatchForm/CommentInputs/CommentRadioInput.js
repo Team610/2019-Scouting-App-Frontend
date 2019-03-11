@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-class CommentRadioInput extends Component {
+export default class CommentRadioInput extends Component {
 	constructor(props) {
 		super(props);
-		this.value = "None selected";
+		this.value = this.props.data ? this.props.data[this.props.inputId] : "None selected";
 		this.handleChange = this.handleChange.bind(this);
 		this.getJSON = this.getJSON.bind(this);
 	}
@@ -14,12 +14,23 @@ class CommentRadioInput extends Component {
 	}
 	handleChange(event) {
 		this.value = event.target.value;
-		console.log(this.value);
+		this.forceUpdate();
 	}
 	render() {
 		let choiceList = [];
 		for (let choice of this.props.choices) {
-			choiceList.push(<label key={choice.value} className="comment"><input type="radio" name={this.props.inputId} value={choice.value} onChange={this.handleChange} required />{choice.description}<br /></label>);
+			choiceList.push(
+				<label key={choice.value} className="comment">
+					<input type="radio"
+						name={this.props.inputId}
+						value={choice.value}
+						onChange={this.handleChange}
+						checked = {this.value === choice.value ? true : false}
+					/>
+					{choice.description}
+					<br />
+				</label>
+			);
 		}
 		return (
 			<React.Fragment>
@@ -29,4 +40,3 @@ class CommentRadioInput extends Component {
 		);
 	}
 }
-export default CommentRadioInput;
