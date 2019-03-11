@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MatchFormHeader from './MatchFormHeader/MatchFormHeader';
 import AllPreMatchForm from './PreMatchForm/AllPreMatchForm';
-import InMatchForm from './InMatchForm/InMatchForm';
+import InMatchForm from './InMatchForm/FieldInput/FieldInput'; //InMatchForm component itself is not used at all!
 import PostMatchForm from './PostMatchForm/PostMatchForm';
 import { Redirect } from 'react-router';
 import SubmitError from './SubmitError';
@@ -13,6 +13,8 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 		super(props);
 		this.submitForm = this.submitForm.bind(this);
 		this.saveToLocal = this.saveToLocal.bind(this);
+		this.getNextView = this.getNextView.bind(this);
+		this.collectCurView = this.collectCurView.bind(this);
 
 		this.data = { matchNum: this.props.matchNum };
 
@@ -26,12 +28,13 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 			this.data = JSON.parse(form);
 			let view = localStorage.getItem("lastView");
 			this.state = {
-				loadForm: true,
-				matchView: view
+				matchView: view,
+				onSavedView: true
 			};
 		} else {
 			this.state = {
-				matchView: 'preMatch'
+				matchView: 'preMatch',
+				onSavedView: false
 			}
 		}
 	}
@@ -40,35 +43,50 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 			"beforeunload",
 			this.saveToLocal
 		);
+		this.interval = window.setInterval(this.saveToLocal, 10000);
 	}
 	componentWillUnmount() {
-		this.saveToLocal();
+		if (!this.state.redirect)
+			this.saveToLocal();
 		window.removeEventListener(
 			"beforeunload",
 			this.saveToLocal
 		);
+		window.clearInterval(this.interval);
 	}
-	saveToLocal() { //TODO: un-duplicate the code below
-		let ref, str;
-		if (this.state.matchView === 'preMatch') { ref = this.preMatchRef; str = 'preMatch' }
-		else if (this.state.matchView === 'inMatch') { ref = this.inMatchRef; str = 'inMatch' }
-		else if (this.state.matchView === 'postMatch') { ref = this.postMatchRef; str = 'postMatch' }
+
+	async getNextView() {
+		this.collectCurView();
+		if (this.state.matchView === 'preMatch') {
+			this.setState({ matchView: 'inMatch', onSavedView: false });
+		} else if (this.state.matchView === 'inMatch') {
+			this.setState({ matchView: 'postMatch', onSavedView: false });
+		} else if (this.state.matchView === 'postMatch') {
+			let res = await this.submitForm();
+			if (res.status > 0) {
+				throw new SubmitError("Could not sumbit form. Please try again.");
+			}
+		} else {
+			alert('Current match view not defined!');
+		}
+	}
+	collectCurView() {
+		let view = this.state.matchView;
+		let ref = this[`${view}Ref`];
 		let viewJSON = ref.current.getJSON();
 		for (let key in viewJSON) {
 			this.data[key] = viewJSON[key];
 		}
-
+	}
+	saveToLocal() {
+		this.collectCurView();
 		localStorage.setItem("form", JSON.stringify(this.data));
-		localStorage.setItem("lastView", str);
+		localStorage.setItem("lastView", this.state.matchView);
 	}
 	async submitForm() {
 		console.log(JSON.stringify(this.data));
 		this.data.user = this.props.user;
-		let alliance = this.data.alliance;
-		delete this.data.alliance;
-		//Strip the alliance from the form
 
-		// Submit the form!
 		try {
 			console.log("trying to submit form");
 			let res = await fetch('/api/v1/submitForm', {
@@ -79,7 +97,6 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 				}
 			});
 			if (!res.ok) {
-				this.data.alliance = alliance;
 				console.log("could not submit form - !res.ok block");
 				throw new SubmitError("Could not sumbit form. Please try again.");
 			}
@@ -96,29 +113,7 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 		});
 		return { 'status': 0, message: 'success' };
 	}
-	async collectData(view) {
-		//Data collection
-		let ref;
-		if (view === 'preMatch') { ref = this.preMatchRef; }
-		else if (view === 'inMatch') { ref = this.inMatchRef; }
-		else if (view === 'postMatch') { ref = this.postMatchRef; }
-		let viewJSON = ref.current.getJSON();
-		for (let key in viewJSON) {
-			this.data[key] = viewJSON[key];
-		}
 
-		//Render next view or submit as appropriate
-		if (view === 'preMatch') {
-			this.setState({ matchView: 'inMatch' });
-		} else if (view === 'inMatch') {
-			this.setState({ matchView: 'postMatch' });
-		} else if (view === 'postMatch') {
-			let res = await this.submitForm();
-			if (res.status > 0) {
-				throw new SubmitError("Could not sumbit form. Please try again.");
-			}
-		}
-	}
 	render() {
 		console.log("Current match view: "+this.state.matchView);
 		if (this.state.redirect) {
@@ -127,15 +122,14 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 			);
 		}
 		if (this.state.matchView === 'preMatch') {
-			console.log(this.data);
 			return (
 				<div>
-					<MatchFormHeader matchNum={this.data.matchNum} teamNum={''} /><hr />
+					<MatchFormHeader matchNum={this.data.matchNum} teamNum='' /><hr />
 					<AllPreMatchForm
-						callNext={() => this.collectData('preMatch')}
+						callNext={this.getNextView}
 						matchNum={this.data.matchNum}
-						ref={this.preMatchRef}
-						data={this.state.loadForm ? this.data : false} />
+						data={this.state.onSavedView ? this.data : false }
+						ref={this.preMatchRef} />
 				</div>
 			);
 		} else if (this.state.matchView === 'inMatch') {
@@ -143,11 +137,11 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 				<div>
 					<MatchFormHeader matchNum={this.data.matchNum} teamNum={this.data.teamNum} /><hr />
 					<InMatchForm
-						callNext={() => this.collectData('inMatch')}
+						callNext={this.getNextView}
 						alliance={this.data.alliance}
 						blueSide={fieldConfig.blueSide}
 						robotPreload={this.data.robot_preload}
-						data={this.state.loadForm ? this.data : false}
+						data={this.state.onSavedView ? this.data : false}
 						ref={this.inMatchRef} />
 				</div>
 			);
@@ -156,15 +150,15 @@ export default class AllMatchForm extends Component { //TODO: figure out how to 
 				<div>
 					<MatchFormHeader matchNum={this.data.matchNum} teamNum={this.data.teamNum} /><hr />
 					<PostMatchForm
-						callNext={() => this.collectData('postMatch')}
-						data={this.state.loadForm ? this.data : false}
+						callNext={this.getNextView}
+						data={this.state.onSavedView ? this.data : false}
 						ref={this.postMatchRef} />
 				</div>
 			);
 		}
 		return (
 			<div>
-				<MatchFormHeader matchNum={this.data.matchNum} teamNum={''} /><hr />
+				<MatchFormHeader matchNum={this.data.matchNum} teamNum='' /><hr />
 				Loading...
 			</div>
 		);

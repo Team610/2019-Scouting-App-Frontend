@@ -7,55 +7,66 @@ export default class FieldInput extends Component {
 	constructor(props) {
 		super(props);
 
-		//Bind all methods
 		this.handleClick = this.handleClick.bind(this);
 		this.checkZone = this.checkZone.bind(this);
-		this.loadMenu = this.loadMenu.bind(this);
+
 		this.recordCycleStart = this.recordCycleStart.bind(this);
 		this.recordCycleEnd = this.recordCycleEnd.bind(this);
+		this.changeIntake = this.changeIntake.bind(this);
+		
+		this.loadMenu = this.loadMenu.bind(this);
+		this.closeMenu = this.closeMenu.bind(this);
 		this.intakeMenu = this.intakeMenu.bind(this);
 		this.rocketMenu = this.rocketMenu.bind(this);
 		this.shipMenu = this.shipMenu.bind(this);
-		this.closeMenu = this.closeMenu.bind(this);
-		this.changeIntake = this.changeIntake.bind(this);
 
-		this.imgPath = `./${this.props.alliance}-`;
 		if ((this.props.alliance === 'blue' && this.props.blueSide === 'left') ||
 			(this.props.alliance === 'red' && this.props.blueSide === 'right')) {
-			this.imgPath += 'left';
 			this.leftSide = true;
 		} else if ((this.props.alliance === 'blue' && this.props.blueSide === 'right') ||
 			(this.props.alliance === 'red' && this.props.blueSide === 'left')) {
-			this.imgPath += 'right';
 			this.leftSide = false;
 		} else {
-			this.imgPath = './blue-left';
 			this.leftSide = true;
 			alert('Alliance/side not properly set.');
 		}
-		this.imgPath += '.png';
+		this.imgPath = `./${this.props.alliance}-${this.leftSide ? 'left' : 'right'}.png`;
 
 		//Initialize empty state
 		this.menu = '';
 		this.menuActive = false;
 		this.intake = this.props.robotPreload === 'neither' ? false : true;
+
 		this.mouseX = 0;
 		this.mouseY = 0;
+
+		this.data = {};
+		let gameModes = ['to', 'ss'];
+		let gamePieces = ['hatch', 'cargo'];
+		let scoreLocs = ['lv1', 'lv2', 'lv3', 'lvS'];
+		for (let gameMode of gameModes) {
+			for (let gamePiece of gamePieces) {
+				for (let scoreLoc of scoreLocs) {
+					let str = `${gameMode}_cycle_${gamePiece}_${scoreLoc}`
+					this.data[str] = this.props.data ? this.props.data[str] : [];
+				}
+			}
+		}
+		this.data.climb_lvl = this.props.data ? this.props.data.climb_lvl : '0';
+		this.data.climb_time = this.props.data ? this.props.data.climb_time : 0.0;
+
 		let time = new Date().getTime();
-		this.startState = { "time": time, "intake": this.props.robotPreload, "gamePeriod": 'ss' };
-		this.initTime = time;
+		this.startState = { "time": time, "intake": this.props.robotPreload, "gamePeriod": this.props.data ? 'to' : 'ss' };
+		this.data.initTime = this.props.data ? this.props.data.initTime : time;
+
 		this.defenseRef = React.createRef();
 		this.climbRef = React.createRef();
-		this.data = {
-			'ss_cycle_hatch_lv1': [], 'ss_cycle_hatch_lv2': [], 'ss_cycle_hatch_lv3': [], 'ss_cycle_hatch_lvS': [],
-			'ss_cycle_cargo_lv1': [], 'ss_cycle_cargo_lv2': [], 'ss_cycle_cargo_lv3': [], 'ss_cycle_cargo_lvS': [],
-			'to_cycle_hatch_lv1': [], 'to_cycle_hatch_lv2': [], 'to_cycle_hatch_lv3': [], 'to_cycle_hatch_lvS': [],
-			'to_cycle_cargo_lv1': [], 'to_cycle_cargo_lv2': [], 'to_cycle_cargo_lv3': [], 'to_cycle_cargo_lvS': [],
-			'climb_lvl': '0', 'climb_time': 0.0
-		};
+		
 		this.state = {
 			menuRequested: false
 		};
+
+		console.log(this.data);
 	}
 	getJSON() {
 		let defJSON = this.defenseRef.current.getJSON();
@@ -85,7 +96,7 @@ export default class FieldInput extends Component {
 					</div> : null}
 				{this.menuActive ? this.loadMenu() : null}
 				<DefenseInput ref={this.defenseRef} />
-				<ClimbInput callNext={this.props.callNext} ref={this.climbRef} />
+				<ClimbInput callNext={this.props.callNext} ref={this.climbRef} initTime={this.data.initTime} />
 			</div>
 		);
 	}
@@ -195,27 +206,10 @@ export default class FieldInput extends Component {
 		return zone;
 	}
 
-	loadMenu() {
-		//Load the appropriate menu
-		console.log(`loading ${this.menu} menu`);
-		if (this.menu === 'rocket') {
-			return this.rocketMenu();
-		} else if (this.menu === 'ship') {
-			return this.shipMenu();
-		} else if (this.menu === 'intake') {
-			return this.intakeMenu();
-		}
-	}
-	closeMenu() {
-		console.log('closing menu');
-		this.menuActive = false;
-		this.setState({ menuRequested: false });
-	}
-
 	recordCycleStart(intake) {
 		console.log('recording cycle start');
 		let startTime = new Date().getTime();
-		this.startState = { "time": this.startState.time, "intake": intake, "gamePeriod": startTime - this.initTime < 15000 ? 'ss' : 'to' };
+		this.startState = { "time": this.startState.time, "intake": intake, "gamePeriod": startTime - this.data.initTime < 15000 ? 'ss' : 'to' };
 
 		this.intake = true;
 		this.menuActive = false;
@@ -241,6 +235,22 @@ export default class FieldInput extends Component {
 		this.setState({ menuRequested: false });
 	}
 
+	loadMenu() {
+		//Load the appropriate menu
+		console.log(`loading ${this.menu} menu`);
+		if (this.menu === 'rocket') {
+			return this.rocketMenu();
+		} else if (this.menu === 'ship') {
+			return this.shipMenu();
+		} else if (this.menu === 'intake') {
+			return this.intakeMenu();
+		}
+	}
+	closeMenu() {
+		console.log('closing menu');
+		this.menuActive = false;
+		this.setState({ menuRequested: false });
+	}
 	intakeMenu() {
 		let intakeSlices = [
 			{
@@ -306,8 +316,8 @@ export default class FieldInput extends Component {
 			position: "absolute",
 			height: '40px',
 			width: '100px',
-			left: this.mouseX-50,
-			top: this.mouseY-20,
+			left: this.mouseX - 50,
+			top: this.mouseY - 20,
 			backgroundColor: '#6D6D6D',
 			border: 'none',
 			fontSize: '16px',
