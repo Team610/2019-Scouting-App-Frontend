@@ -20,39 +20,37 @@ export default class TeamAnalytics extends Component {
 		this.getTeamList = this.getTeamList.bind(this);
 	}
 	async componentDidMount() {
+		this._isMounted = true;
 		this.teamList = await this.getTeamList();
-		this.setState({
-			teamListAvailable: true
-		});
+		if (this._isMounted)
+			this.setState({ teamListAvailable: true });
+	}
+	componentWillUnmount() {
+		this._isMounted = false;
 	}
 	async setTeamNum(num) {
 		if (num !== this.state.teamNum) {
-			this.setState({
-				teamNum: num,
-				dataAvailable: false
-			});
+			if (this._isMounted)
+				this.setState({ teamNum: num, dataAvailable: false });
 			let res = await fetch(`/api/v1/stats/team/${num}/agg`);
 			if (!res.ok) {
-				this.setState({
-					err: new Error("Could not fetch team data. Please try again.")
-				});
+				if (this._isMounted)
+					this.setState({ err: new Error("Could not fetch team data. Please try again.") });
 				return;
 			}
 			res = await res.json();
 			this.data = res[num];
 			console.log(this.data);
 			console.log(`set to team ${this.state.teamNum}`);
-			this.setState({
-				dataAvailable: true
-			});
+			if (this._isMounted)
+				this.setState({ dataAvailable: true });
 		}
 	}
 	async getTeamList() {
 		let res = await fetch(`/api/v1/event/getEventTeams`);
 		if (!res.ok) {
-			this.setState({
-				err: new Error("Could not fetch team list. Please try again.")
-			});
+			if (this._isMounted)
+				this.setState({ err: new Error("Could not fetch team list. Please try again.") });
 			return;
 		}
 		res = await res.json();

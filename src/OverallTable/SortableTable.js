@@ -70,6 +70,13 @@ class SortableTable extends Component {
 		return parseInt(a);
 	}
 
+	componentDidMount() {
+		this._isMounted = true;
+	}
+	componentWillUnmount() {
+		this._isMounted = false;
+	}
+
 	getData() {
 		fetch('/api/v1/stats/teams/agg').then((res) => {
 			if (!res.ok) {
@@ -86,16 +93,18 @@ class SortableTable extends Component {
 				}
 				console.log('got all match-by-match stats');
 				// console.log(this.alias);
-				this.setState({
-					dataLoaded: true,
-					order: Object.keys(this.data)
-				});
+				if (this._isMounted)
+					this.setState({
+						dataLoaded: true,
+						order: Object.keys(this.data)
+					});
 			});
 		}).catch((err) => {
-			this.setState({
-				dataLoaded: false,
-				err: err
-			});
+			if (this._isMounted)
+				this.setState({
+					dataLoaded: false,
+					err: err
+				});
 		});
 	}
 	calcCol(field, team) {
@@ -149,17 +158,20 @@ class SortableTable extends Component {
 	}
 
 	sortTable = (col) => {
-		//If the column is the same as before, flip the direction. Otherwise, keep the same direction.
-		let dir = col === this.state.lastCol ? this.state.dir === 'a' ? 'd' : 'a' : this.state.dir;
+		//If the column is the same as before, flip the direction and handle the special sorting case.
+		if (col === this.state.lastCol) {
+			let dir = this.state.dir === 'a' ? 'd' : 'a';
+			let newOrder = this.state.order.slice(0, -this.state.zeroCount).reverse().concat(this.state.order.slice(-this.state.zeroCount));
+			this.setState({ dir: dir, order: newOrder });
+			return;
+		}
 
+		let dir = this.state.dir;
 		let newOrder = this.state.order;
+		let zeroCount = 0;
 		//handle special case of sorting team, since sorted list already exists
 		if (col === 'team') {
-			if (dir === 'd') {
-				newOrder = Object.keys(this.alias);
-			} else if (dir === 'a') {
-				newOrder = Object.keys(this.alias).reverse();
-			}
+			dir === 'd' ? newOrder = Object.keys(this.alias) : Object.keys(this.alias).reverse();
 		} else {
 			//Insertion sort up until the max value
 			let max = newOrder.length;
@@ -171,6 +183,7 @@ class SortableTable extends Component {
 					newOrder[i] = temp;
 					max--;
 					i--;
+					zeroCount++;
 					continue;
 				}
 
@@ -179,7 +192,7 @@ class SortableTable extends Component {
 				while (j > 0) {
 					let cur = Number(this.alias[newOrder[j]][col]);
 					let pre = Number(this.alias[newOrder[j - 1]][col]);
-					if ((dir === 'd' && cur > pre) || (dir === 'a' && cur < pre)) {
+					if (dir === 'd' ? cur > pre : cur < pre) {
 						//swap
 						let temp = newOrder[j - 1];
 						newOrder[j - 1] = newOrder[j];
@@ -193,8 +206,8 @@ class SortableTable extends Component {
 		}
 		this.setState({
 			order: newOrder,
-			dir: dir,
-			lastCol: col
+			lastCol: col,
+			zeroCount: zeroCount
 		});
 	}
 	render() {
