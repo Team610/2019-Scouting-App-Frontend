@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export default class CommentTextbox extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {value : this.props.data ? this.props.data.other_comments : "blank"};
+		this.state = { value: this.props.loadData ? this.props.data.other_comments : "blank" };
 		this.getJSON = this.getJSON.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}
@@ -11,7 +11,7 @@ export default class CommentTextbox extends Component {
 		return { "other_comments": this.state.value };
 	}
 	handleChange(event) {
-		this.setState({value: event.target.value});
+		this.setState({ value: event.target.value });
 	}
 	render() {
 		return (
@@ -23,7 +23,7 @@ export default class CommentTextbox extends Component {
 					rows="8"
 					cols="40"
 					onChange={this.handleChange}
-					value={this.value !== 'blank' ? this.value : ''}
+					value={this.state.value !== 'blank' ? this.state.value : ''}
 				/>
 				<br />
 			</div>

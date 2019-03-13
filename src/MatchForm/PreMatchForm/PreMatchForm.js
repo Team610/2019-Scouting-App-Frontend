@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import TeamInput from './TeamInput/TeamInput';
 import RobotPreloadInput from './RobotPreloadInput/RobotPreloadInput';
 import ShipPreloadInput from './ShipPreloadsInput/ShipPreloadsInput';
 import StartPositionInput from './StartPositionInput/StartPositionInput';
@@ -23,12 +24,26 @@ export default class PreMatchForm extends Component {
 				obj[key] = fieldJSON[key];
 			}
 		}
-		obj.alliance = this.props.alliance;
 		return obj;
 	}
 	render() {
+		let teamSelect = null;
+		if (this.props.isAdmin) {
+			this.teamSlctRef = React.createRef();
+			this.fieldRefs.push(this.teamSlctRef);
+			teamSelect = (
+				<React.Fragment>
+					<TeamInput
+						ref={this.teamSlctRef}
+						data={this.props.data}
+						loadData={this.props.loadData} />
+					<br />
+				</React.Fragment>
+			);
+		}
 		return (
 			<div style={{ overflow: 'auto' }}>
+				{teamSelect}
 				<div className="element">
 					<table>
 						<colgroup>
@@ -37,12 +52,24 @@ export default class PreMatchForm extends Component {
 						</colgroup>
 						<tbody>
 							<tr>
-								<td><RobotPreloadInput id='robot_preload' ref={this.robPrldRef} data={this.props.data} /></td>
-								<td><ShipPreloadInput id='ship_preloads' ref={this.shpPrldRef} data={this.props.data} /></td>
+								<td>
+									<RobotPreloadInput
+										id='robot_preload'
+										ref={this.robPrldRef}
+										data={this.props.data}
+										loadData={this.props.loadData} />
+								</td>
+								<td>
+									<ShipPreloadInput
+										id='ship_preloads'
+										ref={this.shpPrldRef}
+										data={this.props.data}
+										loadData={this.props.loadData} />
+								</td>
 							</tr>
 						</tbody>
 					</table>
-					<StartPositionInput id='start_position' ref={this.startPosRef} data={this.props.data} />
+					<StartPositionInput id='start_position' ref={this.startPosRef} data={this.props.data} loadData={this.props.loadData} />
 				</div>
 				<div className="element">
 					<RobotPhotoDisplay id='robo_photo' />

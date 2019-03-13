@@ -4,7 +4,7 @@ class ShipPreload extends Component {
 	constructor(props) {
 		super(props);
 		let cargoCount, hatchCount;
-		if (this.props.data) {
+		if (this.props.loadData) {
 			cargoCount = 0;
 			hatchCount = 0;
 			for (let preload of this.props.data.ship_preloads) {

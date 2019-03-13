@@ -4,7 +4,7 @@ class StartPositionInput extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			value: this.props.data ? this.props.data.start_on_lvl_2 : "false"
+			value: this.props.loadData ? this.props.data.start_on_lvl_2 : "false"
 		};
 		this.getJSON = this.getJSON.bind(this);
 		this.handleChange = this.handleChange.bind(this);

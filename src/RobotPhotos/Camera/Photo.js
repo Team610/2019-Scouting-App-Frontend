@@ -1,109 +1,112 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Camera from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import "./robotPhoto.css";
 
-import Review from "./review";
-
 class RobotCamera extends Component {
-  constructor() {
-    super();
-    this.state = {
-      submit: false,
-      teamNumber: 0,
-      file: "",
-      orientation: ""
-    };
+	constructor(props) {
+		super(props);
+		this.state = {
+			review: false,
+			teamNum: undefined,
+			file: undefined,
+			view: 'front',
+			facing: 'FACING_MODES.ENVIRONMENT',
+			fileName: ''
+		};
+		this.flipCamera = this.flipCamera.bind(this);
+		this.handleView = this.handleView.bind(this);
+		this.handleTeamNum = this.handleTeamNum.bind(this);
 
-    this.facing = true;
-    this.facingMode = "FACING_MODES.ENVIRONMENT";
-  }
+		this.photoViews = [
+			{ id: "front", label: "Front" },
+			{ id: "isom", label: "Isometric" },
+			{ id: "side", label: "Side" },
+			{ id: "back", label: "Back" },
+			{ id: "top", label: "Top" },
+			{ id: "other", label: "Other" }
+		]
+		this.viewOptions = [];
+		for (let view of this.photoViews)
+			this.viewOptions.push(<option key={view.id} value={view.id}>{view.label}</option>);
+	}
 
-  onTakePhoto(dataUri) {
-    this.setState({ file: dataUri });
-    this.setState({ teamNumber: document.getElementById("teamInput").value });
-    this.setState({ orientation: document.getElementById("dropdown").value });
-    this.setState({ submit: true });
-    // console.log(this.state.submit);
-  }
+	onTakePhoto(dataUri) {
+		this.setState({
+			file: dataUri,
+			review: true
+		});
+	}
+	async submitPicture() {
+		console.log(`${this.state.view} photo for team ${this.state.teamNum}:\n${this.state.file}`);
+		let obj = {
+			photo: this.state.file,
+			view: this.state.view,
+			teamNum: this.state.teamNum
+		}
+		let res = await fetch('/api/v1/photos', {
+			method: 'POST',
+			body: JSON.stringify(obj),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		res = await res.json();
+		res.success ? console.log('success') : console.log('fail');
+	}
 
-  flipCamera() {
-    console.log("flip");
-    if (this.facing === false) {
-      this.facing = true;
-    } else {
-      this.facing = false;
-    }
-    this.facingMode = this.facing
-      ? "FACING_MODES.ENVIRONMENT"
-      : "FACING_MODES.USER";
-  }
+	flipCamera() {
+		this.setState({
+			facing: this.state.facing === 'FACING_MODES.ENVIRONMENT' ?
+				'FACING_MODES.USER' :
+				'FACING_MODES.ENVIRONMENT'
+		});
+	}
+	handleView(e) {
+		this.setState({ view: e.target.value });
+	}
+	handleTeamNum(e) {
+		this.setState({ teamNum: e.target.value });
+	}
 
-  setOrientation(orientation) {
-    this.orientation = orientation;
-    console.log(this.orientation);
-  }
-
-  renderSubmit() {
-    console.log("submit");
-    return this.state.submit ? (
-      <Review
-        teamNum={this.state.teamNumber}
-        orient={this.state.orientation}
-        img={this.state.file}
-      />
-    ) : null;
-  }
-
-  render() {
-    return (
-      <div className="Camera">
-        <button onClick={this.flipCamera()}>Flip camera</button>
-        <Camera
-          imageType="IMAGE_TYPES.JPG"
-          idealFacingMode={this.state.facingMode}
-          onTakePhoto={dataUri => {
-            this.onTakePhoto(dataUri);
-          }}
-        />
-        <p>Team Number:</p>
-        <form>
-          <input type="text" id="teamInput" />
-        </form>
-        <div>
-          <select id="dropdown">
-            <option value="front">Front</option>
-            <option value="side">Side</option>
-            <option value="back">Back</option>
-            <option value="top">Top</option>
-          </select>
-        </div>
-        {this.renderSubmit()}
-
-        <button
-          onClick={() => {
-            let obj = {};
-            obj.teamNum = this.state.teamNum;
-            obj.orientation = this.state.orientation;
-            obj.image = this.state.file;
-            console.log("yeet");
-          }}
-        >
-          Submit Photo
-        </button>
-        <button
-          id="retake"
-          onClick={() => {
-            if (this.state.submit) {
-              this.setState({ submit: false });
-            }
-          }}
-        >
-          Retake Photo
-        </button>
-      </div>
-    );
-  }
+	render() {
+		//idealFacingMode={this.state.facing}
+		return (
+			<div className="camera-container">
+				<button onClick={this.flipCamera}>Flip camera</button><br />
+				<Camera
+					imageType="jpg"
+					onTakePhoto={dataUri => {
+						this.onTakePhoto(dataUri);
+					}}
+				/><br />
+				<form>
+					Team #: <input type="number" id="teamInput" onChange={this.handleTeamNum} /><br />
+					View: <select id="view" value={this.state.view} onChange={this.handleView}>
+						{this.viewOptions}
+					</select>
+				</form>
+				<p>Image: </p>{this.state.review ? <Fragment><img src={this.state.file} alt='robot' /><br /></Fragment> : null}
+				<br />
+				<button
+					onClick={() => {
+						window.confirm(`Submit ${this.state.view} photo for team ${this.state.teamNum}?`) &&
+							this.submitPicture();
+					}}
+				>
+					Submit
+        		</button>
+				<button
+					id="retake"
+					onClick={() => {
+						this.state.review && this.setState({ review: false });
+					}}
+				>
+					Retake
+        		</button>
+			</div>
+		);
+	}
 }
 
 export default RobotCamera;

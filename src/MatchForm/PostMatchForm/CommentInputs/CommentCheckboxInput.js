@@ -3,16 +3,18 @@ import React, { Component } from 'react';
 class CommentCheckboxInput extends Component {
 	constructor(props) {
 		super(props);
-		this.value = this.props.data ? this.props.data[this.props.inputId] : false;
+		this.state = {
+			value: this.props.loadData ? this.props.data[this.props.inputId] : false
+		}
 		this.handleChange = this.handleChange.bind(this);
 	}
 	getJSON() {
 		let obj = {};
-		obj[this.props.inputId] = this.value;
+		obj[this.props.inputId] = this.state.value;
 		return obj;
 	}
 	handleChange() {
-		this.value = !this.value;
+		this.setState({ value: !this.state.value });
 	}
 	render() {
 		return (
@@ -20,7 +22,7 @@ class CommentCheckboxInput extends Component {
 				<input type="checkbox"
 					id={this.props.inputId}
 					onChange={this.handleChange}
-					checked={this.value} />
+					checked={this.state.value} />
 				{this.props.description}
 				<br />
 			</label>

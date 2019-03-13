@@ -4,8 +4,8 @@ class RobotPreload extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			cargo: this.props.data ? this.props.data.robot_preload === 'cargo' ? 1 : 0 : 1,
-			hatch: this.props.data ? this.props.data.robot_preload === 'hatch' ? 1 : 0 : 0
+			cargo: this.props.loadData ? this.props.data.robot_preload === 'cargo' ? 1 : 0 : 1,
+			hatch: this.props.loadData ? this.props.data.robot_preload === 'hatch' ? 1 : 0 : 0
 		}; //If there is data to be loaded, if robot_preload is cargo, set cargo val to 1. If no data, set to cargo by default.
 		this.getJSON = this.getJSON.bind(this);
 		this.cargoIncrement = this.cargoIncrement.bind(this);

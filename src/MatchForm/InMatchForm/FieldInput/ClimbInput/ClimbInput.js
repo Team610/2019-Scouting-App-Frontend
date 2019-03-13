@@ -7,7 +7,10 @@ class ClimbInput extends Component {
 		this.state = { open: false };
 
 		this.startTime = 0;
-		this.data = { climb_lvl: '', climb_time: 0 };
+		this.data = {
+			climb_lvl: this.props.loadData ? this.props.data.climb_lvl : '',
+			climb_time: this.props.loadData ? this.props.data.climb_time : 0
+		};
 
 		this.getJSON = this.getJSON.bind(this);
 		this.onOpenModal = this.onOpenModal.bind(this);
@@ -39,7 +42,7 @@ class ClimbInput extends Component {
 				climbDur = minTol;
 			}
 			this.data.climb_time = climbDur;
-			this.data.climb_lvl = climbLvl+'';
+			this.data.climb_lvl = climbLvl + '';
 			console.log(`climb length recorded: ${climbDur}`);
 			this.props.callNext();
 		}

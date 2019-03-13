@@ -24,7 +24,6 @@ class InMatchForm extends Component {
             <React.Fragment>
 				<FieldInput
 					callNext={this.props.callNext}
-					alliance={this.props.alliance}
 					blueSide={this.props.blueSide}
 					robotPreload={this.props.robotPreload}
 					data = {this.props.data}

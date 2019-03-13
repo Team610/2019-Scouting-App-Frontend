@@ -5,16 +5,17 @@ export default class Menu extends Component {
 	constructor(props) {
 		super(props);
 		this.sliceList = [];
-		for (let slice of this.props.slices) {
+		for (let i=0; i<this.props.slices.length; i++) {
+			let slice = this.props.slices[i]
 			if (slice.blank) {
-				this.sliceList.push(<Slice key={Math.random()} />);
+				this.sliceList.push(<Slice key={i} />);
 				continue;
 			}
 			this.sliceList.push(
 				<Slice
-					key={Math.random()}
+					key={i}
 					onSelect={() => {
-						console.log(slice.logMsg);
+						// console.log(slice.logMsg);
 						this.props.func(slice.val);
 					}}
 				>

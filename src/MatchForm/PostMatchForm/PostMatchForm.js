@@ -36,8 +36,8 @@ export default class PostMatchForm extends Component {
 		}
 		return (
 			<React.Fragment>
-				<CommentInputs ref={this.cmtInputsRef} data={this.props.data} />
-				<CommentTextbox ref={this.cmtTxtboxRef} data={this.props.data} />
+				<CommentInputs ref={this.cmtInputsRef} data={this.props.data} loadData={this.props.loadData} />
+				<CommentTextbox ref={this.cmtTxtboxRef} data={this.props.data} loadData={this.props.loadData} />
 				<button
 					id='submit-btn'
 					onClick={this.callNext}
