@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 
 export default class OverallSection extends Component {
 	constructor(props) {
@@ -28,10 +28,9 @@ export default class OverallSection extends Component {
 		return parseInt(a);
 	}
 
-	render() {
+	render() { //<h1 className="comp">Overall</h1>
 		return (
-			<div className="analytics-section">
-				<h1 className="comp">Overall</h1>
+			<Fragment>
 				<table className="analyticsTable">
 					<thead>
 						<tr>
@@ -54,7 +53,7 @@ export default class OverallSection extends Component {
 						</tr>
 					</tbody>
 				</table>
-			</div>
+			</Fragment>
 		);
 	}
 }

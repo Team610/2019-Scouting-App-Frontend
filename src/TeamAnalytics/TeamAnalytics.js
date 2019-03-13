@@ -6,6 +6,7 @@ import PreGameSection from './PreGameSection/PreGameSection';
 import EndGameSection from './EndGameSection/EndGameSection';
 import DefenseSection from './DefenseSection/DefenseSection';
 import CommentsSection from './CommentsSection/CommentsSection';
+import Accordion from './CollapsibleContainer/Accordion';
 import './style.css';
 
 export default class TeamAnalytics extends Component {
@@ -94,16 +95,18 @@ export default class TeamAnalytics extends Component {
 		} else {
 			console.log(`loaded team ${this.state.teamNum}`);
 			return (
-				<div>
+				<Fragment>
 					<TeamSelect teamList={this.teamList} teamNum={this.state.teamNum} setTeamNum={this.setTeamNum} /><br />
 					<TeamAnalyticsHeader teamNum={this.state.teamNum} />
-					<OverallSection teamNum={this.state.teamNum} data={this.data} />
-					<CyclesSection teamNum={this.state.teamNum} data={this.data} />
-					<PreGameSection teamNum={this.state.teamNum} data={this.data} />
-					<EndGameSection teamNum={this.state.teamNum} data={this.data} />
-					<DefenseSection teamNum={this.state.teamNum} data={this.data} />
-					<CommentsSection teamNum={this.state.teamNum} data={this.data} />
-				</div>
+					<Accordion>
+						<OverallSection label="Overall" teamNum={this.state.teamNum} data={this.data} />
+						<CyclesSection label="Cycles" teamNum={this.state.teamNum} data={this.data} />
+						<PreGameSection label="Preloads" teamNum={this.state.teamNum} data={this.data} />
+						<EndGameSection label="Climbs" teamNum={this.state.teamNum} data={this.data} />
+						<DefenseSection label="Defense" teamNum={this.state.teamNum} data={this.data} />
+						<CommentsSection label="Comments" teamNum={this.state.teamNum} data={this.data} />
+					</Accordion>
+				</Fragment>
 			);
 		}
 	}
