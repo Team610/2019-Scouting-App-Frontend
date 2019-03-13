@@ -10,7 +10,7 @@ class RobotCamera extends Component {
 			review: false,
 			teamNum: undefined,
 			file: undefined,
-			view: 'front',
+			view: 'not_selected',
 			facing: 'FACING_MODES.ENVIRONMENT',
 			fileName: ''
 		};
@@ -19,6 +19,7 @@ class RobotCamera extends Component {
 		this.handleTeamNum = this.handleTeamNum.bind(this);
 
 		this.photoViews = [
+			{ id: "not_selected", label: "" },
 			{ id: "front", label: "Front" },
 			{ id: "isom", label: "Isometric" },
 			{ id: "side", label: "Side" },
@@ -52,6 +53,7 @@ class RobotCamera extends Component {
 			}
 		});
 		res = await res.json();
+		alert(res.success ? 'Successfully submitted!' : 'Could not submit, please try again.');
 		res.success ? console.log('success') : console.log('fail');
 	}
 
@@ -90,8 +92,16 @@ class RobotCamera extends Component {
 				<br />
 				<button
 					onClick={() => {
-						window.confirm(`Submit ${this.state.view} photo for team ${this.state.teamNum}?`) &&
-							this.submitPicture();
+						if (!this.state.teamNum) {
+							alert('Team number not set!');
+						} else if (this.state.view === 'not_selected') {
+							alert('View not selected!');
+						} else if (!this.state.file) {
+							alert('No photo taken!');
+						} else {
+							window.confirm(`Submit ${this.state.view} photo for team ${this.state.teamNum}?`) &&
+								this.submitPicture();
+						}
 					}}
 				>
 					Submit
