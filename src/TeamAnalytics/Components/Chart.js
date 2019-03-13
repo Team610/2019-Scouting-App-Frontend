@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Bar } from 'react-chartjs-2';
 
-class Chart extends Component {
+export default class Chart extends Component {
 	render() {
-		//Chart data requires deep copying!! Data gets replaced for some bizarre reason
+		//TODO: Chart data requires deep copying!! Data gets replaced for some bizarre reason
 		return (
 			<div className="chart">
 				<Bar
@@ -29,5 +29,3 @@ class Chart extends Component {
 		)
 	}
 }
-
-export default Chart;

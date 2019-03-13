@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-class RobotPreload extends Component {
+export default class RobotPreload extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -58,5 +58,3 @@ class RobotPreload extends Component {
 		);
 	}
 }
-
-export default RobotPreload;

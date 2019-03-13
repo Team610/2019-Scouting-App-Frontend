@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {isEqual} from './Util';
 
 export default class AnalyticsTable extends Component {
 	constructor(props) {
@@ -7,7 +8,6 @@ export default class AnalyticsTable extends Component {
 			headers: this.populateHeaders(),
 			rows: this.populateRows()
 		};
-		this.isEqual = this.isEqual.bind(this);
 		this.populateHeaders = this.populateHeaders.bind(this);
 		this.populateRows = this.populateRows.bind(this);
 	}
@@ -31,44 +31,14 @@ export default class AnalyticsTable extends Component {
 		return rows;
 	}
 	componentDidUpdate(prevProps) {
-		if (!this.isEqual(this.props.headers, prevProps.headers)) {
+		if (!isEqual(this.props.headers, prevProps.headers)) {
 			this.setState({ headers: this.populateHeaders() });
 		}
-		if (!this.isEqual(this.props.rows, prevProps.rows)) {
+		if (!isEqual(this.props.rows, prevProps.rows)) {
 			this.setState({ rows: this.populateRows() });
 		}
 	}
-	isEqual(a, b) {
-		const aObj = typeof a === 'object';
-		const bObj = typeof b === 'object';
-		const aArr = Array.isArray(a);
-		const bArr = Array.isArray(b);
-		if (aObj !== bObj || aArr !== bArr) {
-			return false;
-		} else if (!aObj && !bObj) {
-			return a === b;
-		} else if (!aArr && !bArr) {
-			let aKeys = Object.keys(a);
-			for (let aKey of aKeys) {
-				if (b[aKey] === undefined || !this.isEqual(a[aKey], b[aKey])) {
-					return false;
-				}
-				return true;
-			}
-		} else {
-			let aLen = a.length;
-			if (b.length !== aLen) {
-				return false;
-			} else {
-				for (let i = 0; i < aLen; i++) {
-					if (!this.isEqual(a[i], b[i])) {
-						return false;
-					}
-				}
-				return true;
-			}
-		}
-	}
+	
 	render() {
 		return (
 			<table className="analyticsTable">

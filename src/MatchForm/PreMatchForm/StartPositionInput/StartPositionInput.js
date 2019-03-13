@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-class StartPositionInput extends Component {
+export default class StartPositionInput extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -37,5 +37,3 @@ class StartPositionInput extends Component {
 		);
 	}
 }
-
-export default StartPositionInput;

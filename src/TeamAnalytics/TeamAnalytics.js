@@ -6,6 +6,7 @@ import PreGameSection from './PreGameSection/PreGameSection';
 import EndGameSection from './EndGameSection/EndGameSection';
 import DefenseSection from './DefenseSection/DefenseSection';
 import CommentsSection from './CommentsSection/CommentsSection';
+import PhotoSection from './PhotoSection/PhotoSection';
 import Accordion from './CollapsibleContainer/Accordion';
 import './style.css';
 
@@ -15,98 +16,96 @@ export default class TeamAnalytics extends Component {
 		this.state = {
 			teamNum: -1,
 			dataAvailable: false,
-			teamListAvailable: false
+			teamListAvailable: false,
+			status: 'Team list loading...' //TODO: separate status codes and messages
 		}
 		this.setTeamNum = this.setTeamNum.bind(this);
 		this.getTeamList = this.getTeamList.bind(this);
+		this.collectedData = {};
 	}
 	async componentDidMount() {
 		this._isMounted = true;
 		this.teamList = await this.getTeamList();
 		if (this._isMounted)
-			this.setState({ teamListAvailable: true });
+			this.setState({ status: 'Which team?' });
 	}
 	componentWillUnmount() {
 		this._isMounted = false;
 	}
 	async setTeamNum(num) {
-		if (num !== this.state.teamNum) {
-			if (this._isMounted)
-				this.setState({ teamNum: num, dataAvailable: false });
+		if (num === this.state.teamNum) {
+			return;
+		}
+		if (this.collectedData[num] === undefined) {
+			//If this team's data hasn't been collected yet...
+			if (this._isMounted) {
+				this.setState({ teamNum: num, status: `Team ${num} data loading...` });
+			} else {
+				return;
+			}
 			let res = await fetch(`/api/v1/stats/team/${num}/agg`);
 			if (!res.ok) {
 				if (this._isMounted)
-					this.setState({ err: new Error("Could not fetch team data. Please try again.") });
+					this.setState({ status: new Error("Could not fetch team data. Please try again.") });
 				return;
 			}
 			res = await res.json();
 			this.data = res[num];
-			console.log(this.data);
-			console.log(`set to team ${this.state.teamNum}`);
-			if (this._isMounted)
-				this.setState({ dataAvailable: true });
+			console.log(`Fetched team ${num}`);
+			if (this._isMounted) {
+				this.collectedData[num] = this.data;
+				this.setState({ teamNum: num, status: 'ok' });
+			}
+		} else {
+			if (this._isMounted) {
+				console.log(`Team ${num} has been pulled before`);
+				this.data = this.collectedData[num];
+				this.setState({ teamNum: num });
+			} else {
+				return;
+			}
 		}
 	}
 	async getTeamList() {
 		let res = await fetch(`/api/v1/event/getEventTeams`);
 		if (!res.ok) {
 			if (this._isMounted)
-				this.setState({ err: new Error("Could not fetch team list. Please try again.") });
+				this.setState({ status: new Error("Could not fetch team list. Please try again.") });
 			return;
 		}
 		res = await res.json();
-		console.log("got team list");
 		return res;
 	}
 	render() {
-		if (this.state.err) {
-			console.log(this.state.err.message);
+		if (this.state.status instanceof Error) {
+			console.log(this.state.err.stack);
 			return (
 				<div>
 					<p>Could not load data.</p>
 					<p>{this.state.err.message}</p>
 				</div>
 			);
-		}
-		if (!this.state.teamListAvailable) {
-			console.log('loading team list');
-			return (
-				<div>
-					Loading...
-				</div>
-			);
-		}
-		if (this.state.teamNum === -1) {
-			console.log('no team selected');
-			return (
-				<div>
-					<TeamSelect teamList={this.teamList} setTeamNum={this.setTeamNum} />
-					<p>Please select a team.</p>
-				</div>
-			);
-		} else if (!this.state.dataAvailable) {
-			console.log(`loading team ${this.state.teamNum}`);
-			return (
-				<div>
-					<TeamSelect teamList={this.teamList} setTeamNum={this.setTeamNum} /><br />
-					Data for Team {this.state.teamNum} loading...
-				</div>
-			);
 		} else {
-			console.log(`loaded team ${this.state.teamNum}`);
-			return (
-				<Fragment>
-					<TeamSelect teamList={this.teamList} teamNum={this.state.teamNum} setTeamNum={this.setTeamNum} /><br />
-					<TeamAnalyticsHeader teamNum={this.state.teamNum} />
+			return ( //TODO: find a more consistent method of showing the status
+				<div>
+					{this.state.status !== 'Team list loading...' &&
+						<TeamSelect
+							teamList={this.teamList}
+							setTeamNum={this.setTeamNum}
+							teamNum={this.state.teamNum} />}
+					<TeamAnalyticsHeader
+						teamNum={this.state.teamNum}
+						text={this.state.status !== 'ok' && this.state.status} />
 					<Accordion>
-						<OverallSection label="Overall" teamNum={this.state.teamNum} data={this.data} />
-						<CyclesSection label="Cycles" teamNum={this.state.teamNum} data={this.data} />
-						<PreGameSection label="Preloads" teamNum={this.state.teamNum} data={this.data} />
-						<EndGameSection label="Climbs" teamNum={this.state.teamNum} data={this.data} />
-						<DefenseSection label="Defense" teamNum={this.state.teamNum} data={this.data} />
-						<CommentsSection label="Comments" teamNum={this.state.teamNum} data={this.data} />
+						{this.data ? <OverallSection label="Overall" teamNum={this.state.teamNum} data={this.data} /> : null}
+						{this.data ? <PhotoSection label="Photos" teamNum={this.state.teamNum} /> : null}
+						{this.data ? <CyclesSection label="Cycles" teamNum={this.state.teamNum} data={this.data} /> : null}
+						{this.data ? <PreGameSection label="Preloads" teamNum={this.state.teamNum} data={this.data} /> : null}
+						{this.data ? <EndGameSection label="Climbs" teamNum={this.state.teamNum} data={this.data} /> : null}
+						{this.data ? <DefenseSection label="Defense" teamNum={this.state.teamNum} data={this.data} /> : null}
+						{this.data ? <CommentsSection label="Comments" teamNum={this.state.teamNum} data={this.data} /> : null}
 					</Accordion>
-				</Fragment>
+				</div>
 			);
 		}
 	}

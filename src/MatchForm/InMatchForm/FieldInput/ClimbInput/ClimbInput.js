@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import Modal from "react-responsive-modal";
 
-class ClimbInput extends Component {
+export default class ClimbInput extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { open: false };
@@ -63,5 +63,3 @@ class ClimbInput extends Component {
 		);
 	}
 }
-
-export default ClimbInput;

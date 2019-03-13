@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './style.css';
 
-class SortableTable extends Component {
+export default class SortableTable extends Component {
 	constructor(props) {
 		super(props);
 		//util funcs
@@ -276,5 +276,3 @@ class SortableTable extends Component {
 		);
 	}
 }
-
-export default SortableTable;

@@ -1,95 +1,94 @@
 import React, { Component, Fragment } from "react";
 import Chart from '../Components/Chart';
+import { validFlt } from '../Components/Util';
 import MDButton from '../Components/MatchDataButton';
 import ATable from '../Components/AnalyticsTable';
 
 export default class CyclesSection extends Component {
 	constructor(props) {
 		super(props);
-		//util funcs
-		this.validFlt = this.validFlt.bind(this);
-		this.validInt = this.validInt.bind(this);
-
 		this.getChartData = this.getChartData.bind(this);
 		this.flipState = this.flipState.bind(this);
 		this.teleop = this.teleop.bind(this);
 		this.sandstorm = this.sandstorm.bind(this);
+		this.populateHeaders = this.populateHeaders.bind(this);
+		this.populateRows = this.populateRows.bind(this);
 
-		this.state = { gamePeriod: "to", chartLoaded: false, chartOn: false };
-		this.headers = ["Level", "Hatch", "Cargo"];
-		this.toRows = [
-			[
-				3,
-				this.validFlt(this.props.data.avg_time_to_hatch_lv3) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_to_hatch_lv3) + ' s',
-				this.validFlt(this.props.data.avg_time_to_cargo_lv3) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_to_cargo_lv3) + ' s'
-			],
-			[
-				2,
-				this.validFlt(this.props.data.avg_time_to_hatch_lv2) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_to_hatch_lv2) + ' s',
-				this.validFlt(this.props.data.avg_time_to_cargo_lv2) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_to_cargo_lv2) + ' s'
-			],
-			[
-				1,
-				this.validFlt(this.props.data.avg_time_to_hatch_lv1) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_to_hatch_lv1) + ' s',
-				this.validFlt(this.props.data.avg_time_to_cargo_lv1) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_to_cargo_lv1) + ' s'
-			],
-			[
-				'S',
-				this.validFlt(this.props.data.avg_time_to_hatch_lvS) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_to_hatch_lvS) + ' s',
-				this.validFlt(this.props.data.avg_time_to_cargo_lvS) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_to_cargo_lvS) + ' s'
-			]
-		];
-		this.ssRows = [
-			[
-				3,
-				this.validFlt(this.props.data.avg_time_ss_hatch_lv3) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_ss_hatch_lv3) + ' s',
-				this.validFlt(this.props.data.avg_time_ss_cargo_lv3) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_ss_cargo_lv3) + ' s'
-			],
-			[
-				2,
-				this.validFlt(this.props.data.avg_time_ss_hatch_lv2) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_ss_hatch_lv2) + ' s',
-				this.validFlt(this.props.data.avg_time_ss_cargo_lv2) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_ss_cargo_lv2) + ' s'
-			],
-			[
-				1,
-				this.validFlt(this.props.data.avg_time_ss_hatch_lv1) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_ss_hatch_lv1) + ' s',
-				this.validFlt(this.props.data.avg_time_ss_cargo_lv1) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_ss_cargo_lv1) + ' s'
-			],
-			[
-				'S',
-				this.validFlt(this.props.data.avg_time_ss_hatch_lvS) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_ss_hatch_lvS) + ' s',
-				this.validFlt(this.props.data.avg_time_ss_cargo_lvS) + ' @ ' +
-				this.validFlt(this.props.data.avg_num_ss_cargo_lvS) + ' s'
-			]
-		];
-	}
-	//utils
-	validFlt(num) {
-		let a = num;
-		if (Number.isNaN(num) || !num) a = 0;
-		return parseFloat(Math.round(a * 1000) / 1000).toFixed(3);
-	}
-	validInt(int) {
-		let a = int;
-		if (Number.isNaN(int) || !int) a = 0;
-		return parseInt(a);
+		this.state = { gamePeriod: "to", chartLoaded: false, chartOn: false, headers: this.populateHeaders(), rows: this.populateRows() };
 	}
 
+	populateHeaders() {
+		return ["Level", "Hatch", "Cargo"];
+	}
+	populateRows() {
+		return {
+			to: [
+				[
+					3,
+					validFlt(this.props.data.avg_time_to_hatch_lv3) + ' @ ' +
+					validFlt(this.props.data.avg_num_to_hatch_lv3) + ' s',
+					validFlt(this.props.data.avg_time_to_cargo_lv3) + ' @ ' +
+					validFlt(this.props.data.avg_num_to_cargo_lv3) + ' s'
+				],
+				[
+					2,
+					validFlt(this.props.data.avg_time_to_hatch_lv2) + ' @ ' +
+					validFlt(this.props.data.avg_num_to_hatch_lv2) + ' s',
+					validFlt(this.props.data.avg_time_to_cargo_lv2) + ' @ ' +
+					validFlt(this.props.data.avg_num_to_cargo_lv2) + ' s'
+				],
+				[
+					1,
+					validFlt(this.props.data.avg_time_to_hatch_lv1) + ' @ ' +
+					validFlt(this.props.data.avg_num_to_hatch_lv1) + ' s',
+					validFlt(this.props.data.avg_time_to_cargo_lv1) + ' @ ' +
+					validFlt(this.props.data.avg_num_to_cargo_lv1) + ' s'
+				],
+				[
+					'S',
+					validFlt(this.props.data.avg_time_to_hatch_lvS) + ' @ ' +
+					validFlt(this.props.data.avg_num_to_hatch_lvS) + ' s',
+					validFlt(this.props.data.avg_time_to_cargo_lvS) + ' @ ' +
+					validFlt(this.props.data.avg_num_to_cargo_lvS) + ' s'
+				]
+			],
+			ss: [
+				[
+					3,
+					validFlt(this.props.data.avg_time_ss_hatch_lv3) + ' @ ' +
+					validFlt(this.props.data.avg_num_ss_hatch_lv3) + ' s',
+					validFlt(this.props.data.avg_time_ss_cargo_lv3) + ' @ ' +
+					validFlt(this.props.data.avg_num_ss_cargo_lv3) + ' s'
+				],
+				[
+					2,
+					validFlt(this.props.data.avg_time_ss_hatch_lv2) + ' @ ' +
+					validFlt(this.props.data.avg_num_ss_hatch_lv2) + ' s',
+					validFlt(this.props.data.avg_time_ss_cargo_lv2) + ' @ ' +
+					validFlt(this.props.data.avg_num_ss_cargo_lv2) + ' s'
+				],
+				[
+					1,
+					validFlt(this.props.data.avg_time_ss_hatch_lv1) + ' @ ' +
+					validFlt(this.props.data.avg_num_ss_hatch_lv1) + ' s',
+					validFlt(this.props.data.avg_time_ss_cargo_lv1) + ' @ ' +
+					validFlt(this.props.data.avg_num_ss_cargo_lv1) + ' s'
+				],
+				[
+					'S',
+					validFlt(this.props.data.avg_time_ss_hatch_lvS) + ' @ ' +
+					validFlt(this.props.data.avg_num_ss_hatch_lvS) + ' s',
+					validFlt(this.props.data.avg_time_ss_cargo_lvS) + ' @ ' +
+					validFlt(this.props.data.avg_num_ss_cargo_lvS) + ' s'
+				]
+			]
+		};
+	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.teamNum !== this.props.teamNum && this._isMounted)
+			this.setState({ rows: this.populateRows(), chartLoaded: false }); //TODO: Find a way to hold onto chart data?
+	}
 	componentDidMount() {
 		this._isMounted = true;
 	}
@@ -102,7 +101,7 @@ export default class CyclesSection extends Component {
 			this.setState({ chartOn: false });
 		else {
 			this.setState({ chartOn: true });
-			if (!this.state.chartLoaded)
+			if (!this.state.chartLoaded && this._isMounted)
 				await this.getChartData();
 		}
 	}
@@ -256,15 +255,15 @@ export default class CyclesSection extends Component {
 				<MDButton flipState={this.flipState} />
 				{!this.state.chartOn && (
 					<ATable
-						headers={this.headers}
-						rows={this[`${this.state.gamePeriod}Rows`]} />
+						headers={this.state.headers}
+						rows={this.state.rows[this.state.gamePeriod]} />
 				)}
 				{this.state.chartOn && (
 					this.state.chartLoaded ? (
 						<Chart
 							chartData={this[`${this.state.gamePeriod}ChartData`]}
 							team={this.props.teamNum}
-							title={`${this.state.gamePeriod.toUpperCase} Cycles: `} />) :
+							title={`${this.state.gamePeriod.toUpperCase()} Cycles: `} />) :
 						<p>Chart loading...</p>
 				)}
 			</Fragment>

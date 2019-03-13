@@ -4,7 +4,7 @@ import AccordionSection from './AccordionSection';
 export default class Accordion extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { openSections: {} };
+		this.state = { openSections: { Overall: true } };
 	}
 	handleClick = label => {
 		let openList = this.state.openSections;
@@ -14,11 +14,11 @@ export default class Accordion extends Component {
 		});
 	}
 	render() {
-		const children = this.props.children;
 		const openSections = this.state.openSections;
-		return (
-			<div>
-				{children.map(child => (
+		let sections = [];
+		for (let child of this.props.children) {
+			if (child)
+				sections.push(
 					<AccordionSection
 						key={child.props.label}
 						isOpen={!!openSections[child.props.label]}
@@ -27,7 +27,11 @@ export default class Accordion extends Component {
 					>
 						{child.props.children ? child.props.children : child}
 					</AccordionSection>
-				))}
+				);
+		}
+		return (
+			<div>
+				{sections}
 			</div>
 		);
 	}

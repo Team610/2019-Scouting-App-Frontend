@@ -3,7 +3,7 @@ import Camera from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import "./robotPhoto.css";
 
-class RobotCamera extends Component {
+export default class RobotCamera extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -118,5 +118,3 @@ class RobotCamera extends Component {
 		);
 	}
 }
-
-export default RobotCamera;

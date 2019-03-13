@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class TeamInput extends Component {
+export default class TeamInput extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -100,5 +100,3 @@ class TeamInput extends Component {
 		}
 	}
 }
-
-export default TeamInput;

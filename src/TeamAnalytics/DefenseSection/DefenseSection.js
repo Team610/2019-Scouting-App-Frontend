@@ -1,21 +1,23 @@
 import React, { Component, Fragment } from "react";
 import Chart from '../Components/Chart';
+import { validFlt, validInt } from '../Components/Util';
 import MDButton from '../Components/MatchDataButton';
 import ATable from '../Components/AnalyticsTable';
 
 export default class DefenseSection extends Component {
 	constructor(props) {
 		super(props);
-		//util funcs
-		this.validFlt = this.validFlt.bind(this);
-		this.validInt = this.validInt.bind(this);
-
 		this.getChartData = this.getChartData.bind(this);
 		this.flipState = this.flipState.bind(this);
+		this.populateHeaders = this.populateHeaders.bind(this);
+		this.populateRows = this.populateRows.bind(this);
+		this.state = { chartLoaded: false, chartOn: false, headers: this.populateHeaders(), rows: this.populateRows() };
+	}
 
-		this.state = { chartLoaded: false, chartOn: false };
-		this.headers = ["", "Total Time", "Matches"];
-		this.rows = [];
+	populateHeaders() {
+		return ["", "Total Time", "Matches"];
+	}
+	populateRows() {
 		let arr = [
 			{
 				label: "Total",
@@ -38,28 +40,23 @@ export default class DefenseSection extends Component {
 				name: "_driving_around"
 			}
 		];
+		let rows = [];
 		for (let val of arr) {
 			let row = [];
 			row.push(
 				val.label,
-				this.validFlt(this.props.data[`tot_time_def${val.name}`]),
-				this.validInt(this.props.data[`tot_matches_def${val.name}`])
+				validFlt(this.props.data[`tot_time_def${val.name}`]),
+				validInt(this.props.data[`tot_matches_def${val.name}`])
 			);
-			this.rows.push(row);
+			rows.push(row);
 		}
-	}
-	//utils
-	validFlt(num) {
-		let a = num;
-		if (Number.isNaN(num) || !num) a = 0;
-		return parseFloat(Math.round(a * 1000) / 1000).toFixed(3);
-	}
-	validInt(int) {
-		let a = int;
-		if (Number.isNaN(int) || !int) a = 0;
-		return parseInt(a);
+		return rows;
 	}
 
+	componentDidUpdate(prevProps) {
+		if (prevProps.teamNum !== this.props.teamNum && this._isMounted)
+			this.setState({ rows: this.populateRows(), chartLoaded: false });
+	}
 	componentDidMount() {
 		this._isMounted = true;
 	}
@@ -68,11 +65,11 @@ export default class DefenseSection extends Component {
 	}
 
 	async flipState() {
-		if (this.state.chartOn)
+		if (this.state.chartOn) //TODO: where to put this._isMounted check?
 			this.setState({ chartOn: false });
 		else {
 			this.setState({ chartOn: true });
-			if (!this.state.chartLoaded)
+			if (!this.state.chartLoaded && this._isMounted)
 				await this.getChartData();
 		}
 	}
@@ -141,8 +138,8 @@ export default class DefenseSection extends Component {
 			<Fragment>
 				{!this.state.chartOn && (
 					<ATable
-						headers={this.headers}
-						rows={this.rows} />
+						headers={this.state.headers}
+						rows={this.state.rows} />
 				)}
 				<MDButton flipState={this.flipState} />
 				{this.state.chartOn && (

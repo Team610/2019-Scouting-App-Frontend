@@ -4,7 +4,7 @@ class TeamAnalyticsHeader extends Component {
     render() {
         return (
             <div className="sticky teamPageHeader" id="teamPageHeader">
-                <h2>Team #{this.props.teamNum}</h2>
+                <h2>{this.props.teamNum > 0 ? `Team #${this.props.teamNum}` : this.props.text}</h2>
             </div>
         );
     }

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-class CommentsSection extends Component {
+export default class CommentsSection extends Component {
 	constructor(props) {
 		super(props);
 		//util funcs
@@ -105,5 +105,3 @@ class CommentsSection extends Component {
 		);
 	}
 }
-
-export default CommentsSection;

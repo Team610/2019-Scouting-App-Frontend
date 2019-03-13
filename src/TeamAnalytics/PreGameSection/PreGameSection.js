@@ -1,45 +1,41 @@
 import React, { Component, Fragment } from 'react';
 import Chart from '../Components/Chart';
+import { validInt } from '../Components/Util';
 import MDButton from '../Components/MatchDataButton';
 import ATable from '../Components/AnalyticsTable';
 
 export default class PreGameSection extends Component {
 	constructor(props) {
 		super(props);
-		//util funcs
-		this.validFlt = this.validFlt.bind(this);
-		this.validInt = this.validInt.bind(this);
-
 		this.getChartData = this.getChartData.bind(this);
 		this.flipState = this.flipState.bind(this);
+		this.populateHeaders = this.populateHeaders.bind(this);
+		this.populateRows = this.populateRows.bind(this);
+		this.state = { chartLoaded: false, chartOn: false, headers: this.populateHeaders(), rows: this.populateRows() };
+	}
 
-		this.state = { chartLoaded: false, chartOn: false };
-		this.headers = ["", "Hatches", "Cargo"];
-		this.rows = [
+	populateHeaders() {
+		return ["", "Hatches", "Cargo"];
+	}
+	populateRows() {
+		return [
 			[
 				"Ship Preload",
-				this.validInt(this.props.data.tot_ship_preload.hatch),
-				this.validInt(this.props.data.tot_ship_preload.cargo)
+				validInt(this.props.data.tot_ship_preload.hatch),
+				validInt(this.props.data.tot_ship_preload.cargo)
 			],
 			[
 				"Robot Preload",
-				this.validInt(this.props.data.tot_robot_preload.hatch),
-				this.validInt(this.props.data.tot_robot_preload.cargo)
+				validInt(this.props.data.tot_robot_preload.hatch),
+				validInt(this.props.data.tot_robot_preload.cargo)
 			]
 		];
 	}
-	//utils
-	validFlt(num) {
-		let a = num;
-		if (Number.isNaN(num) || !num) a = 0;
-		return parseFloat(Math.round(a * 1000) / 1000).toFixed(3);
-	}
-	validInt(int) {
-		let a = int;
-		if (Number.isNaN(int) || !int) a = 0;
-		return parseInt(a);
-	}
 
+	componentDidUpdate(prevProps) {
+		if (prevProps.teamNum !== this.props.teamNum && this._isMounted)
+			this.setState({ rows: this.populateRows(), chartLoaded: false });
+	}
 	componentDidMount() {
 		this._isMounted = true;
 	}
@@ -52,7 +48,7 @@ export default class PreGameSection extends Component {
 			this.setState({ chartOn: false });
 		else {
 			this.setState({ chartOn: true });
-			if (!this.state.chartLoaded)
+			if (!this.state.chartLoaded && this._isMounted)
 				await this.getChartData();
 		}
 	}
@@ -113,8 +109,8 @@ export default class PreGameSection extends Component {
 				<MDButton flipState={this.flipState} />
 				{!this.state.chartOn && (
 					<ATable
-						headers={this.headers}
-						rows={this.rows} />
+						headers={this.state.headers}
+						rows={this.state.rows} />
 				)}
 				{this.state.chartOn && (
 					this.state.chartLoaded ? (

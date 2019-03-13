@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-class MatchFormHeader extends Component {
+export default class MatchFormHeader extends Component {
 	render() {
 		return (
 			<Fragment>
@@ -9,5 +9,3 @@ class MatchFormHeader extends Component {
 		);
 	}
 }
-
-export default MatchFormHeader;

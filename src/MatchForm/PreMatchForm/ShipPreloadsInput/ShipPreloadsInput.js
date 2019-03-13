@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-class ShipPreload extends Component {
+export default class ShipPreload extends Component {
 	constructor(props) {
 		super(props);
 		let cargoCount, hatchCount;
@@ -63,5 +63,3 @@ class ShipPreload extends Component {
 		);
 	}
 }
-
-export default ShipPreload;
