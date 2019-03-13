@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import TeamAnalyticsHeader from './TeamAnalyticsHeader/TeamAnalyticsHeader';
 import OverallSection from './OverallSection/OverallSection';
 import CyclesSection from './CyclesSection/CyclesSection';
@@ -125,10 +125,10 @@ class TeamSelect extends Component {
 			);
 		}
 		return (
-			<React.Fragment>
+			<Fragment>
 				<h2>Teams</h2>
 				<ul>{liList}</ul>
-			</React.Fragment>
+			</Fragment>
 		);
 	}
 }

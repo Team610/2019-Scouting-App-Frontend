@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import CommentCheckboxInput from './CommentCheckboxInput';
 import CommentRadioInput from './CommentRadioInput';
 
@@ -26,7 +26,7 @@ export default class CommentInputs extends Component {
 	}
 	render() {
 		return (
-			<React.Fragment>
+			<Fragment>
 				<CommentRadioInput className="comments" inputId="climb_state"
 					choices={
 						[
@@ -67,7 +67,7 @@ export default class CommentInputs extends Component {
 					ref={this.dropCboxRef}
 					data={this.props.data}
 					loadData={this.props.loadData} />
-			</React.Fragment>
+			</Fragment>
 		);
 	}
 }

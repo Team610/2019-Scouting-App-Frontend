@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component, Fragment } from 'react';
 
 class MatchFormHeader extends Component {
-    render() {
-        return(
-            <React.Fragment>
-                <p className="subheader">Match {this.props.matchNum} &nbsp; &nbsp;Team {this.props.teamNum}</p>
-            </React.Fragment>
-        );
-    }
+	render() {
+		return (
+			<Fragment>
+				<p className="subheader">Match {this.props.matchNum} &nbsp; &nbsp;Team {this.props.teamNum}</p>
+			</Fragment>
+		);
+	}
 }
 
 export default MatchFormHeader;

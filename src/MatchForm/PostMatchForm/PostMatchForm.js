@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import CommentInputs from './CommentInputs/CommentInputs';
 import CommentTextbox from './CommentTextbox/CommentTextbox';
 import SubmitError from '../SubmitError';
@@ -35,7 +35,7 @@ export default class PostMatchForm extends Component {
 			float: 'right'
 		}
 		return (
-			<React.Fragment>
+			<Fragment>
 				<CommentInputs ref={this.cmtInputsRef} data={this.props.data} loadData={this.props.loadData} />
 				<CommentTextbox ref={this.cmtTxtboxRef} data={this.props.data} loadData={this.props.loadData} />
 				<button
@@ -54,7 +54,7 @@ export default class PostMatchForm extends Component {
 				>
 					Discard
 				</button>
-			</React.Fragment>
+			</Fragment>
 		);
 	}
 	async callNext() {

@@ -23,6 +23,7 @@ class TeamInput extends Component {
 	}
 
 	selectTeam(teamNum, pos) {
+		this.props.updateTeamNum(teamNum);
 		this.setState({
 			value: teamNum,
 			alliance: pos < 3 ? 'red' : 'blue'
@@ -30,12 +31,27 @@ class TeamInput extends Component {
 	}
 	async getTeams() {
 		try {
+			console.log(`/api/v1/matches/${this.props.data.matchNum}/teams`);
 			let teamListRaw = await fetch(`/api/v1/matches/${this.props.data.matchNum}/teams`);
-			this.teamList = await teamListRaw.json();
-			this.setState({
-				teamsLoaded: true
-			});
-			this.renderTeamBtns('');
+			if (teamListRaw.ok) {
+				this.teamList = await teamListRaw.json();
+				if (this.teamList.success === false) {
+					this.setState({
+						teamsLoaded: false,
+						cannotLoad: true
+					});
+				} else {
+					this.setState({
+						teamsLoaded: true
+					});
+				}
+				this.renderTeamBtns('');
+			} else {
+				this.setState({
+					teamsLoaded: false,
+					cannotLoad: true
+				})
+			}
 		} catch (err) {
 			console.log("could not load teams");
 			console.log(err.stack);
@@ -72,7 +88,7 @@ class TeamInput extends Component {
 		} else if (this.state.cannotLoad) {
 			return (
 				<div>
-					Cannot load team list...
+					Cannot load team list.
 				</div>
 			)
 		} else {

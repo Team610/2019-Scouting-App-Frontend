@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 class StartPositionInput extends Component {
 	constructor(props) {
@@ -22,7 +22,7 @@ class StartPositionInput extends Component {
 
 	render() {
 		return (
-			<React.Fragment>
+			<Fragment>
 				<p className="nonSelectable" style={{visibility:'hidden'}}>Hidden text</p>
 				<p className="subheader"> Select Start Position  </p>
 				<label className="comment">
@@ -33,7 +33,7 @@ class StartPositionInput extends Component {
 					<input checked={this.state.value === "true"} type="radio" name="startPos" value="true" onChange={this.handleChange}></input>
 					Level 2
             	</label><br />
-			</React.Fragment>
+			</Fragment>
 		);
 	}
 }

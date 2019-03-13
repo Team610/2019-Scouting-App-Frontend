@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component, Fragment } from "react";
 import { BrowserRouter as Router, Route, NavLink, Switch } from "react-router-dom";
 import Loadable from "react-loadable";
 import './App.css';
@@ -7,7 +7,7 @@ import Logout from './Auth/Logout';
 
 const googleClientId = "609299116953-at08rh33j3ggljmn33atjpp4uaqunc0s.apps.googleusercontent.com";
 
-export default class App extends React.Component {
+export default class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { //TODO: make authenticated information persistent
@@ -39,24 +39,27 @@ export default class App extends React.Component {
 				'Content-Type': 'application/json'
 			}
 		}).then(res => {
-			res.json().then(user => {
-				if (user.role.low >= 0) {
-					user.role = user.role.low;
-				}
-				if (user.role >= 0) {
-					sessionStorage.setItem('user', JSON.stringify(user));
-					this.setState({
-						user: user,
-						isAuth: true
-					});
-				} else {
-					sessionStorage.removeItem('user');
-					this.setState({
-						user: null,
-						isAuth: true
-					});
-				}
-			});
+			console.log(res);
+			if (res.ok) {
+				res.json().then(user => {
+					if (user.role.low >= 0) {
+						user.role = user.role.low;
+					}
+					if (user.role >= 0) {
+						sessionStorage.setItem('user', JSON.stringify(user));
+						this.setState({
+							user: user,
+							isAuth: true
+						});
+					} else {
+						sessionStorage.removeItem('user');
+						this.setState({
+							user: null,
+							isAuth: true
+						});
+					}
+				});
+			}
 		});
 	}
 	onLoginFail = (err) => {
@@ -76,18 +79,18 @@ export default class App extends React.Component {
 	render() {
 		if (!this.state.isAuth) {
 			return (
-				<React.Fragment>
+				<Fragment>
 					<p>Please log in</p>
 					<Login googleResponse={this.googleResponse} onFail={this.onLoginFail} clientId={googleClientId} />
-				</React.Fragment>
+				</Fragment>
 			);
 		} else {
 			if (this.state.user === null || this.state.user === undefined) {
 				return (
-					<React.Fragment>
+					<Fragment>
 						<p>Unable to log in</p>
 						<Logout onLogoutSuccess={this.logout} />
-					</React.Fragment>
+					</Fragment>
 				);
 			}
 			if (this.state.user.role === 1) {
@@ -114,7 +117,7 @@ export default class App extends React.Component {
 }
 
 const Home = () => <h2>Home</h2>;
-class Loading extends React.Component {
+class Loading extends Component {
 	render() {
 		// console.log(this.props);
 		if (this.props.error) {
@@ -215,7 +218,7 @@ const OverallTable = Loadable({
 });
 
 const RobotPhotos = Loadable({
-	loader: () => import("./RobotPhotos/Camera/Photo"),
+	loader: () => import("./RobotPhotos/Photo"),
 	loading: Loading
 });
 

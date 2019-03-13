@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Modal from "react-responsive-modal";
 
 class ClimbInput extends Component {
@@ -51,7 +51,7 @@ class ClimbInput extends Component {
 
 	render() {
 		return (
-			<React.Fragment>
+			<Fragment>
 				<Modal open={this.state.open} onClose={this.onCloseModal} center>
 					<br />
 					<button style={{ margin: 5, width: 100, height: 50 }} onClick={() => { this.onCloseModal(3) }}>Level 3</button><br />
@@ -59,7 +59,7 @@ class ClimbInput extends Component {
 					<button style={{ margin: 5, width: 100, height: 50 }} onClick={() => { this.onCloseModal(1) }}>Level 1</button><br />
 					<button style={{ margin: 5, width: 100, height: 50 }} onClick={() => { this.onCloseModal(0) }}>Level 0</button><br />
 				</Modal>
-			</React.Fragment>
+			</Fragment>
 		);
 	}
 }

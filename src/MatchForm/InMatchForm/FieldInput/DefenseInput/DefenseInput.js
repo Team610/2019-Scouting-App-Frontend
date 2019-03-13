@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Modal from "react-responsive-modal";
 
 class DefenseInput extends Component {
@@ -50,22 +50,22 @@ class DefenseInput extends Component {
 		let btnArr = [];
 		for (let type of this.defTypes) {
 			btnArr.push(
-				<React.Fragment key={type.id}>
+				<Fragment key={type.id}>
 					<button
 						style={btnStyle}
 						onClick={() => { this.onCloseModal(type.id) }}>
 						{type.label}
 					</button><br />
-				</React.Fragment>
+				</Fragment>
 			);
 		}
 		return (
-			<React.Fragment>
+			<Fragment>
 				<Modal open={this.state.open} onClose={this.onCloseModal} center>
 					<br />
 					{btnArr}
 				</Modal>
-			</React.Fragment>
+			</Fragment>
 		);
 	}
 }

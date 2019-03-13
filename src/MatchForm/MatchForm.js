@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import SubmitError from './SubmitError';
 import { Redirect, Prompt } from 'react-router';
 import MatchFormHeader from './MatchFormHeader/MatchFormHeader';
@@ -181,7 +181,7 @@ export default class MatchForm extends Component {
 class Header extends Component {
 	render() {
 		return (
-			<React.Fragment>
+			<Fragment>
 				<Prompt
 					when={this.props.block}
 					message={location =>
@@ -189,7 +189,7 @@ class Header extends Component {
 					}
 				/>
 				<MatchFormHeader matchNum={this.props.matchNum} teamNum={this.props.teamNum} /> <hr />
-			</React.Fragment>
+			</Fragment>
 		);
 	}
 }

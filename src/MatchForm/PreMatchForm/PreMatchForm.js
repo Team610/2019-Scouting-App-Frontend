@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import TeamInput from './TeamInput/TeamInput';
 import RobotPreloadInput from './RobotPreloadInput/RobotPreloadInput';
 import ShipPreloadInput from './ShipPreloadsInput/ShipPreloadsInput';
@@ -8,13 +8,19 @@ import RobotPhotoDisplay from './RobotPhotoDisplay/RobotPhotoDisplay';
 export default class PreMatchForm extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = { teamNum: this.props.data.teamNum };
 		this.getJSON = this.getJSON.bind(this);
-		
+		this.updateTeamNum = this.updateTeamNum.bind(this);
+
 		this.startPosRef = React.createRef();
 		this.robPrldRef = React.createRef();
 		this.shpPrldRef = React.createRef();
 		this.fieldRefs = [this.startPosRef, this.robPrldRef, this.shpPrldRef];
+
+		if (this.props.isAdmin) {
+			this.teamSlctRef = React.createRef();
+			this.fieldRefs.push(this.teamSlctRef);
+		}
 	}
 	getJSON() {
 		let obj = {};
@@ -26,21 +32,24 @@ export default class PreMatchForm extends Component {
 		}
 		return obj;
 	}
+	updateTeamNum(aNum) {
+		this.setState({ teamNum: aNum });
+	}
 	render() {
 		let teamSelect = null;
 		if (this.props.isAdmin) {
-			this.teamSlctRef = React.createRef();
-			this.fieldRefs.push(this.teamSlctRef);
 			teamSelect = (
-				<React.Fragment>
+				<Fragment>
 					<TeamInput
 						ref={this.teamSlctRef}
 						data={this.props.data}
-						loadData={this.props.loadData} />
+						loadData={this.props.loadData}
+						updateTeamNum={this.updateTeamNum} />
 					<br />
-				</React.Fragment>
+				</Fragment>
 			);
 		}
+		let roboDisplay = <RobotPhotoDisplay teamNum={this.state.teamNum} />
 		return (
 			<div style={{ overflow: 'auto' }}>
 				{teamSelect}
@@ -72,7 +81,7 @@ export default class PreMatchForm extends Component {
 					<StartPositionInput id='start_position' ref={this.startPosRef} data={this.props.data} loadData={this.props.loadData} />
 				</div>
 				<div className="element">
-					<RobotPhotoDisplay id='robo_photo' />
+					{roboDisplay}
 				</div>
 				<button onClick={this.props.callNext}>Start</button>
 			</div>
