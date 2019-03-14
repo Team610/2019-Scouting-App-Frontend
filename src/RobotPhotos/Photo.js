@@ -39,7 +39,9 @@ export default class RobotCamera extends Component {
 		});
 	}
 	async submitPicture() {
-		console.log(`${this.state.view} photo for team ${this.state.teamNum}:\n${this.state.file}`);
+		let btn = document.getElementById('submit');
+		btn.disabled = true;
+		btn.innerHTML = 'Submitting...';
 		let obj = {
 			photo: this.state.file,
 			view: this.state.view,
@@ -55,6 +57,8 @@ export default class RobotCamera extends Component {
 		res = await res.json();
 		alert(res.success ? 'Successfully submitted!' : 'Could not submit, please try again.');
 		res.success ? console.log('success') : console.log('fail');
+		btn.innerHTML = 'Submit';
+		btn.disabled = false;
 	}
 
 	flipCamera() {
@@ -75,7 +79,7 @@ export default class RobotCamera extends Component {
 		//idealFacingMode={this.state.facing}
 		return (
 			<div className="camera-container">
-				<button onClick={this.flipCamera}>Flip camera</button><br />
+				<button onClick={this.flipCamera} id="flip">Flip camera</button><br />
 				<Camera
 					imageType="jpg"
 					onTakePhoto={dataUri => {
@@ -103,6 +107,7 @@ export default class RobotCamera extends Component {
 								this.submitPicture();
 						}
 					}}
+					id="submit"
 				>
 					Submit
         		</button>
@@ -115,6 +120,6 @@ export default class RobotCamera extends Component {
 					Retake
         		</button>
 			</div>
-		);
+		); //TODO: style buttons
 	}
 }

@@ -4,7 +4,7 @@ export default class PhotoSection extends Component {
 	constructor(props) {
 		super(props);
 		this.getPhotos = this.getPhotos.bind(this);
-		this.viewList = {
+		this.viewList = { //TODO: find a more proper way to add these
 			front: "Front",
 			isom: "Isometric",
 			side: "Side",
@@ -43,7 +43,7 @@ export default class PhotoSection extends Component {
 			this.setState({ photos: {}, view: '' });
 	}
 	async getPhotos(team, view) {
-		if (view === '') {
+		if (view === '') { //TODO: find better way to handle view: ''
 			if (this._isMounted)
 				this.setState({ status: 'ready' });
 			return;
@@ -78,6 +78,6 @@ export default class PhotoSection extends Component {
 				<ul>{this.viewBtns}</ul>
 				{dispPhotos}
 			</Fragment>
-		);
+		); //TODO: properly style photo select bar
 	}
 }
