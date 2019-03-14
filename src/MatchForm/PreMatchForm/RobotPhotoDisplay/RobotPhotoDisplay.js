@@ -33,7 +33,7 @@ export default class RobotPhotoDisplay extends Component {
 			let res = await fetch(`/api/v1/photos/${teamNum}/isom`);
 			if (res.ok) {
 				res = await res.json();
-				let imgList = res.photos;
+				const imgList = res.photos;
 				if (imgList.length > 0) {
 					console.log('new photo');
 					this.photos[teamNum] = imgList[0];

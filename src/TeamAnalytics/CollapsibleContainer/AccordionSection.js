@@ -19,11 +19,9 @@ export default class AccordionSection extends Component {
 						{isOpen ? '\u25b2' : '\u25bc'}
 					</span>
 				</h1>
-				{isOpen && (
-					<div>
-						{this.props.children}
-					</div>
-				)}
+				<div style={isOpen ? {display:'block'} : {display:'none'}}>
+					{this.props.children}
+				</div>
 			</div>
 		);
 	}

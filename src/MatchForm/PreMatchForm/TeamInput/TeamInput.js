@@ -31,7 +31,6 @@ export default class TeamInput extends Component {
 	}
 	async getTeams() {
 		try {
-			console.log(`/api/v1/matches/${this.props.data.matchNum}/teams`);
 			let teamListRaw = await fetch(`/api/v1/matches/${this.props.data.matchNum}/teams`);
 			if (teamListRaw.ok) {
 				this.teamList = await teamListRaw.json();
