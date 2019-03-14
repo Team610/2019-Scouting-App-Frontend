@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
-class ShipPreload extends Component {
+export default class ShipPreload extends Component {
 	constructor(props) {
 		super(props);
 		let cargoCount, hatchCount;
@@ -48,7 +48,7 @@ class ShipPreload extends Component {
 	}
 	render() {
 		return (
-			<React.Fragment>
+			<Fragment>
 				<p className="subheader">Ship Preloads</p>
 				<label>
 					<button type="button" onClick={this.cargoIncrement} className="increment-button">Cargo: {this.state.cargo}</button>
@@ -59,9 +59,7 @@ class ShipPreload extends Component {
 				<label>
 					<button type="button" onClick={this.hatchIncrement} className="increment-button" style={{visibility:'hidden'}}>Hatch: {this.state.hatch}</button>
 				</label>
-			</React.Fragment>
+			</Fragment>
 		);
 	}
 }
-
-export default ShipPreload;

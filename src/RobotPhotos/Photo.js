@@ -3,14 +3,14 @@ import Camera from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import "./robotPhoto.css";
 
-class RobotCamera extends Component {
+export default class RobotCamera extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			review: false,
 			teamNum: undefined,
 			file: undefined,
-			view: 'front',
+			view: 'not_selected',
 			facing: 'FACING_MODES.ENVIRONMENT',
 			fileName: ''
 		};
@@ -19,6 +19,7 @@ class RobotCamera extends Component {
 		this.handleTeamNum = this.handleTeamNum.bind(this);
 
 		this.photoViews = [
+			{ id: "not_selected", label: "" },
 			{ id: "front", label: "Front" },
 			{ id: "isom", label: "Isometric" },
 			{ id: "side", label: "Side" },
@@ -38,7 +39,9 @@ class RobotCamera extends Component {
 		});
 	}
 	async submitPicture() {
-		console.log(`${this.state.view} photo for team ${this.state.teamNum}:\n${this.state.file}`);
+		let btn = document.getElementById('submit');
+		btn.disabled = true;
+		btn.innerHTML = 'Submitting...';
 		let obj = {
 			photo: this.state.file,
 			view: this.state.view,
@@ -52,7 +55,10 @@ class RobotCamera extends Component {
 			}
 		});
 		res = await res.json();
+		alert(res.success ? 'Successfully submitted!' : 'Could not submit, please try again.');
 		res.success ? console.log('success') : console.log('fail');
+		btn.innerHTML = 'Submit';
+		btn.disabled = false;
 	}
 
 	flipCamera() {
@@ -73,7 +79,7 @@ class RobotCamera extends Component {
 		//idealFacingMode={this.state.facing}
 		return (
 			<div className="camera-container">
-				<button onClick={this.flipCamera}>Flip camera</button><br />
+				<button onClick={this.flipCamera} id="flip">Flip camera</button><br />
 				<Camera
 					imageType="jpg"
 					onTakePhoto={dataUri => {
@@ -90,9 +96,18 @@ class RobotCamera extends Component {
 				<br />
 				<button
 					onClick={() => {
-						window.confirm(`Submit ${this.state.view} photo for team ${this.state.teamNum}?`) &&
-							this.submitPicture();
+						if (!this.state.teamNum) {
+							alert('Team number not set!');
+						} else if (this.state.view === 'not_selected') {
+							alert('View not selected!');
+						} else if (!this.state.file) {
+							alert('No photo taken!');
+						} else {
+							window.confirm(`Submit ${this.state.view} photo for team ${this.state.teamNum}?`) &&
+								this.submitPicture();
+						}
 					}}
+					id="submit"
 				>
 					Submit
         		</button>
@@ -105,8 +120,6 @@ class RobotCamera extends Component {
 					Retake
         		</button>
 			</div>
-		);
+		); //TODO: style buttons
 	}
 }
-
-export default RobotCamera;

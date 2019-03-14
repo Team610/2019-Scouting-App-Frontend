@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
-class CommentsSection extends Component {
+export default class CommentsSection extends Component {
 	constructor(props) {
 		super(props);
 		//util funcs
@@ -27,10 +27,10 @@ class CommentsSection extends Component {
 		for (let cmt of Object.keys(this.props.data.all_other_comments)) {
 			if (cmt !== 'blank' && cmt !== '') {
 				otherComments.push(
-					<React.Fragment key={cmt}>
+					<Fragment key={cmt}>
 						<tr><td>{cmt}</td></tr>
 						<tr><td style={{ visibility: "hidden" }}>invisible text</td></tr>
-					</React.Fragment>
+					</Fragment>
 				);
 			}
 		}
@@ -105,5 +105,3 @@ class CommentsSection extends Component {
 		);
 	}
 }
-
-export default CommentsSection;

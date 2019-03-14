@@ -1,60 +1,52 @@
 import React, { Component } from "react";
+import { validFlt, validInt } from '../Components/Util';
+import ATable from '../Components/AnalyticsTable';
 
 export default class OverallSection extends Component {
 	constructor(props) {
 		super(props);
-		//util funcs
-		this.validFlt = this.validFlt.bind(this);
-		this.validInt = this.validInt.bind(this);
-
-		this.avg_num_hatch = this.validFlt(this.props.data.avg_num_ss_hatch_tot + this.props.data.avg_num_to_hatch_tot);
-		this.avg_time_hatch = this.validFlt(this.props.data.avg_time_ss_hatch_tot * this.props.data.avg_num_ss_hatch_tot / this.avg_num_hatch + this.props.data.avg_time_to_hatch_tot * this.props.data.avg_num_to_hatch_tot / this.avg_num_hatch);
-		this.avg_num_cargo = this.validFlt(this.props.data.avg_num_ss_cargo_tot + this.props.data.avg_num_to_cargo_tot);
-		this.avg_time_cargo = this.validFlt(this.props.data.avg_time_ss_cargo_tot * this.props.data.avg_num_ss_cargo_tot / this.avg_num_cargo + this.props.data.avg_time_to_cargo_tot * this.props.data.avg_num_to_cargo_tot / this.avg_num_cargo);
-		let lvl2_climbs = this.validInt(this.props.data.tot_num_climb_lvl[2]);
-		let lvl3_climbs = this.validInt(this.props.data.tot_num_climb_lvl[3]);
-		this.tot_climbs = this.validInt(lvl2_climbs+lvl3_climbs);
-		this.avg_time_climb = this.validFlt(this.props.data.avg_time_climb_lv2 * lvl2_climbs / this.tot_climbs + this.props.data.avg_time_climb_lv3 * lvl3_climbs / this.tot_climbs);
+		this.populateHeaders = this.populateHeaders.bind(this);
+		this.populateRows = this.populateRows.bind(this);
+		this.state = {
+			headers: this.populateHeaders(),
+			rows: this.populateRows()
+		}
 	}
-	//utils
-	validFlt(num) {
-		let a = num;
-		if(Number.isNaN(num)||!num) a=0;
-		return parseFloat(Math.round(a * 1000) / 1000).toFixed(3);
+	componentDidUpdate(prevProps) {
+		if (prevProps.data !== this.props.data && this._isMounted)
+			this.setState({ rows: this.populateRows() });
 	}
-	validInt(int) {
-		let a = int;
-		if(Number.isNaN(int)||!int) a=0;
-		return parseInt(a);
+	componentDidMount() {
+		this._isMounted = true;
+	}
+	componentWillUnmount() {
+		this._isMounted = false;
 	}
 
-	render() {
+	populateRows() {
+		const avg_num_hatch = validFlt(this.props.data.avg_num_ss_hatch_tot + this.props.data.avg_num_to_hatch_tot);
+		const avg_time_hatch = validFlt(this.props.data.avg_time_ss_hatch_tot * this.props.data.avg_num_ss_hatch_tot / this.avg_num_hatch + this.props.data.avg_time_to_hatch_tot * this.props.data.avg_num_to_hatch_tot / this.avg_num_hatch);
+		const avg_num_cargo = validFlt(this.props.data.avg_num_ss_cargo_tot + this.props.data.avg_num_to_cargo_tot);
+		const avg_time_cargo = validFlt(this.props.data.avg_time_ss_cargo_tot * this.props.data.avg_num_ss_cargo_tot / this.avg_num_cargo + this.props.data.avg_time_to_cargo_tot * this.props.data.avg_num_to_cargo_tot / this.avg_num_cargo);
+		const lvl2_climbs = validInt(this.props.data.tot_num_climb_lvl[2]);
+		const lvl3_climbs = validInt(this.props.data.tot_num_climb_lvl[3]);
+		const tot_climbs = validInt(lvl2_climbs + lvl3_climbs);
+		const avg_time_climb = validFlt(this.props.data.avg_time_climb_lv2 * lvl2_climbs / this.tot_climbs + this.props.data.avg_time_climb_lv3 * lvl3_climbs / this.tot_climbs);
+		return [[
+			`${avg_num_hatch} @ ${avg_time_hatch} s`,
+			`${avg_num_cargo} @ ${avg_time_cargo} s`,
+			`${tot_climbs} @ ${avg_time_climb} s`
+		]];
+	}
+	populateHeaders() {
+		return ['Hatch', 'Cargo', 'Climb'];
+	}
+
+	render() { //<h1 className="comp">Overall</h1>
 		return (
-			<div className="analytics-section">
-				<h1 className="comp">Overall</h1>
-				<table className="analyticsTable">
-					<thead>
-						<tr>
-							<th>Hatch</th>
-							<th>Cargo</th>
-							<th>Climb</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td className="analyticsTable">
-								{this.avg_num_hatch} @ {this.avg_time_hatch} s
-							</td>
-							<td className="analyticsTable">
-								{this.avg_num_cargo} @ {this.avg_time_cargo} s
-							</td>
-							<td className="analyticsTable">
-								{this.tot_climbs} @ {this.avg_time_climb} s
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+			<ATable
+				headers={this.state.headers}
+				rows={this.state.rows} />
 		);
 	}
 }

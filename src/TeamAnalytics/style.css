@@ -1,5 +1,5 @@
 table.analyticsTable {
-	width: 60%;
+	width: 90%;
 	margin-left: 10px;
 	text-align: right;
 	padding-left: 10px;
@@ -8,6 +8,7 @@ td.analyticsTable {
 	margin-left: 10px;
 	text-align: right;
 	padding-left: 10px;
+	width: 30vw;
 }
 
 table.commentTable {
@@ -30,7 +31,7 @@ table.commentTable {
 	padding-left: 20px;
 	padding-bottom: 5px;
 	border: 1px solid black;
-	width: 60%;
+	width: 90%;
 	border-radius: 10px;
 	margin-left: 10px;
 }
@@ -53,7 +54,7 @@ table.commentTable {
 	border-radius: 2px;
 	background-color: white;
 	position: absolute;
-	right: 40%;
+	right: 10%;
 }
 
 .header {

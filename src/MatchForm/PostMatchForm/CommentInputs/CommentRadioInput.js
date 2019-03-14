@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 export default class CommentRadioInput extends Component {
 	constructor(props) {
@@ -34,10 +34,10 @@ export default class CommentRadioInput extends Component {
 			);
 		}
 		return (
-			<React.Fragment>
+			<Fragment>
 				<p className="subheader">{this.props.description}</p>
 				{choiceList}
-			</React.Fragment>
+			</Fragment>
 		);
 	}
 }

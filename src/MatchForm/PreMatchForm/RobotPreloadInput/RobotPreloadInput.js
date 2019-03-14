@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
-class RobotPreload extends Component {
+export default class RobotPreload extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -43,7 +43,7 @@ class RobotPreload extends Component {
 	}
 	render() {
 		return (
-			<React.Fragment>
+			<Fragment>
 				<p className="subheader">Robot Preloads</p>
 				<label>
 					<button type="button" onClick={this.cargoIncrement} className="increment-button">Cargo: {this.state.cargo}</button>
@@ -54,9 +54,7 @@ class RobotPreload extends Component {
 				<label>
 					<button type="button" onClick={this.setToZero} className="increment-button" style={{color:'#dd0000', backgroundColor:'#ff8888'}}>Reset to 0</button>
 				</label>
-			</React.Fragment>
+			</Fragment>
 		);
 	}
 }
-
-export default RobotPreload;
