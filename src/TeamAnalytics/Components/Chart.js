@@ -49,6 +49,6 @@ export default class Chart extends Component {
 					}}
 				/>
 			</div>
-		)
+		);
 	}
 }

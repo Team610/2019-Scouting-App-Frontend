@@ -104,7 +104,7 @@ export default class TeamAnalytics extends Component {
 						{this.data ? <CommentsSection label="Comments" teamNum={this.state.teamNum} data={this.data} /> : null}
 					</Accordion>
 				</div>
-			);
+			); //TODO: find a way to persist chart data and share across diff sections
 		}
 	}
 }
