@@ -22,7 +22,7 @@ export default class Chart extends Component {
 	render() {
 		//Chart data requires deep copying!! Data gets replaced for some bizarre reason
 		return (
-			<div className="chart" style={{ width: '90vw', backgroundColor: '#EEE' }}>
+			<div className="chart" style={{ width: '90vw', backgroundColor: '#EEE', marginLeft: '10px', paddingLeft:'10px' }}>
 				<Bar
 					data={this.state.data}
 					options={{
