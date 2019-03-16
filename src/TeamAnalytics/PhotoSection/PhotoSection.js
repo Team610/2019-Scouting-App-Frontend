@@ -78,6 +78,6 @@ export default class PhotoSection extends Component {
 				<ul>{this.viewBtns}</ul>
 				{dispPhotos}
 			</Fragment>
-		); //TODO: properly style photo select bar
+		);
 	}
 }

@@ -4,7 +4,7 @@ export default class CommentRadioInput extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			value: this.props.loadData ? this.props.data[this.props.inputId] : "None selected"
+			value: this.props.loadData ? this.props.data[this.props.inputId] : this.props.choices[0].value
 		}
 		this.handleChange = this.handleChange.bind(this);
 		this.getJSON = this.getJSON.bind(this);

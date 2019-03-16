@@ -59,3 +59,39 @@ li a:hover, li button.btn-link:hover {
 	position: sticky;
 	top: 0;
 }
+
+/*Button styling*/
+.btn-inactive {
+	background-color: gray;
+	color: #222222;
+	height: 30px;
+	font-size: 14px;
+}
+.btn-active {
+	background-color: darkgreen;
+	color: white;
+	height: 30px;
+	font-size: 14px;
+}
+.increment-button{
+  background-color: white;
+  border: 3px solid #DDDDDD;
+  color: black;
+  padding: 15px 32px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  float:up;
+  width: 128px;
+}
+.submit-btn {
+	background-color: #30E030;
+	border: none;
+}
+.reject-btn {
+	background-color: #DD0000;
+	border: none;
+	float: right;
+}

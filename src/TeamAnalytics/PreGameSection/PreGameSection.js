@@ -34,7 +34,7 @@ export default class PreGameSection extends Component {
 
 	componentDidUpdate(prevProps) {
 		if (prevProps.teamNum !== this.props.teamNum && this._isMounted)
-			this.setState({ rows: this.populateRows(), chartLoaded: false });
+			this.setState({ rows: this.populateRows(), chartLoaded: false, chartOn: false });
 	}
 	componentDidMount() {
 		this._isMounted = true;
@@ -44,12 +44,13 @@ export default class PreGameSection extends Component {
 	}
 
 	async flipState() {
-		if (this.state.chartOn)
+		if (this.state.chartOn && this._isMounted)
 			this.setState({ chartOn: false });
 		else {
-			this.setState({ chartOn: true });
-			if (!this.state.chartLoaded && this._isMounted)
+			if (!this.state.chartLoaded && this._isMounted) {
+				this.setState({ chartOn: true });
 				await this.getChartData();
+			}
 		}
 	}
 	async getChartData() {
@@ -106,7 +107,7 @@ export default class PreGameSection extends Component {
 	render() {
 		return (
 			<Fragment>
-				<MDButton flipState={this.flipState} />
+				<MDButton flipState={this.flipState} show={this.state.chartOn ? true : false} />
 				{!this.state.chartOn && (
 					<ATable
 						headers={this.state.headers}

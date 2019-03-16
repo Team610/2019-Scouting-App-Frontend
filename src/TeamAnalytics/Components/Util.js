@@ -13,8 +13,8 @@ export function isEqual(a, b) {
 			if (b[aKey] === undefined || !isEqual(a[aKey], b[aKey])) {
 				return false;
 			}
-			return true;
 		}
+		return true;
 	} else {
 		let aLen = a.length;
 		if (b.length !== aLen) {

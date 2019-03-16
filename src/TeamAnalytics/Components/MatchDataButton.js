@@ -8,7 +8,10 @@ export default class MatchDataButton extends Component {
 	}
 	async flipState() {
 		await this.props.flipState();
-		this.setState({ value: !this.state.value });
+	}
+	componentDidUpdate(prevProps) {
+		if (this.props.show !== prevProps.show)
+			this.setState({ value: this.props.show });
 	}
 	render() {
 		return (

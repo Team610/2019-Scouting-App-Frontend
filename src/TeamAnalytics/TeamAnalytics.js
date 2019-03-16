@@ -21,6 +21,7 @@ export default class TeamAnalytics extends Component {
 		}
 		this.setTeamNum = this.setTeamNum.bind(this);
 		this.getTeamList = this.getTeamList.bind(this);
+		this.fetchData = this.fetchData.bind(this);
 		this.collectedData = {};
 	}
 	async componentDidMount() {
@@ -32,38 +33,35 @@ export default class TeamAnalytics extends Component {
 	componentWillUnmount() {
 		this._isMounted = false;
 	}
-	async setTeamNum(num) {
-		if (num === this.state.teamNum) {
+	async fetchData(num) {
+		let res = await fetch(`/api/v1/stats/team/${num}/agg`);
+		if (!res.ok) {
+			if (this._isMounted)
+				this.setState({ status: new Error("Could not fetch team data. Please try again.") });
 			return;
 		}
+		res = await res.json();
+		console.log(`Fetched team ${num}`);
+		if (this._isMounted) {
+			this.data = res[num];
+			this.collectedData[num] = this.data;
+			this.setState({ teamNum: num, status: 'ok' });
+		}
+	}
+	setTeamNum(num) {
+		if (num === this.state.teamNum)
+			return;
 		if (this.collectedData[num] === undefined) {
 			//If this team's data hasn't been collected yet...
 			if (this._isMounted) {
 				this.setState({ teamNum: num, status: `Team ${num} data loading...` });
-			} else {
-				return;
-			}
-			let res = await fetch(`/api/v1/stats/team/${num}/agg`);
-			if (!res.ok) {
-				if (this._isMounted)
-					this.setState({ status: new Error("Could not fetch team data. Please try again.") });
-				return;
-			}
-			res = await res.json();
-			this.data = res[num];
-			console.log(`Fetched team ${num}`);
-			if (this._isMounted) {
-				this.collectedData[num] = this.data;
-				this.setState({ teamNum: num, status: 'ok' });
+				this.fetchData(num);
 			}
 		} else {
-			if (this._isMounted) {
-				console.log(`Team ${num} has been pulled before`);
-				this.data = this.collectedData[num];
+			console.log(`Team ${num} has been pulled before`);
+			this.data = this.collectedData[num];
+			if (this._isMounted)
 				this.setState({ teamNum: num });
-			} else {
-				return;
-			}
 		}
 	}
 	async getTeamList() {
@@ -106,23 +104,23 @@ export default class TeamAnalytics extends Component {
 						{this.data ? <CommentsSection label="Comments" teamNum={this.state.teamNum} data={this.data} /> : null}
 					</Accordion>
 				</div>
-			);
+			); //TODO: find a way to persist chart data and share across diff sections
 		}
 	}
 }
 
 class TeamSelect extends Component {
 	render() {
-		let json = this.props.teamList;
+		let tList = this.props.teamList;
 		let liList = [];
 		let btnClass = 'btn-link';
-		for (let i = 0; i < json.length; i++) {
+		for (let i = 0; i < tList.length; i++) {
 			liList.push(
-				<li key={json[i]}>
+				<li key={tList[i]}>
 					<button
-						onClick={() => { this.props.setTeamNum(json[i]); }}
-						className={`${btnClass} ${json[i] === this.props.teamNum ? 'active' : ''}`}
-						href='#'>{json[i]}</button>
+						onClick={() => { this.props.setTeamNum(tList[i]); }}
+						className={`${btnClass} ${tList[i] === this.props.teamNum ? 'active' : ''}`}
+						href='#'>{tList[i]}</button>
 				</li>
 			);
 		}

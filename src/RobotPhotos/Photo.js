@@ -79,7 +79,18 @@ export default class RobotCamera extends Component {
 		//idealFacingMode={this.state.facing}
 		return (
 			<div className="camera-container">
-				<button onClick={this.flipCamera} id="flip">Flip camera</button><br />
+				<button
+					onClick={this.flipCamera}
+					id="flip"
+					style={{
+						border: 'none',
+						backgroundColor: '#FFF',
+						padding: '5px',
+						textAlign: 'center'
+					}}
+				>
+					Flip camera
+				</button><br />
 				<Camera
 					imageType="jpg"
 					onTakePhoto={dataUri => {
@@ -108,6 +119,7 @@ export default class RobotCamera extends Component {
 						}
 					}}
 					id="submit"
+					className="increment-button submit-btn"
 				>
 					Submit
         		</button>
@@ -116,10 +128,11 @@ export default class RobotCamera extends Component {
 					onClick={() => {
 						this.state.review && this.setState({ review: false });
 					}}
+					className="increment-button reject-btn"
 				>
 					Retake
         		</button>
 			</div>
-		); //TODO: style buttons
+		);
 	}
 }
