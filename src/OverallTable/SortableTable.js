@@ -52,8 +52,9 @@ export default class SortableTable extends Component {
 		this.state = {
 			dataLoaded: false,
 			columns: ["avg_num_hatch", "avg_time_hatch", "avg_num_cargo", "avg_time_cargo", "tot_climbs", "avg_time_climb"],
-			dir: 'd',
-			lastCol: 'team'
+			dir: 1,
+			lastCol: 'team',
+			zeroCount: 0
 		}
 		this.getData = this.getData.bind(this);
 		this.getData();
@@ -158,29 +159,28 @@ export default class SortableTable extends Component {
 	}
 
 	sortTable = (col) => {
+		let order = JSON.parse(JSON.stringify(this.state.order));
+		let dir = this.state.dir;
+
 		//If the column is the same as before, flip the direction and handle the special sorting case.
 		if (col === this.state.lastCol) {
-			let dir = this.state.dir === 'a' ? 'd' : 'a';
-			let newOrder = this.state.order.slice(0, -this.state.zeroCount).reverse().concat(this.state.order.slice(-this.state.zeroCount));
+			dir *= -1;
+			let newOrder = this.state.zeroCount === 0 ? order.reverse() : order.slice(0, -this.state.zeroCount).reverse().concat(order.slice(-this.state.zeroCount));
 			this.setState({ dir: dir, order: newOrder });
 			return;
 		}
 
-		let dir = this.state.dir;
-		let newOrder = this.state.order;
 		let zeroCount = 0;
 		//handle special case of sorting team, since sorted list already exists
 		if (col === 'team') {
-			dir === 'd' ? newOrder = Object.keys(this.alias) : Object.keys(this.alias).reverse();
+			order = dir > 0 ? Object.keys(this.alias) : Object.keys(this.alias).reverse();
 		} else {
 			//Insertion sort up until the max value
-			let max = newOrder.length;
+			let max = order.length;
 			for (let i = 0; i < max; i++) {
 				//handle special case of val is 0: dump to bottom of list, don't actually increment, and reduce max
-				if (this.alias[newOrder[i]][col] === 0 || this.alias[newOrder[i]][col] === '0.000') {
-					let temp = newOrder[max - 1];
-					newOrder[max - 1] = newOrder[i];
-					newOrder[i] = temp;
+				if (Number(this.alias[order[i]][col]) === 0) {
+					order = order.slice(0, i).concat(order.slice(i + 1), order[i]);
 					max--;
 					i--;
 					zeroCount++;
@@ -190,22 +190,21 @@ export default class SortableTable extends Component {
 				let j = i;
 				//If arr[j] compared with arr[j-1] needs to be swapped, swap. Else, arr[j] is already in place.
 				while (j > 0) {
-					let cur = Number(this.alias[newOrder[j]][col]);
-					let pre = Number(this.alias[newOrder[j - 1]][col]);
-					if (dir === 'd' ? cur > pre : cur < pre) {
+					let cur = Number(this.alias[order[j]][col]);
+					let pre = Number(this.alias[order[j - 1]][col]);
+					if (dir < 0 ? cur > pre : cur < pre) {
 						//swap
-						let temp = newOrder[j - 1];
-						newOrder[j - 1] = newOrder[j];
-						newOrder[j] = temp;
+						let temp = order[j - 1];
+						order[j - 1] = order[j];
+						order[j] = temp;
 						j--;
-					} else {
+					} else
 						break;
-					}
 				}
 			}
 		}
 		this.setState({
-			order: newOrder,
+			order: order,
 			lastCol: col,
 			zeroCount: zeroCount
 		});
@@ -217,8 +216,15 @@ export default class SortableTable extends Component {
 		if (!this.state.dataLoaded) {
 			return (<p>Loading data...</p>);
 		}
+		let dirArr = this.state.dir < 0 ? '\u2191' : '\u2193';
 		let heads = [
-			<th key='Team' className='overall-freeze-col' onClick={() => this.sortTable('team')}>Team {this.state.lastCol === 'team' ? this.state.dir === 'a' ? '↑' : '↓' : null}</th>
+			<th
+				key='Team'
+				className='overall-freeze-col nonSelectable'
+				onClick={() => this.sortTable('team')}
+			>
+				Team {this.state.lastCol === 'team' ? dirArr : null}
+			</th>
 		];
 		for (let statCol of this.columns) {
 			for (let i = 0; i < this.state.columns.length; i++) {
@@ -226,10 +232,10 @@ export default class SortableTable extends Component {
 					heads.push(
 						<th
 							key={this.state.columns[i]}
-							className='overall-data'
+							className='overall-data nonSelectable'
 							onClick={() => this.sortTable(statCol.alias)}
 						>
-							{statCol.name} {statCol.alias === this.state.lastCol ? this.state.dir === 'a' ? '\u2191' : '\u2193' : null}
+							{statCol.name} {statCol.alias === this.state.lastCol ? dirArr : null}
 						</th>
 					);
 					break;

@@ -25,15 +25,6 @@ export default class PostMatchForm extends Component {
 		return obj;
 	}
 	render() {
-		let submitStyle = {
-			backgroundColor: '#30E030',
-			border: 'none'
-		}
-		let discardStyle = {
-			backgroundColor: '#DD0000',
-			border: 'none',
-			float: 'right'
-		}
 		return (
 			<Fragment>
 				<CommentInputs ref={this.cmtInputsRef} data={this.props.data} loadData={this.props.loadData} />
@@ -41,16 +32,14 @@ export default class PostMatchForm extends Component {
 				<button
 					id='submit-btn'
 					onClick={this.callNext}
-					className='increment-button'
-					style={submitStyle}
+					className='increment-button submit-btn'
 				>
 					Submit
 				</button>
 				<button
 					id='discard-btn'
 					onClick={this.props.discard}
-					className='increment-button'
-					style={discardStyle}
+					className='increment-button reject-btn'
 				>
 					Discard
 				</button>

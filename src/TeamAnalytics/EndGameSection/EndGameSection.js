@@ -39,7 +39,7 @@ export default class EndGameSection extends Component {
 
 	componentDidUpdate(prevProps) {
 		if (prevProps.teamNum !== this.props.teamNum && this._isMounted)
-			this.setState({ rows: this.populateRows(), chartLoaded: false }); //TODO: Find a way to hold onto chart data?
+			this.setState({ rows: this.populateRows(), chartLoaded: false });
 	}
 	componentDidMount() {
 		this._isMounted = true;

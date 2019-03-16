@@ -49,7 +49,6 @@ export default class PreMatchForm extends Component {
 				</Fragment>
 			);
 		}
-		let roboDisplay = <RobotPhotoDisplay teamNum={this.state.teamNum} />
 		return (
 			<div style={{ overflow: 'auto' }}>
 				{teamSelect}
@@ -81,10 +80,10 @@ export default class PreMatchForm extends Component {
 					<StartPositionInput id='start_position' ref={this.startPosRef} data={this.props.data} loadData={this.props.loadData} />
 				</div>
 				<div className="element">
-					{roboDisplay}
+					<RobotPhotoDisplay teamNum={this.state.teamNum} />
 				</div>
-				<button onClick={this.props.callNext}>Start</button>
+				<button onClick={this.props.callNext} style={{marginLeft:'10px'}}>Start</button>
 			</div>
-		); //TODO: figure out who has responsibility for fetching correct match# and team# from DB
+		);
 	}
 }

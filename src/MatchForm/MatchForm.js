@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import SubmitError from './SubmitError';
-import { Redirect, Prompt } from 'react-router';
+import { Redirect } from 'react-router';
 import MatchFormHeader from './MatchFormHeader/MatchFormHeader';
 import PreMatchForm from './PreMatchForm/PreMatchForm';
 import InMatchForm from './InMatchForm/FieldInput/FieldInput'; //InMatchForm component itself is not used at all!
@@ -17,17 +17,12 @@ export default class MatchForm extends Component {
 		this.collectCurView = this.collectCurView.bind(this);
 		this.discardForm = this.discardForm.bind(this);
 
-		this.viewList = ['PreMatch', 'InMatch', 'PostMatch'];
-		this.viewRefs = [];
-		for (let view of this.viewList) {
-			this[`${view}Ref`] = React.createRef();
-			this.viewRefs.push(this[`${view}Ref`]);
-		}
 		this.formList = {
 			PreMatch: PreMatchForm,
 			InMatch: InMatchForm,
 			PostMatch: PostMatchForm
 		}
+		this.viewRef = React.createRef();
 
 		let form = localStorage.getItem("form");
 		if (form) {
@@ -81,17 +76,19 @@ export default class MatchForm extends Component {
 	}
 
 	collectCurView() {
-		let ref = this.viewRefs[this.state.matchView];
-		if (ref.current)
-			Object.assign(this.data, ref.current.getJSON());
-		else
+		if (this.viewRef.current) {
+			const prevTeamNum = this.data.teamNum;
+			Object.assign(this.data, this.viewRef.current.getJSON());
+			if (this.data.teamNum !== prevTeamNum) //This is for the match form header. TODO: find a fix that works immediately, instead of every 10 seconds
+				this.forceUpdate();
+		} else
 			console.log('cannot find the view reference');
 	}
 	async getNextView() {
 		this.collectCurView();
-		if (this.state.matchView < this.viewList.length - 1)
+		if (this.state.matchView < Object.keys(this.formList).length - 1)
 			this.setState({ matchView: this.state.matchView + 1, onSavedView: false });
-		else if (this.state.matchView === this.viewList.length - 1) {
+		else if (this.state.matchView === Object.keys(this.formList).length - 1) {
 			let res = await this.submitForm();
 			if (res.status > 0)
 				throw new SubmitError("Could not sumbit form. Please try again.");
@@ -144,7 +141,8 @@ export default class MatchForm extends Component {
 	}
 
 	render() {
-		console.log("Current match view: " + this.viewList[this.state.matchView]);
+		const view = Object.keys(this.formList)[this.state.matchView];
+		console.log(`Current match view: ${view}`);
 		if (this.state.redirect)
 			return <Redirect to="/" />;
 		else if (this.state.cannotLoad)
@@ -152,13 +150,11 @@ export default class MatchForm extends Component {
 		else if (this.state.isLoading)
 			return <div><p>Loading...</p></div>;
 		else {
-			if (this.state.matchView >= 0 && this.state.matchView < this.viewList.length) {
-				let Form = this.formList[this.viewList[this.state.matchView]];
-				console.log(`showing ${this.viewList[this.state.matchView]}`);
-				let ref = this.viewRefs[this.state.matchView];
+			if (this.state.matchView >= 0 && this.state.matchView < Object.keys(this.formList).length) {
+				const Form = this.formList[view];
 				return (
 					<div>
-						<Header
+						<MatchFormHeader
 							block={this.state.block}
 							matchNum={this.data.matchNum}
 							teamNum={this.data.teamNum} />
@@ -168,28 +164,12 @@ export default class MatchForm extends Component {
 							data={this.data}
 							isAdmin={this.props.isAdmin}
 							discard={this.discardForm}
-							ref={ref} />
+							ref={this.viewRef} />
 					</div>
 				);
 			} else {
 				return <div><p>Loading...</p></div>;
 			}
 		}
-	}
-}
-
-class Header extends Component {
-	render() {
-		return (
-			<Fragment>
-				<Prompt
-					when={this.props.block}
-					message={location =>
-						`Are you sure you want to go to ${location.pathname} ?`
-					}
-				/>
-				<MatchFormHeader matchNum={this.props.matchNum} teamNum={this.props.teamNum} /> <hr />
-			</Fragment>
-		);
 	}
 }

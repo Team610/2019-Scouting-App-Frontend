@@ -25,13 +25,13 @@ export default class OverallSection extends Component {
 
 	populateRows() {
 		const avg_num_hatch = validFlt(this.props.data.avg_num_ss_hatch_tot + this.props.data.avg_num_to_hatch_tot);
-		const avg_time_hatch = validFlt(this.props.data.avg_time_ss_hatch_tot * this.props.data.avg_num_ss_hatch_tot / this.avg_num_hatch + this.props.data.avg_time_to_hatch_tot * this.props.data.avg_num_to_hatch_tot / this.avg_num_hatch);
+		const avg_time_hatch = validFlt(this.props.data.avg_time_ss_hatch_tot * this.props.data.avg_num_ss_hatch_tot / avg_num_hatch + this.props.data.avg_time_to_hatch_tot * this.props.data.avg_num_to_hatch_tot / avg_num_hatch);
 		const avg_num_cargo = validFlt(this.props.data.avg_num_ss_cargo_tot + this.props.data.avg_num_to_cargo_tot);
-		const avg_time_cargo = validFlt(this.props.data.avg_time_ss_cargo_tot * this.props.data.avg_num_ss_cargo_tot / this.avg_num_cargo + this.props.data.avg_time_to_cargo_tot * this.props.data.avg_num_to_cargo_tot / this.avg_num_cargo);
+		const avg_time_cargo = validFlt(this.props.data.avg_time_ss_cargo_tot * this.props.data.avg_num_ss_cargo_tot / avg_num_cargo + this.props.data.avg_time_to_cargo_tot * this.props.data.avg_num_to_cargo_tot / avg_num_cargo);
 		const lvl2_climbs = validInt(this.props.data.tot_num_climb_lvl[2]);
 		const lvl3_climbs = validInt(this.props.data.tot_num_climb_lvl[3]);
 		const tot_climbs = validInt(lvl2_climbs + lvl3_climbs);
-		const avg_time_climb = validFlt(this.props.data.avg_time_climb_lv2 * lvl2_climbs / this.tot_climbs + this.props.data.avg_time_climb_lv3 * lvl3_climbs / this.tot_climbs);
+		const avg_time_climb = validFlt(this.props.data.avg_time_climb_lv2 * lvl2_climbs / tot_climbs + this.props.data.avg_time_climb_lv3 * lvl3_climbs / tot_climbs);
 		return [[
 			`${avg_num_hatch} @ ${avg_time_hatch} s`,
 			`${avg_num_cargo} @ ${avg_time_cargo} s`,
@@ -42,7 +42,7 @@ export default class OverallSection extends Component {
 		return ['Hatch', 'Cargo', 'Climb'];
 	}
 
-	render() { //<h1 className="comp">Overall</h1>
+	render() {
 		return (
 			<ATable
 				headers={this.state.headers}

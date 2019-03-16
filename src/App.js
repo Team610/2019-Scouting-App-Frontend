@@ -10,7 +10,7 @@ const googleClientId = "609299116953-at08rh33j3ggljmn33atjpp4uaqunc0s.apps.googl
 export default class App extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { //TODO: make authenticated information persistent
+		this.state = {
 			user: null,
 			isAuth: false
 		}
