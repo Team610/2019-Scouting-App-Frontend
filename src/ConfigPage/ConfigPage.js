@@ -16,27 +16,33 @@ export default class ConfigPage extends Component {
 		this.configList = {
 			calcAnalytics: {
 				component: CalcAnalytics,
-				label: 'Calculate analytics'
+				label: 'Calculate analytics',
+				role: 1
 			},
 			createEvent: {
 				component: CreateEvent,
-				label: 'Create event'
+				label: 'Create event',
+				role: 1
 			},
 			curEvent: {
 				component: CurEvent,
-				label: 'Set current event'
+				label: 'Set current event',
+				role: 1
 			},
 			createForm: {
 				component: CreateForm,
-				label: 'Create temporary form'
+				label: 'Create temporary form',
+				role: 2
 			},
 			generateUsers: {
 				component: GenerateUsers,
-				label: 'Generate users'
+				label: 'Generate users',
+				role: 2
 			},
 			blueSide: {
 				component: BlueSide,
-				label: 'Set blue side'
+				label: 'Set blue side',
+				role: 1
 			}
 		};
 		this.state = { config: 'none' };
@@ -55,16 +61,18 @@ export default class ConfigPage extends Component {
 		const activeClass = 'btn-link active';
 		const viewBtns = [];
 		for (let config of Object.keys(this.configList)) {
-			viewBtns.push(
-				<li key={config}>
-					<button
-						className={config === this.state.config ? activeClass : inactiveClass}
-						onClick={() => this.displayConfig(config)}
-					>
-						{this.configList[config].label}
-					</button>
-				</li>
-			);
+			if(this.props.user.role >= this.configList[config].role) {
+				viewBtns.push(
+					<li key={config}>
+						<button
+							className={config === this.state.config ? activeClass : inactiveClass}
+							onClick={() => this.displayConfig(config)}
+						>
+							{this.configList[config].label}
+						</button>
+					</li>
+				);
+			}
 		}
 		const Config = this.state.config === 'none' ? None : this.configList[this.state.config].component;
 		return (
