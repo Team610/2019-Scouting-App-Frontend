@@ -93,16 +93,10 @@ export default class App extends Component {
 					</Fragment>
 				);
 			}
-			if (this.state.user.role === 1) {
+			if (this.state.user.role > 0) {
 				return (
 					<Router>
 						<AdminRouter user={this.state.user} logout={this.logout} />
-					</Router>
-				);
-			} else if (this.state.user.role === 2) {
-				return (
-					<Router>
-						<SuperAdminRouter user={this.state.user} logout={this.logout} />
 					</Router>
 				);
 			} else {
@@ -134,7 +128,7 @@ class Loading extends Component {
 	}
 }
 
-const SuperAdminRouter = (props) => (
+const AdminRouter = (props) => (
 	<div>
 		<ul>
 			<li><NavLink to="/">Home</NavLink></li>
@@ -143,7 +137,7 @@ const SuperAdminRouter = (props) => (
 			<li><NavLink to="/overall">Overall</NavLink></li>
 			<li><NavLink to="/config">Configs</NavLink></li>
 			<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
-			<li style={{ float: "right" }}>Welcome, {props.user.name} &nbsp; <Logout logout={props.logout} /></li>
+			<li style={{ float: "right" }}>Welcome, Admin {props.user.name} &nbsp;<Logout logout={props.logout} /></li>
 		</ul>
 
 		<Switch>
@@ -151,28 +145,7 @@ const SuperAdminRouter = (props) => (
 			<Route path="/form" render={() => <AdminMatchSelect user={props.user} />} />
 			<Route path="/teams" component={Teams} />
 			<Route path="/overall" component={OverallTable} />
-			<Route path="/config" component={ConfigPage} />
-			<Route path="/robotPhotos" component={RobotPhotos} />
-			<Route component={Err404} />
-		</Switch>
-	</div>
-);
-const AdminRouter = (props) => (
-	<div>
-		<ul>
-			<li><NavLink to="/">Home</NavLink></li>
-			<li><NavLink to="/form">Form</NavLink></li>
-			<li><NavLink to="/teams">Teams</NavLink></li>
-			<li><NavLink to="/overall">Overall</NavLink></li>
-			<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
-			<li style={{ float: "right" }}>Welcome, {props.user.name} &nbsp;<Logout logout={props.logout} /></li>
-		</ul>
-
-		<Switch>
-			<Route exact path="/" component={Home} />
-			<Route path="/form" render={() => <AdminMatchSelect user={props.user} />} />
-			<Route path="/teams" component={Teams} />
-			<Route path="/overall" component={OverallTable} />
+			<Route path="/config" render={() => <ConfigPage user={props.user} />} />
 			<Route path="/robotPhotos" component={RobotPhotos} />
 			<Route component={Err404} />
 		</Switch>
@@ -185,7 +158,7 @@ const ScoutRouter = (props) => (
 			<li><NavLink to="/form">Form</NavLink></li>
 			<li><NavLink to="/overall">Overall</NavLink></li>
 			<li><NavLink to="/robotPhotos">Robot Photos</NavLink></li>
-			<li style={{ float: "right" }}>Welcome, {props.user.name} &nbsp; <Logout logout={props.logout} /></li>
+			<li style={{ float: "right" }}>Welcome, Scout {props.user.name} &nbsp; <Logout logout={props.logout} /></li>
 		</ul>
 
 		<Switch>

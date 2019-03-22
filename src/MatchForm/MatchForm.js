@@ -6,7 +6,6 @@ import PreMatchForm from './PreMatchForm/PreMatchForm';
 import InMatchForm from './InMatchForm/FieldInput/FieldInput'; //InMatchForm component itself is not used at all!
 import PostMatchForm from './PostMatchForm/PostMatchForm';
 import './style.css';
-let fieldConfig = require('../config.json');
 
 export default class MatchForm extends Component {
 	constructor(props) {
@@ -16,6 +15,7 @@ export default class MatchForm extends Component {
 		this.getNextView = this.getNextView.bind(this);
 		this.collectCurView = this.collectCurView.bind(this);
 		this.discardForm = this.discardForm.bind(this);
+		this.getBlueSide = this.getBlueSide.bind(this);
 
 		this.formList = {
 			PreMatch: PreMatchForm,
@@ -35,7 +35,7 @@ export default class MatchForm extends Component {
 				block: true
 			};
 		} else {
-			this.data = { user: this.props.user, blueSide: fieldConfig.blueSide };
+			this.data = { user: this.props.user, blueSide: 'left' };
 			this.state = {
 				matchView: 0,
 				onSavedView: false,
@@ -50,6 +50,7 @@ export default class MatchForm extends Component {
 		this.interval = window.setInterval(this.saveToLocal, 10000);
 		if (this.state.isLoading) {
 			let res = await this.props.getMatchTeamNums();
+			let blueSide = await this.getBlueSide();
 			if (res.cannotLoad) {
 				alert('Could not load match and team numbers!');
 				if (this._isMounted)
@@ -58,6 +59,7 @@ export default class MatchForm extends Component {
 				//In the case of isScout, data will be assigned matchNum, teamNum, alliance
 				//In the case of isAdmin, data will be assigned matchNum; teamNum and alliance are set to ''
 				Object.assign(this.data, res);
+				this.data.blueSide = blueSide;
 				if (this._isMounted)
 					this.setState({ isLoading: false });
 			} else {
@@ -73,6 +75,17 @@ export default class MatchForm extends Component {
 		this._isMounted = false;
 		window.removeEventListener("beforeunload", this.saveToLocal);
 		window.clearInterval(this.interval);
+	}
+
+	async getBlueSide() {
+		let res = await fetch(`/api/settings/blueSide`);
+		if (res.ok) {
+			res = await res.json();
+			return res.success ? res.blueSide : false;
+		} else {
+			alert('Could not retrieve blue side of field. Please try again.');
+			return false;
+		}
 	}
 
 	collectCurView() {

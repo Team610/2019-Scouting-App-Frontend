@@ -17,19 +17,6 @@ export default class PhotoSection extends Component {
 			view: '',
 			status: 'loading'
 		};
-		this.viewBtns = [];
-		for (let view of Object.keys(this.viewList)) {
-			this.viewBtns.push(
-				<li key={view}>
-					<button
-						className='btn-link'
-						onClick={() => this.getPhotos(this.props.teamNum, view)}
-					>
-						{this.viewList[view]}
-					</button>
-				</li>
-			);
-		}
 	}
 	async componentDidMount() {
 		this._isMounted = true;
@@ -63,6 +50,21 @@ export default class PhotoSection extends Component {
 		}
 	}
 	render() {
+		const inactiveClass = 'btn-link';
+		const activeClass = 'btn-link active';
+		const viewBtns = [];
+		for (let view of Object.keys(this.viewList)) {
+			viewBtns.push(
+				<li key={view}>
+					<button
+						className={view === this.state.view ? activeClass : inactiveClass}
+						onClick={() => this.getPhotos(this.props.teamNum, view)}
+					>
+						{this.viewList[view]}
+					</button>
+				</li>
+			);
+		}
 		if (this.state.status !== 'ready') {
 			return (<Fragment>Loading...</Fragment>);
 		}
@@ -75,7 +77,7 @@ export default class PhotoSection extends Component {
 		}
 		return (
 			<Fragment>
-				<ul>{this.viewBtns}</ul>
+				<ul>{viewBtns}</ul>
 				{dispPhotos}
 			</Fragment>
 		);
