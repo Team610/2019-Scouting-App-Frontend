@@ -151,7 +151,7 @@ const SuperAdminRouter = (props) => (
 			<Route path="/form" render={() => <AdminMatchSelect user={props.user} />} />
 			<Route path="/teams" component={Teams} />
 			<Route path="/overall" component={OverallTable} />
-			<Route path="/config" component={ConfigPage} />
+			<Route path="/config" render={() => <ConfigPage user={props.user} />} />
 			<Route path="/robotPhotos" component={RobotPhotos} />
 			<Route component={Err404} />
 		</Switch>
