@@ -4,7 +4,7 @@ import MatchForm from './MatchForm';
 export default class ScoutMatchForm extends Component {
 	async getMatchTeamNums() {
 		try {
-			let nums = await fetch('/api/v1/evetn/getNextUserMatch', {
+			let nums = await fetch('/api/v1/event/getNextUserMatch', {
 				method: 'POST',
 				body: JSON.stringify(this.props.user),
 				headers: {
