@@ -37,6 +37,18 @@ export default class SortableTable extends Component {
 				type: "flt"
 			},
 			{
+				name: "Cycle #",
+				field: "flt.alias.avg_num_hatch flt.alias.avg_num_cargo +",
+				alias: "avg_num_cycle",
+				type: "flt"
+			},
+			{
+				name: "Cycle (s)",
+				field: "flt.alias.avg_num_cycle flt.alias.avg_num_hatch flt.alias.avg_time_hatch * flt.alias.avg_num_cargo flt.alias.avg_time_cargo * + /",
+				alias: "avg_time_cycle",
+				type: "flt"
+			},
+			{
 				name: "Climb #",
 				field: "int.data.tot_num_climb_lvl.2 int.data.tot_num_climb_lvl.3 +",
 				alias: "tot_climbs",
@@ -51,7 +63,7 @@ export default class SortableTable extends Component {
 		]
 		this.state = {
 			dataLoaded: false,
-			columns: ["avg_num_hatch", "avg_time_hatch", "avg_num_cargo", "avg_time_cargo", "tot_climbs", "avg_time_climb"],
+			columns: ["avg_num_hatch", "avg_time_hatch", "avg_num_cargo", "avg_time_cargo", "avg_num_cycle", "avg_time_cycle", "tot_climbs", "avg_time_climb"],
 			dir: 1,
 			lastCol: 'team',
 			zeroCount: 0
