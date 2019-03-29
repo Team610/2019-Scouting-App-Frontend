@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import MatchForm from './MatchForm';
 
 export default class ScoutMatchForm extends Component {
+	constructor(props) {
+		super(props);
+		this.getMatchTeamNums = this.getMatchTeamNums.bind(this);
+	}
 	async getMatchTeamNums() {
 		try {
 			let nums = await fetch('/api/v1/event/getNextUserMatch', {
