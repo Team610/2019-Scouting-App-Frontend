@@ -72,7 +72,7 @@ export default class PhotoSection extends Component {
 		if (this.state.view.length > 0) {
 			let statePhotos = this.state.photos[this.state.view];
 			for (let i = 0; i < statePhotos.length; i++) {
-				dispPhotos.push(typeof statePhotos[i] === 'object' ? <p key={i}>{statePhotos[i].status}</p> : <img key={i} src={statePhotos[i]} alt='' />);
+				dispPhotos.push(typeof statePhotos[i] === 'object' ? <p key={i}>{statePhotos[i].status}</p> : <img key={i} src={statePhotos[i]} alt='' width='50%' />);
 			}
 		}
 		return (

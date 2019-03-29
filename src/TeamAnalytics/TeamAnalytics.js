@@ -42,11 +42,10 @@ export default class TeamAnalytics extends Component {
 		}
 		res = await res.json();
 		console.log(`Fetched team ${num}`);
-		if (this._isMounted) {
-			this.data = res[num];
-			this.collectedData[num] = this.data;
+		this.data = res[num];
+		this.collectedData[num] = this.data;
+		if (this._isMounted)
 			this.setState({ teamNum: num, status: 'ok' });
-		}
 	}
 	setTeamNum(num) {
 		if (num === this.state.teamNum)
@@ -54,7 +53,7 @@ export default class TeamAnalytics extends Component {
 		if (this.collectedData[num] === undefined) {
 			//If this team's data hasn't been collected yet...
 			if (this._isMounted) {
-				this.setState({ teamNum: num, status: `Team ${num} data loading...` });
+				// this.setState({ teamNum: num, status: `Team ${num} data loading...` });
 				this.fetchData(num);
 			}
 		} else {
