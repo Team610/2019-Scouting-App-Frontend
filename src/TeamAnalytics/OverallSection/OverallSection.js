@@ -28,6 +28,8 @@ export default class OverallSection extends Component {
 		const avg_time_hatch = validFlt(this.props.data.avg_time_ss_hatch_tot * this.props.data.avg_num_ss_hatch_tot / avg_num_hatch + this.props.data.avg_time_to_hatch_tot * this.props.data.avg_num_to_hatch_tot / avg_num_hatch);
 		const avg_num_cargo = validFlt(this.props.data.avg_num_ss_cargo_tot + this.props.data.avg_num_to_cargo_tot);
 		const avg_time_cargo = validFlt(this.props.data.avg_time_ss_cargo_tot * this.props.data.avg_num_ss_cargo_tot / avg_num_cargo + this.props.data.avg_time_to_cargo_tot * this.props.data.avg_num_to_cargo_tot / avg_num_cargo);
+		const avg_num_cycle = validFlt(Number(avg_num_hatch) + Number(avg_num_cargo));
+		const avg_time_cycle = validFlt((avg_num_hatch * avg_time_hatch + avg_num_cargo * avg_time_cargo) / (avg_num_cycle));
 		const lvl2_climbs = validInt(this.props.data.tot_num_climb_lvl[2]);
 		const lvl3_climbs = validInt(this.props.data.tot_num_climb_lvl[3]);
 		const tot_climbs = validInt(lvl2_climbs + lvl3_climbs);
@@ -35,11 +37,12 @@ export default class OverallSection extends Component {
 		return [[
 			`${avg_num_hatch} @ ${avg_time_hatch} s`,
 			`${avg_num_cargo} @ ${avg_time_cargo} s`,
+			`${avg_num_cycle} @ ${avg_time_cycle} s`,
 			`${tot_climbs} @ ${avg_time_climb} s`
 		]];
 	}
 	populateHeaders() {
-		return ['Hatch', 'Cargo', 'Climb'];
+		return ['Hatch', 'Cargo', 'Cycles', 'Climb'];
 	}
 
 	render() {
