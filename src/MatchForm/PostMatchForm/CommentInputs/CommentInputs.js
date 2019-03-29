@@ -63,7 +63,7 @@ export default class CommentInputs extends Component {
 					loadData={this.props.loadData} />
 				<CommentCheckboxInput
 					inputId="robot_drop"
-					description=" Robot droppped several game pieces."
+					description=" Robot dropped several game pieces."
 					ref={this.dropCboxRef}
 					data={this.props.data}
 					loadData={this.props.loadData} />
