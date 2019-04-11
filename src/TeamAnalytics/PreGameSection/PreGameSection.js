@@ -15,17 +15,17 @@ export default class PreGameSection extends Component {
 	}
 
 	populateHeaders() {
-		return ["", "Hatches", "Cargo"];
+		return ["", "Hatch", "Cargo"];
 	}
 	populateRows() {
 		return [
 			[
-				"Ship Preload",
+				"Ship",
 				validInt(this.props.data.tot_ship_preload.hatch),
 				validInt(this.props.data.tot_ship_preload.cargo)
 			],
 			[
-				"Robot Preload",
+				"Robot",
 				validInt(this.props.data.tot_robot_preload.hatch),
 				validInt(this.props.data.tot_robot_preload.cargo)
 			]
