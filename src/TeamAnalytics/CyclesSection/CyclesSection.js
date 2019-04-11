@@ -97,7 +97,6 @@ export default class CyclesSection extends Component {
 				for (let gp of gamePieces) {
 					for (let lvCnt = 0; lvCnt <= 3; lvCnt++) {
 						const lv = lvCnt === 0 ? 'S' : lvCnt;
-						const brightness = (238 - lvCnt * 30).toString(16);
 						this[`${gm}ChartData`].datasets.push({
 							label: `${gp} lv${lv}`,
 							data: data[gm][gp][`lv${lv}`],
