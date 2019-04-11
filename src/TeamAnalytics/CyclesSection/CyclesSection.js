@@ -21,68 +21,26 @@ export default class CyclesSection extends Component {
 		return ["Level", "Hatch", "Cargo"];
 	}
 	populateRows() {
-		return {
-			to: [
-				[
-					3,
-					validFlt(this.props.data.avg_time_to_hatch_lv3) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_hatch_lv3) + ' s',
-					validFlt(this.props.data.avg_time_to_cargo_lv3) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_cargo_lv3) + ' s'
-				],
-				[
-					2,
-					validFlt(this.props.data.avg_time_to_hatch_lv2) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_hatch_lv2) + ' s',
-					validFlt(this.props.data.avg_time_to_cargo_lv2) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_cargo_lv2) + ' s'
-				],
-				[
-					1,
-					validFlt(this.props.data.avg_time_to_hatch_lv1) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_hatch_lv1) + ' s',
-					validFlt(this.props.data.avg_time_to_cargo_lv1) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_cargo_lv1) + ' s'
-				],
-				[
-					'S',
-					validFlt(this.props.data.avg_time_to_hatch_lvS) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_hatch_lvS) + ' s',
-					validFlt(this.props.data.avg_time_to_cargo_lvS) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_cargo_lvS) + ' s'
-				]
-			],
-			ss: [
-				[
-					3,
-					validFlt(this.props.data.avg_time_ss_hatch_lv3) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_hatch_lv3) + ' s',
-					validFlt(this.props.data.avg_time_ss_cargo_lv3) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_cargo_lv3) + ' s'
-				],
-				[
-					2,
-					validFlt(this.props.data.avg_time_ss_hatch_lv2) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_hatch_lv2) + ' s',
-					validFlt(this.props.data.avg_time_ss_cargo_lv2) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_cargo_lv2) + ' s'
-				],
-				[
-					1,
-					validFlt(this.props.data.avg_time_ss_hatch_lv1) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_hatch_lv1) + ' s',
-					validFlt(this.props.data.avg_time_ss_cargo_lv1) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_cargo_lv1) + ' s'
-				],
-				[
-					'S',
-					validFlt(this.props.data.avg_time_ss_hatch_lvS) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_hatch_lvS) + ' s',
-					validFlt(this.props.data.avg_time_ss_cargo_lvS) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_cargo_lvS) + ' s'
-				]
-			]
-		};
+		let obj = {};
+		const gameModes = ["to", "ss"];
+		const gamePieces = ["hatch", "cargo"];
+		for (let gm of gameModes) {
+			obj[gm] = [];
+			for (let i = 3; i >= 0; i--) {
+				let lvl = i;
+				if (lvl===0)
+					lvl = 'S';
+				let data = [i];
+				for (let gp of gamePieces) {
+					data.push(
+						validFlt(this.props.data[`avg_num_${gm}_${gp}_lv${lvl}`]) + ' @ ' +
+						validFlt(this.props.data[`avg_time_${gm}_${gp}_lv${lvl}`]) + ' s'
+					);
+				}
+				obj[gm].push(data);
+			}
+		}
+		return obj;
 	}
 
 	componentDidUpdate(prevProps) {

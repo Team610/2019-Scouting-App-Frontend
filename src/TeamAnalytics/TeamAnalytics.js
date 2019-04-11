@@ -55,13 +55,13 @@ export default class TeamAnalytics extends Component {
 						teamNum={this.props.teamNum}
 						text={this.state.status !== 'ok' && this.state.status} />
 					<Accordion>
-						{this.data ? <OverallSection label="Overall" teamNum={this.state.teamNum} data={this.data} /> : null}
-						{this.data ? <PhotoSection label="Photos" teamNum={this.state.teamNum} /> : null}
-						{this.data ? <CyclesSection label="Cycles" teamNum={this.state.teamNum} data={this.data} /> : null}
-						{this.data ? <PreGameSection label="Preloads" teamNum={this.state.teamNum} data={this.data} /> : null}
-						{this.data ? <EndGameSection label="Climbs" teamNum={this.state.teamNum} data={this.data} /> : null}
-						{this.data ? <DefenseSection label="Defense" teamNum={this.state.teamNum} data={this.data} /> : null}
-						{this.data ? <CommentsSection label="Comments" teamNum={this.state.teamNum} data={this.data} /> : null}
+						{this.data ? <OverallSection label="Overall" teamNum={this.props.teamNum} data={this.data} /> : null}
+						{this.data ? <PhotoSection label="Photos" teamNum={this.props.teamNum} /> : null}
+						{this.data ? <CyclesSection label="Cycles" teamNum={this.props.teamNum} data={this.data} /> : null}
+						{this.data ? <PreGameSection label="Preloads" teamNum={this.props.teamNum} data={this.data} /> : null}
+						{this.data ? <EndGameSection label="Climbs" teamNum={this.props.teamNum} data={this.data} /> : null}
+						{this.data ? <DefenseSection label="Defense" teamNum={this.props.teamNum} data={this.data} /> : null}
+						{this.data ? <CommentsSection label="Comments" teamNum={this.props.teamNum} data={this.data} /> : null}
 					</Accordion>
 				</div>
 			); //TODO: find a way to persist chart data and share across diff sections
