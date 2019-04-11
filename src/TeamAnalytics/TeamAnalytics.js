@@ -54,7 +54,7 @@ export default class TeamAnalytics extends Component {
 					<TeamAnalyticsHeader
 						teamNum={this.props.teamNum}
 						text={this.state.status !== 'ok' && this.state.status} />
-					<Accordion>
+					<Accordion sections={this.props.sections} changeSections={this.props.changeSections}>
 						{this.data ? <OverallSection label="Overall" teamNum={this.props.teamNum} data={this.data} /> : null}
 						{this.data ? <PhotoSection label="Photos" teamNum={this.props.teamNum} /> : null}
 						{this.data ? <CyclesSection label="Cycles" teamNum={this.props.teamNum} data={this.data} /> : null}

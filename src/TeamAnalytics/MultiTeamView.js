@@ -6,11 +6,13 @@ export default class MultiTeamView extends Component {
 		super(props);
 		this.state = {
 			activeTeams: [],
+			activeViews: { Overall: true },
 			status: 'Team list loading...' //TODO: separate status codes and messages
 		}
 		this.getTeamList = this.getTeamList.bind(this);
 		this.handleTeam = this.handleTeam.bind(this);
 		this.checkTeam = this.checkTeam.bind(this);
+		this.changeViews = this.changeViews.bind(this);
 	}
 	async componentDidMount() {
 		this._isMounted = true;
@@ -20,6 +22,10 @@ export default class MultiTeamView extends Component {
 	}
 	componentWillUnmount() {
 		this._isMounted = false;
+	}
+
+	changeViews(a) {
+		this.setState({activeViews: a});
 	}
 
 	async getTeamList() {
@@ -64,7 +70,12 @@ export default class MultiTeamView extends Component {
 		let teams = [];
 		for (let i = 0; i < this.state.activeTeams.length; i++) {
 			teams.push(
-				<td key={i}><SingleTeam teamNum={this.state.activeTeams[i]} /></td>
+				<td key={i}>
+					<SingleTeam
+						teamNum={this.state.activeTeams[i]}
+						sections={this.state.activeViews}
+						changeSections={this.changeViews} />
+				</td>
 			);
 		}
 		return (
