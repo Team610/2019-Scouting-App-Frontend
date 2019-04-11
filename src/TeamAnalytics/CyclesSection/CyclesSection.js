@@ -14,75 +14,33 @@ export default class CyclesSection extends Component {
 		this.populateHeaders = this.populateHeaders.bind(this);
 		this.populateRows = this.populateRows.bind(this);
 
-		this.state = { gamePeriod: "to", chartLoaded: false, chartOn: false, headers: this.populateHeaders(), rows: this.populateRows() };
+		this.state = { gamePeriod: 'to', chartLoaded: false, chartOn: false, headers: this.populateHeaders(), rows: this.populateRows() };
 	}
 
 	populateHeaders() {
 		return ["Level", "Hatch", "Cargo"];
 	}
 	populateRows() {
-		return {
-			to: [
-				[
-					3,
-					validFlt(this.props.data.avg_time_to_hatch_lv3) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_hatch_lv3) + ' s',
-					validFlt(this.props.data.avg_time_to_cargo_lv3) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_cargo_lv3) + ' s'
-				],
-				[
-					2,
-					validFlt(this.props.data.avg_time_to_hatch_lv2) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_hatch_lv2) + ' s',
-					validFlt(this.props.data.avg_time_to_cargo_lv2) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_cargo_lv2) + ' s'
-				],
-				[
-					1,
-					validFlt(this.props.data.avg_time_to_hatch_lv1) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_hatch_lv1) + ' s',
-					validFlt(this.props.data.avg_time_to_cargo_lv1) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_cargo_lv1) + ' s'
-				],
-				[
-					'S',
-					validFlt(this.props.data.avg_time_to_hatch_lvS) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_hatch_lvS) + ' s',
-					validFlt(this.props.data.avg_time_to_cargo_lvS) + ' @ ' +
-					validFlt(this.props.data.avg_num_to_cargo_lvS) + ' s'
-				]
-			],
-			ss: [
-				[
-					3,
-					validFlt(this.props.data.avg_time_ss_hatch_lv3) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_hatch_lv3) + ' s',
-					validFlt(this.props.data.avg_time_ss_cargo_lv3) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_cargo_lv3) + ' s'
-				],
-				[
-					2,
-					validFlt(this.props.data.avg_time_ss_hatch_lv2) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_hatch_lv2) + ' s',
-					validFlt(this.props.data.avg_time_ss_cargo_lv2) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_cargo_lv2) + ' s'
-				],
-				[
-					1,
-					validFlt(this.props.data.avg_time_ss_hatch_lv1) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_hatch_lv1) + ' s',
-					validFlt(this.props.data.avg_time_ss_cargo_lv1) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_cargo_lv1) + ' s'
-				],
-				[
-					'S',
-					validFlt(this.props.data.avg_time_ss_hatch_lvS) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_hatch_lvS) + ' s',
-					validFlt(this.props.data.avg_time_ss_cargo_lvS) + ' @ ' +
-					validFlt(this.props.data.avg_num_ss_cargo_lvS) + ' s'
-				]
-			]
-		};
+		let obj = {};
+		const gameModes = ['to', 'ss'];
+		const gamePieces = ['hatch', 'cargo'];
+		for (let gm of gameModes) {
+			obj[gm] = [];
+			for (let i = 3; i >= 0; i--) {
+				let lvl = i;
+				if (lvl === 0)
+					lvl = 'S';
+				let data = [i];
+				for (let gp of gamePieces) {
+					data.push(
+						validFlt(this.props.data[`avg_num_${gm}_${gp}_lv${lvl}`]) + ' @ ' +
+						validFlt(this.props.data[`avg_time_${gm}_${gp}_lv${lvl}`]) + ' s'
+					);
+				}
+				obj[gm].push(data);
+			}
+		}
+		return obj;
 	}
 
 	componentDidUpdate(prevProps) {
@@ -97,14 +55,9 @@ export default class CyclesSection extends Component {
 	}
 
 	async flipState() {
-		if (this.state.chartOn && this._isMounted)
-			this.setState({ chartOn: false });
-		else {
-			if (!this.state.chartLoaded && this._isMounted) {
-				this.setState({ chartOn: true });
-				await this.getChartData();
-			}
-		}
+		this.setState({ chartOn: !this.state.chartOn });
+		if (!this.state.chartLoaded)
+			await this.getChartData();
 	}
 	async getChartData() {
 		console.log('getting cycles chart data');
@@ -114,136 +67,46 @@ export default class CyclesSection extends Component {
 			res = await res.json();
 			res = res[teamNum];
 			let matchList = [];
-			let data = {
-				to: {
-					cargo: {
-						lvS: [],
-						lv1: [],
-						lv2: [],
-						lv3: []
-					},
-					hatch: {
-						lvS: [],
-						lv1: [],
-						lv2: [],
-						lv3: []
-					}
-				},
-				ss: {
-					cargo: {
-						lvS: [],
-						lv1: [],
-						lv2: [],
-						lv3: []
-					},
-					hatch: {
-						lvS: [],
-						lv1: [],
-						lv2: [],
-						lv3: []
-					}
-				}
-			};
+			let data = {};
+			const gameModes = ['to', 'ss'];
+			const gamePieces = ['cargo', 'hatch'];
 			for (let matchNum of Object.keys(res)) {
-				matchList.push(`Match ${matchNum}`);
-				for (let i = 0; i <= 3; i++) {
-					let lv = i === 0 ? 'S' : i;
-					data.to.cargo[`lv${lv}`].push(res[matchNum][`to_cargo_lv${lv}`].length);
-					data.to.hatch[`lv${lv}`].push(res[matchNum][`to_hatch_lv${lv}`].length);
-					data.ss.cargo[`lv${lv}`].push(res[matchNum][`ss_cargo_lv${lv}`].length);
-					data.ss.hatch[`lv${lv}`].push(res[matchNum][`ss_hatch_lv${lv}`].length);
+				matchList.push(`Q${matchNum}`);
+				for (let gm of gameModes) {
+					if (!data[gm]) data[gm] = {};
+					for (let gp of gamePieces) {
+						if (!data[gm][gp]) data[gm][gp] = {};
+						for (let i = 0; i <= 3; i++) {
+							let lv = i === 0 ? 'S' : i;
+							if (!data[gm][gp][`lv${lv}`]) data[gm][gp][`lv${lv}`] = [];
+							data[gm][gp][`lv${lv}`].push(res[matchNum][`${gm}_${gp}_lv${lv}`].length);
+						}
+					}
 				}
 			}
-			this.toChartData = {
-				labels: matchList,
-				datasets: [
-					{
-						label: "Cargo Lv S",
-						data: data.to.cargo.lvS,
-						backgroundColor: '#EE0000'
-					},
-					{
-						label: "Cargo Lv 1",
-						data: data.to.cargo.lv1,
-						backgroundColor: '#BB0000'
-					},
-					{
-						label: "Cargo Lv 2",
-						data: data.to.cargo.lv2,
-						backgroundColor: '#990000'
-					},
-					{
-						label: "Cargo Lv 3",
-						data: data.to.cargo.lv3,
-						backgroundColor: '#660000'
-					},
-					{
-						label: "Hatch Lv S",
-						data: data.to.hatch.lvS,
-						backgroundColor: '#00EE00'
-					},
-					{
-						label: "Hatch Lv 1",
-						data: data.to.hatch.lv1,
-						backgroundColor: '#00BB00'
-					},
-					{
-						label: "Hatch Lv 2",
-						data: data.to.hatch.lv2,
-						backgroundColor: '#009900'
-					},
-					{
-						label: "Hatch Lv 3",
-						data: data.to.hatch.lv3,
-						backgroundColor: '#006600'
-					}
+			const colours = {
+				cargo: [
+					'#22f93f', '#47e5da', '#4286f4', '#8f48f2'
+				],
+				hatch: [
+					'#ff14c4', '#ff2b14', '#ff9019', '#f7f31d'
 				]
 			};
-			this.ssChartData = {
-				labels: matchList,
-				datasets: [
-					{
-						label: "Cargo Lv S",
-						data: data.ss.cargo.lvS,
-						backgroundColor: '#EE0000'
-					},
-					{
-						label: "Cargo Lv 1",
-						data: data.ss.cargo.lv1,
-						backgroundColor: '#BB0000'
-					},
-					{
-						label: "Cargo Lv 2",
-						data: data.ss.cargo.lv2,
-						backgroundColor: '#990000'
-					},
-					{
-						label: "Cargo Lv 3",
-						data: data.ss.cargo.lv3,
-						backgroundColor: '#660000'
-					},
-					{
-						label: "Hatch Lv S",
-						data: data.ss.hatch.lvS,
-						backgroundColor: '#00EE00'
-					},
-					{
-						label: "Hatch Lv 1",
-						data: data.ss.hatch.lv1,
-						backgroundColor: '#00BB00'
-					},
-					{
-						label: "Hatch Lv 2",
-						data: data.ss.hatch.lv2,
-						backgroundColor: '#009900'
-					},
-					{
-						label: "Hatch Lv 3",
-						data: data.ss.hatch.lv3,
-						backgroundColor: '#006600'
+			for (let gm of gameModes) {
+				this[`${gm}ChartData`] = { labels: matchList, stacked: true, datasets: [] };
+				for (let gp of gamePieces) {
+					for (let lvCnt = 0; lvCnt <= 3; lvCnt++) {
+						const lv = lvCnt === 0 ? 'S' : lvCnt;
+						const brightness = (238 - lvCnt * 30).toString(16);
+						this[`${gm}ChartData`].datasets.push({
+							label: `${gp} lv${lv}`,
+							data: data[gm][gp][`lv${lv}`],
+							backgroundColor: colours[gp][lvCnt],
+							stack: gp
+						});
 					}
-				]
-			};
+				}
+			}
 			if (this._isMounted)
 				this.setState({ chartLoaded: true });
 		}

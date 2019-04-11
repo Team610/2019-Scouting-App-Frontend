@@ -15,22 +15,22 @@ export default class EndGameSection extends Component {
 	}
 
 	populateHeaders() {
-		return ['', 'Number', 'Time'];
+		return ['', '#', 'Time'];
 	}
 	populateRows() {
 		return [
 			[
-				'Level 3',
+				'Lv 3',
 				validInt(this.props.data.tot_num_climb_lvl[3]),
 				validFlt(this.props.data.avg_time_climb_lv3)
 			],
 			[
-				'Level 2',
+				'Lv 2',
 				validInt(this.props.data.tot_num_climb_lvl[2]),
 				validFlt(this.props.data.avg_time_climb_lv2)
 			],
 			[
-				'Level 1',
+				'Lv 1',
 				validInt(this.props.data.tot_num_climb_lvl[1]),
 				validFlt(this.props.data.avg_time_climb_lv1)
 			]

@@ -181,7 +181,7 @@ const AdminMatchSelect = Loadable({
 });
 
 const Teams = Loadable({
-	loader: () => import("./TeamAnalytics/TeamAnalytics"),
+	loader: () => import("./TeamAnalytics/MultiTeamView"),
 	loading: Loading
 });
 

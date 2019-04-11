@@ -43,7 +43,11 @@ export default class Chart extends Component {
 								ticks: {
 									beginAtZero: true,
 									stepSize: 0.5
-								}
+								},
+								stacked: !!this.state.data.stacked
+							}],
+							xAxes: [{
+								stacked: !!this.state.data.stacked
 							}]
 						}
 					}}
