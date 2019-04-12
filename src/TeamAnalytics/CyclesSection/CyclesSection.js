@@ -27,10 +27,8 @@ export default class CyclesSection extends Component {
 		for (let gm of gameModes) {
 			obj[gm] = [];
 			for (let i = 3; i >= 0; i--) {
-				let lvl = i;
-				if (lvl === 0)
-					lvl = 'S';
-				let data = [i];
+				let lvl = i === 0 ? 'S' : i;
+				let data = [lvl];
 				for (let gp of gamePieces) {
 					data.push(
 						validFlt(this.props.data[`avg_num_${gm}_${gp}_lv${lvl}`]) + ' @ ' +
