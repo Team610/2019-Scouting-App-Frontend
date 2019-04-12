@@ -27,10 +27,8 @@ export default class CyclesSection extends Component {
 		for (let gm of gameModes) {
 			obj[gm] = [];
 			for (let i = 3; i >= 0; i--) {
-				let lvl = i;
-				if (lvl === 0)
-					lvl = 'S';
-				let data = [i];
+				let lvl = i === 0 ? 'S' : i;
+				let data = [lvl];
 				for (let gp of gamePieces) {
 					data.push(
 						validFlt(this.props.data[`avg_num_${gm}_${gp}_lv${lvl}`]) + ' @ ' +
@@ -97,7 +95,6 @@ export default class CyclesSection extends Component {
 				for (let gp of gamePieces) {
 					for (let lvCnt = 0; lvCnt <= 3; lvCnt++) {
 						const lv = lvCnt === 0 ? 'S' : lvCnt;
-						const brightness = (238 - lvCnt * 30).toString(16);
 						this[`${gm}ChartData`].datasets.push({
 							label: `${gp} lv${lv}`,
 							data: data[gm][gp][`lv${lv}`],

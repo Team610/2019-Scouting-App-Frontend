@@ -28,6 +28,11 @@ export default class PreGameSection extends Component {
 				"Robot",
 				validInt(this.props.data.tot_robot_preload.hatch),
 				validInt(this.props.data.tot_robot_preload.cargo)
+			],
+			[
+				"Lv 2 Start",
+				"",
+				validInt(this.props.data.tot_lvl2_starts.true)
 			]
 		];
 	}

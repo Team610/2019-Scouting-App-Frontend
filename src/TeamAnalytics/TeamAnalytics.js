@@ -58,7 +58,7 @@ export default class TeamAnalytics extends Component {
 						{this.data ? <OverallSection label="Overall" teamNum={this.props.teamNum} data={this.data} /> : null}
 						{this.data ? <PhotoSection label="Photos" teamNum={this.props.teamNum} /> : null}
 						{this.data ? <CyclesSection label="Cycles" teamNum={this.props.teamNum} data={this.data} /> : null}
-						{this.data ? <PreGameSection label="Preloads" teamNum={this.props.teamNum} data={this.data} /> : null}
+						{this.data ? <PreGameSection label="Pregame" teamNum={this.props.teamNum} data={this.data} /> : null}
 						{this.data ? <EndGameSection label="Climbs" teamNum={this.props.teamNum} data={this.data} /> : null}
 						{this.data ? <DefenseSection label="Defense" teamNum={this.props.teamNum} data={this.data} /> : null}
 						{this.data ? <CommentsSection label="Comments" teamNum={this.props.teamNum} data={this.data} /> : null}

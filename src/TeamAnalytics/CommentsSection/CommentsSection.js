@@ -36,7 +36,6 @@ export default class CommentsSection extends Component {
 		}
 		return (
 			<div>
-				<h1 className="comp">Comments</h1>
 				<table className="analyticsTable">
 					<thead>
 						<tr>

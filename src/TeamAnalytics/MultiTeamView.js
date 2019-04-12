@@ -25,7 +25,7 @@ export default class MultiTeamView extends Component {
 	}
 
 	changeViews(a) {
-		this.setState({activeViews: a});
+		this.setState({ activeViews: a });
 	}
 
 	async getTeamList() {
@@ -53,16 +53,18 @@ export default class MultiTeamView extends Component {
 		if (!this.checkTeam(num))
 			return false;
 		let teams = this.state.activeTeams;
+		let found = false;
 		for (let i = 0; i < this.state.activeTeams.length; i++) {
 			if (Number(this.state.activeTeams[i]) === num) {
 				console.log(`remove ${num}`);
 				teams.splice(i, 1);
-				this.setState({ activeTeams: teams });
-				return false;
+				found = true;
 			}
 		}
-		console.log(`add ${num}`);
-		teams.splice(this.state.activeTeams.length, 0, num);
+		if (!found) {
+			console.log(`add ${num}`);
+			teams.splice(this.state.activeTeams.length, 0, num);
+		}
 		this.setState({ activeTeams: teams });
 	}
 
