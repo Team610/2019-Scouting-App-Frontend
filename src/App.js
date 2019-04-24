@@ -191,7 +191,7 @@ const OverallTable = Loadable({
 });
 
 const RobotPhotos = Loadable({
-	loader: () => import("./RobotPhotos/Photo"),
+	loader: () => import("./RobotPhotos/PhotoUpload"),
 	loading: Loading
 });
 

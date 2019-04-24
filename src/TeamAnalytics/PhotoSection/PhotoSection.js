@@ -43,6 +43,9 @@ export default class PhotoSection extends Component {
 		if (res.ok) {
 			res = await res.json();
 			const imgList = res.photos;
+			if (imgList.success === false) {
+				alert("Unable to load photos.");
+			}
 			let newPhotos = this.state.photos;
 			newPhotos[view] = imgList.length > 0 ? imgList : [{ status: `No ${view} photos for team ${team} found.` }];
 			if (this._isMounted)

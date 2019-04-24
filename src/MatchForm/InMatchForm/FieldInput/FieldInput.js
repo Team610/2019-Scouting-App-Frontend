@@ -32,7 +32,7 @@ export default class FieldInput extends Component {
 			this.leftSide = true;
 			alert('Alliance/side not properly set.');
 		}
-		this.imgPath = `./${alliance}-${this.leftSide ? 'left' : 'right'}.png`;
+		this.imgPath = `./${alliance}-${this.leftSide ? 'left' : 'right'}.jpeg`;
 
 		//Initialize empty state
 		this.menu = '';

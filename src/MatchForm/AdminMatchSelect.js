@@ -10,8 +10,20 @@ export default class AllMatchSelect extends Component {
 		this.getMatchTeamNums = this.getMatchTeamNums.bind(this);
 	}
 	selectMatchNum() {
-		let input = document.getElementById('matchNumInput');
-		this.setState({ matchNum: input.value });
+		let input = document.getElementById('matchNumInput').value;
+		if (Number.isNaN(Number(input))) {
+			if ((input.charAt(0) === 'Q' || input.charAt(0) === 'S' || input.charAt(0) === 'F') && (input.charAt(2) === '-')) {
+				this.setState({ matchNum: input });
+			} else {
+				alert("Text format not recognized!");
+			}
+		} else {
+			if (Number(input) < 200 && Number(input) > 0) {
+				this.setState({ matchNum: input });
+			} else {
+				alert("Match number is out of range!");
+			}
+		}
 	}
 	getMatchTeamNums() {
 		return {
@@ -25,7 +37,7 @@ export default class AllMatchSelect extends Component {
 			return (
 				<div>
 					<br />
-					<label>Match num: <input type="number" id="matchNumInput" min="1" max="80" /></label>
+					<label>Match num: <input type="text" id="matchNumInput" /></label>
 					<button onClick={this.selectMatchNum}>Submit</button>
 				</div>
 			);
