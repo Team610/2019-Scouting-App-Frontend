@@ -6,6 +6,7 @@ export default class SetCurEvent extends Component {
 		this.getCurEvent = this.getCurEvent.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleValidate = this.handleValidate.bind(this);
 		this.state = { event: 'Waiting for current event...', value: '' };
 	}
 	componentDidMount() {
@@ -52,10 +53,30 @@ export default class SetCurEvent extends Component {
 		btn.removeAttribute('disabled');
 		this.getCurEvent();
 	}
+	async handleValidate() {
+		let btn = document.getElementById('curEvent_validateBtn');
+		btn.innerHTML = 'Validating...';
+		btn.setAttribute('disabled', 'true');
+		let res = await fetch(`/api/v1/event/validate`);
+		if (res.ok) {
+			res = await res.json();
+			console.log(res.discrepancies);
+			alert(res.success ? 'Successfully validated current event.' : 'Internal server error. Please contact the admins.');
+		} else {
+			alert('Unable to validate current event. Please try again.');
+		}
+		btn.innerHTML = 'Validate';
+		btn.removeAttribute('disabled');
+		this.getCurEvent();
+	}
+
 	render() {
 		return (
 			<div>
-				<p>Current event: {this.state.event}</p>
+				<p>
+					Current event: {this.state.event} &nbsp;
+					<button onClick={this.handleValidate} id='curEvent_validateBtn'>Validate</button>
+				</p>
 				<p>Input event code</p>
 				<input
 					type="text"

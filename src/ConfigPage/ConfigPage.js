@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-
-//comment
 import CalcAnalytics from './CalcAnalytics/CalcAnalytics';
 import CreateEvent from './CreateEvent/CreateEvent';
 import CurEvent from './CurEvent/CurEvent';
@@ -26,7 +24,7 @@ export default class ConfigPage extends Component {
 			},
 			curEvent: {
 				component: CurEvent,
-				label: 'Set current event',
+				label: 'Current event',
 				role: 1
 			},
 			createForm: {
