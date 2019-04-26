@@ -103,6 +103,11 @@ export default class DefenseSection extends Component {
 					label: 'Driving Around',
 					form_val: 'driving_around',
 					backgroundColor: '#006600'
+				},
+				{
+					label: 'Tough Defense',
+					form_val: 'tough_defense',
+					backgroundColor: '#003300'
 				}
 			];
 			for (let val of arr) {
