@@ -38,6 +38,10 @@ export default class DefenseSection extends Component {
 			{
 				label: "Driving Around",
 				name: "_driving_around"
+			},
+			{
+				label: "Tough Defense",
+				name: "_tough_defense"
 			}
 		];
 		let rows = [];
