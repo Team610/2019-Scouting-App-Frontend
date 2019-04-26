@@ -65,14 +65,9 @@ export default class DefenseSection extends Component {
 	}
 
 	async flipState() {
-		if (this.state.chartOn && this._isMounted)
-			this.setState({ chartOn: false });
-		else {
-			if (!this.state.chartLoaded && this._isMounted) {
-				this.setState({ chartOn: true });
-				await this.getChartData();
-			}
-		}
+		this.setState({ chartOn: !this.state.chartOn });
+		if (!this.state.chartLoaded)
+			await this.getChartData();
 	}
 	async getChartData() {
 		console.log('getting defense chart data');
@@ -103,6 +98,11 @@ export default class DefenseSection extends Component {
 					label: 'Driving Around',
 					form_val: 'driving_around',
 					backgroundColor: '#006600'
+				},
+				{
+					label: 'Tough Defense',
+					form_val: 'tough_defense',
+					backgroundColor: '#003300'
 				}
 			];
 			for (let val of arr) {
