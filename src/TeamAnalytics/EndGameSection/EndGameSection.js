@@ -49,14 +49,9 @@ export default class EndGameSection extends Component {
 	}
 
 	async flipState() {
-		if (this.state.chartOn && this._isMounted)
-			this.setState({ chartOn: false });
-		else {
-			if (!this.state.chartLoaded && this._isMounted) {
-				this.setState({ chartOn: true });
-				await this.getChartData();
-			}
-		}
+		this.setState({ chartOn: !this.state.chartOn });
+		if (!this.state.chartLoaded)
+			await this.getChartData();
 	}
 	async getChartData() {
 		console.log('getting climb chart data');
