@@ -1,4 +1,5 @@
 export function isEqual(a, b) {
+	if (Number.isNaN(a) && Number.isNaN(b)) return true;
 	const aObj = typeof a === 'object';
 	const bObj = typeof b === 'object';
 	const aArr = Array.isArray(a);
